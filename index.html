@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpectraWash | Precizní Ruční Mytí Aut Praha</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="SpectraWash Praha - Poctivé ruční mytí a čištění vozů. Nabízíme kompletní péči o exteriér i interiér, voskování a tepování. Čistota, která přesvědčí." />
+    <meta name="keywords" content="ruční mytí praha, čištění auta, tepování interiéru, mytí aut praha, voskování auta, spectrawash, čištění kůže" />
+    <meta name="author" content="SpectraWash" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="business.business" />
+    <meta property="og:url" content="https://spectrawash.cz/" />
+    <meta property="og:title" content="SpectraWash | Precizní Ruční Mytí Aut" />
+    <meta property="og:description" content="Dopřejte svému vozu poctivou péči. Ruční mytí, detailní čištění interiéru a ochrana laku v Praze." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=1200&auto=format&fit=crop" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://spectrawash.cz/" />
+    <meta property="twitter:title" content="SpectraWash | Precizní Ruční Mytí Aut" />
+    <meta property="twitter:description" content="Dopřejte svému vozu poctivou péči. Ruční mytí, detailní čištění interiéru a ochrana laku v Praze." />
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=1200&auto=format&fit=crop" />
+
+    <!-- Google Fonts: Poppins for headings, Montserrat for body, Mrs Saint Delafield for signatures -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                blue: '#3FD5D3', // CHANGED to Electric Turquoise
+                dark: '#2F2F2F',
+                light: '#F7F7F7',
+                gray: '#4A4A4A'
+              }
+            },
+            fontFamily: {
+              sans: ['Montserrat', 'sans-serif'],
+              heading: ['Poppins', 'sans-serif'],
+              signature: ['Mrs Saint Delafield', 'cursive'],
+            },
+            backgroundImage: {
+              'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #F7F7F7;
+        color: #2F2F2F;
+        overflow-x: hidden;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Poppins', sans-serif;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+      }
+      .glass-dark {
+        background: rgba(47, 47, 47, 0.9);
+        backdrop-filter: blur(10px);
+      }
+
+      /* --- CINEMATIC POLISH --- */
+      
+      /* 1. Custom Text Selection Color */
+      ::selection {
+        background-color: #3FD5D3; /* Brand Blue */
+        color: #2F2F2F; /* Dark text on selection for contrast */
+      }
+
+      /* 2. Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        background-color: transparent;
+      }
+      ::-webkit-scrollbar-track {
+        background-color: #F7F7F7; /* Match body bg to hide black strip */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #3FD5D3; /* Brand Blue thumb */
+        border-radius: 9999px;
+        border: 2px solid #F7F7F7; /* Border matching bg creates floating effect */
+        background-clip: content-box;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #2bbcb9; /* Darker teal on hover */
+      }
+    </style>
+
+    <!-- Structured Data (JSON-LD) for Local SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AutoDetailing",
+      "name": "SpectraWash",
+      "image": "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070&auto=format&fit=crop",
+      "@id": "https://spectrawash.cz",
+      "url": "https://spectrawash.cz",
+      "telephone": "+420777888999",
+      "email": "info@spectrawash.cz",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Milevská 2095/5",
+        "addressLocality": "Praha 4 – Krč",
+        "postalCode": "14000",
+        "addressCountry": "CZ"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 50.0435,
+        "longitude": 14.4503
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "08:00",
+        "closes": "18:00"
+      },
+      "priceRange": "$$",
+      "sameAs": [
+        "https://www.instagram.com/spectrawash/",
+        "https://www.facebook.com/spectrawash"
+      ],
+      "servesCuisine": "Car Wash"
+    }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^12.23.24"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
