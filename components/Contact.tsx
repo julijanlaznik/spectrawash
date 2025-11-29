@@ -100,11 +100,17 @@ const Contact: React.FC = () => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [isPickerOpen]);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert("Děkujeme za vaši poptávku! Budeme vás brzy kontaktovat.");
+    // Reset form logic would go here
+  };
+
   // Background Image for the glass effect (Dark luxury car detail)
   const BG_IMAGE = "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070&auto=format&fit=crop";
 
   return (
-    <section id="contact" ref={containerRef} className="py-32 relative overflow-hidden bg-gray-50">
+    <section id="contact" ref={containerRef} className="py-24 md:py-32 relative overflow-hidden bg-gray-50">
       {/* CSS Override for Autofill */}
       <style>{`
         input:-webkit-autofill,
@@ -131,7 +137,7 @@ const Contact: React.FC = () => {
         <div className="flex flex-col lg:flex-row shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
           
           {/* --- CLEAN BLUE GLASS PANEL (Left) --- */}
-          <div className="lg:w-5/12 relative min-h-[650px] overflow-hidden group/glass bg-brand-blue">
+          <div className="lg:w-5/12 relative min-h-[400px] lg:min-h-[650px] overflow-hidden group/glass bg-brand-blue">
             <div className="absolute inset-0">
                <img src={BG_IMAGE} alt="Car Abstract" className="w-full h-full object-cover" />
             </div>
@@ -141,42 +147,42 @@ const Contact: React.FC = () => {
                initial={{ opacity: 0, x: -20 }}
                whileInView={{ opacity: 1, x: 0 }}
                viewport={{ once: true }}
-               className="relative z-30 p-12 lg:p-16 h-full flex flex-col justify-between text-white"
+               className="relative z-30 p-10 lg:p-16 h-full flex flex-col justify-between text-white"
             >
               <div>
                 <span className="text-white/70 text-[10px] font-bold uppercase tracking-[0.3em] mb-4 block border-l border-white/50 pl-3">
                   Napište nám
                 </span>
-                <h2 className="text-4xl lg:text-5xl font-heading font-bold mb-12 text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.1)]">
+                <h2 className="text-4xl lg:text-5xl font-heading font-bold mb-8 lg:mb-12 text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.1)]">
                   Kontakt
                 </h2>
               </div>
 
-              <div className="space-y-10 relative">
+              <div className="space-y-8 lg:space-y-10 relative">
                 <div className="group cursor-default relative">
                   <h4 className="text-xs font-bold uppercase tracking-widest text-white/60 mb-1 group-hover:text-white transition-colors">Adresa</h4>
-                  <p className="text-lg font-heading font-medium pb-2 inline-block text-white/90 group-hover:text-white transition-colors relative">
+                  <p className="text-base lg:text-lg font-heading font-medium pb-2 inline-block text-white/90 group-hover:text-white transition-colors relative">
                     {CONTACT_INFO.address}
                     <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 group-hover:w-full"></span>
                   </p>
                 </div>
                 <div className="group cursor-default relative">
                   <h4 className="text-xs font-bold uppercase tracking-widest text-white/60 mb-1 group-hover:text-white transition-colors">Telefon</h4>
-                  <p className="text-lg font-heading font-medium pb-2 inline-block text-white/90 group-hover:text-white transition-colors relative">
+                  <p className="text-base lg:text-lg font-heading font-medium pb-2 inline-block text-white/90 group-hover:text-white transition-colors relative">
                     {CONTACT_INFO.phone}
                     <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 group-hover:w-full"></span>
                   </p>
                 </div>
                 <div className="group cursor-default relative">
                   <h4 className="text-xs font-bold uppercase tracking-widest text-white/60 mb-1 group-hover:text-white transition-colors">Email</h4>
-                  <p className="text-lg font-heading font-medium pb-2 inline-block text-white/90 group-hover:text-white transition-colors relative">
+                  <p className="text-base lg:text-lg font-heading font-medium pb-2 inline-block text-white/90 group-hover:text-white transition-colors relative">
                     {CONTACT_INFO.email}
                     <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 group-hover:w-full"></span>
                   </p>
                 </div>
                 <div className="group cursor-default relative">
                   <h4 className="text-xs font-bold uppercase tracking-widest text-white/60 mb-1 group-hover:text-white transition-colors">Otevírací doba</h4>
-                  <p className="text-lg font-heading font-medium pb-2 inline-block text-white/90 group-hover:text-white transition-colors relative">
+                  <p className="text-base lg:text-lg font-heading font-medium pb-2 inline-block text-white/90 group-hover:text-white transition-colors relative">
                     {CONTACT_INFO.hours}
                     <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 group-hover:w-full"></span>
                   </p>
@@ -186,7 +192,7 @@ const Contact: React.FC = () => {
           </div>
 
           {/* Form Section (Right) */}
-          <div className="lg:w-7/12 bg-white p-12 lg:p-20 relative overflow-visible group">
+          <div className="lg:w-7/12 bg-white p-6 md:p-12 lg:p-20 relative overflow-visible group">
             
             {/* 1. Animated Top Accent Line */}
             <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-brand-blue via-brand-blue to-transparent transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 ease-out z-30"></div>
@@ -208,7 +214,7 @@ const Contact: React.FC = () => {
                 </p>
               </motion.div>
               
-              <form className="space-y-8">
+              <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <motion.div variants={itemVariants} className="relative group/input">
                     <motion.input 
@@ -366,7 +372,7 @@ const Contact: React.FC = () => {
 
                 <motion.div variants={itemVariants} className="pt-4">
                   <Button 
-                    type="button" 
+                    type="submit"
                     fullWidth 
                     variant="dark"
                   >

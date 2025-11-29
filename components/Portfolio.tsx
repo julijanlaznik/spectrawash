@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PORTFOLIO_ITEMS, PORTFOLIO_CATEGORIES } from '../constants';
@@ -25,10 +26,14 @@ const Portfolio: React.FC = () => {
     }
   };
 
+  const handleArchiveClick = () => {
+    alert("Zobrazuji kompletní archiv realizací... (Demo)");
+  };
+
   return (
-    <section id="portfolio" className="py-32 bg-white">
+    <section id="portfolio" className="py-24 md:py-32 bg-white">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-20">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-20">
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -44,7 +49,7 @@ const Portfolio: React.FC = () => {
           </motion.div>
 
           {/* Filters */}
-          <div className="flex flex-wrap gap-8">
+          <div className="flex flex-wrap gap-4 md:gap-8">
             {PORTFOLIO_CATEGORIES.map((category) => (
               <button
                 key={category}
@@ -117,8 +122,11 @@ const Portfolio: React.FC = () => {
           </AnimatePresence>
         </motion.div>
         
-        <div className="mt-24 flex justify-center">
-            <button className="group relative px-8 py-3 bg-transparent overflow-hidden">
+        <div className="mt-12 md:mt-24 flex justify-center">
+            <button 
+              onClick={handleArchiveClick}
+              className="group relative px-8 py-3 bg-transparent overflow-hidden"
+            >
                 <span className="relative z-10 text-xs font-bold uppercase tracking-[0.2em] text-brand-dark group-hover:text-white transition-colors duration-300">
                     Prozkoumat celý archiv
                 </span>

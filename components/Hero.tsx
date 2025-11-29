@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { HERO_SLIDES } from '../constants';
@@ -18,6 +19,14 @@ const Hero: React.FC = () => {
     }, 7000);
     return () => clearInterval(timer);
   }, []);
+
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const scrollToPortfolio = () => {
+    document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <section ref={containerRef} className="relative h-screen w-full overflow-hidden bg-black">
@@ -87,7 +96,7 @@ const Hero: React.FC = () => {
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-6xl md:text-8xl lg:text-9xl font-heading font-bold text-white leading-[1.1] tracking-tighter max-w-4xl"
+              className="text-4xl md:text-8xl lg:text-9xl font-heading font-bold text-white leading-[1.1] tracking-tighter max-w-4xl"
             >
               {HERO_SLIDES[currentSlide].title}
             </motion.h1>
@@ -98,7 +107,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-lg md:text-xl text-gray-300 mb-10 max-w-xl font-light leading-relaxed border-l-2 border-brand-blue pl-6"
+            className="text-base md:text-xl text-gray-300 mb-10 max-w-xl font-light leading-relaxed border-l-2 border-brand-blue pl-6"
           >
             {HERO_SLIDES[currentSlide].subtitle}
           </motion.p>
@@ -107,12 +116,12 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-6"
+            className="flex flex-col sm:flex-row gap-4 sm:gap-6"
           >
-            <Button>
+            <Button onClick={scrollToContact} fullWidth={false} className="w-full sm:w-auto">
               Rezervovat Online
             </Button>
-            <Button variant="outline">
+            <Button onClick={scrollToPortfolio} variant="outline" fullWidth={false} className="w-full sm:w-auto">
               Prozkoumat Portfolio
             </Button>
           </motion.div>

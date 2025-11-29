@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { NAV_LINKS } from '../constants';
 import Button from './Button';
@@ -10,6 +11,7 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,11 +41,32 @@ const Header: React.FC = () => {
   const handleScrollToSection = (path: string) => {
     if (path.includes('#')) {
       const id = path.split('#')[1];
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+      
+      // If we are not on home and trying to scroll to a home section
+      if (location.pathname !== '/' && path.startsWith('/#')) {
+        navigate('/');
+        // Wait for navigation then scroll
+        setTimeout(() => {
+          const element = document.getElementById(id);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      } else {
+        // We are on the page or it's a simple hash
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
       }
+    } else {
+      navigate(path);
     }
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleBookingClick = () => {
+    handleScrollToSection('/#contact');
   };
 
   return (
@@ -65,17 +88,14 @@ const Header: React.FC = () => {
           <nav className="hidden xl:flex items-center space-x-12">
             {NAV_LINKS.map((link) => (
               <div key={link.name} className="relative group overflow-hidden">
-                <NavLink
-                  to={link.path.includes('#') ? '/' : link.path}
+                <button
                   onClick={() => handleScrollToSection(link.path)}
-                  className={({ isActive }) => 
-                    `text-[11px] font-light tracking-[0.25em] uppercase transition-colors duration-300 block py-4 ${
-                      isActive && !link.path.includes('#') ? 'text-brand-blue' : (isScrolled ? 'text-brand-dark' : 'text-white/90')
-                    }`
-                  }
+                  className={`text-[11px] font-light tracking-[0.25em] uppercase transition-colors duration-300 block py-4 ${
+                     (isScrolled ? 'text-brand-dark' : 'text-white/90')
+                  } hover:text-brand-blue`}
                 >
                   {link.name}
-                </NavLink>
+                </button>
                 {/* Hover Underline Effect - Thicker (2px) and strictly at bottom with gap */}
                 <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-brand-blue transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out`} />
               </div>
@@ -83,6 +103,7 @@ const Header: React.FC = () => {
             <Button 
               variant={isScrolled ? "primary" : "outline"}
               className={!isScrolled ? "border-white/30 hover:border-white" : ""}
+              onClick={handleBookingClick}
             >
               Rezervovat
             </Button>
@@ -137,18 +158,14 @@ const Header: React.FC = () => {
               animate={isMobileMenuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
               transition={{ delay: 0.2 + (idx * 0.1), duration: 0.5, ease: "easeOut" }}
             >
-              <NavLink
-                to={link.path.includes('#') ? '/' : link.path}
-                onClick={() => {
-                  handleScrollToSection(link.path);
-                  setIsMobileMenuOpen(false);
-                }}
+              <button
+                onClick={() => handleScrollToSection(link.path)}
                 className="text-2xl font-heading font-light text-brand-dark hover:text-brand-blue transition-colors uppercase tracking-[0.25em] relative group block pb-3 mb-2"
               >
                 <span className="relative z-10">{link.name}</span>
                 {/* Thicker line, explicit gap via padding-bottom on link */}
                 <span className="absolute left-0 bottom-0 w-full h-[2px] bg-brand-blue -z-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              </NavLink>
+              </button>
             </motion.div>
           ))}
           
@@ -158,7 +175,7 @@ const Header: React.FC = () => {
             transition={{ delay: 0.8 }}
             className="mt-12"
           >
-            <Button onClick={() => setIsMobileMenuOpen(false)}>
+            <Button onClick={handleBookingClick}>
               Rezervovat Online
             </Button>
           </motion.div>

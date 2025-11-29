@@ -30,11 +30,11 @@ const SocialFeed: React.FC = () => {
   };
 
   return (
-    <section id="social" className="py-32 bg-brand-dark overflow-hidden relative">
+    <section id="social" className="py-24 md:py-32 bg-brand-dark overflow-hidden relative">
       {/* Background Ambience */}
       <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-brand-blue/5 blur-[100px] rounded-full"></div>
 
-      <div className="container mx-auto px-6 mb-16 flex flex-col md:flex-row justify-between items-end relative z-10">
+      <div className="container mx-auto px-6 mb-12 md:mb-16 flex flex-col md:flex-row justify-between items-start md:items-end relative z-10">
         <motion.div
            initial={{ opacity: 0, y: 30 }}
            whileInView={{ opacity: 1, y: 0 }}
@@ -88,7 +88,7 @@ const SocialFeed: React.FC = () => {
                 <motion.div
                 key={item.id}
                 variants={itemVariants}
-                className="relative w-80 md:w-96 h-[36rem] group cursor-pointer bg-gray-900 overflow-hidden rounded-none border-none" 
+                className="relative w-80 md:w-96 h-[32rem] md:h-[36rem] group cursor-pointer bg-gray-900 overflow-hidden rounded-none border-none" 
                 >
                 <img 
                     src={item.thumbnail} 

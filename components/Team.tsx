@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { TEAM } from '../constants';
 import { motion } from 'framer-motion';
@@ -7,23 +8,23 @@ const Team: React.FC = () => {
   const [hoveredMember, setHoveredMember] = useState<number | null>(null);
 
   return (
-    <section id="about" className="py-32 bg-white relative overflow-hidden">
+    <section id="about" className="py-24 md:py-32 bg-white relative overflow-hidden">
       <div className="container mx-auto px-6 mb-16">
         <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex flex-col md:flex-row justify-between items-end border-b border-brand-dark pb-8"
+            className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-brand-dark pb-8"
           >
-             <div>
+             <div className="mb-6 md:mb-0">
                 <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs mb-4 block">
                   Lidé za značkou
                 </span>
-                <h2 className="text-5xl md:text-6xl font-heading font-bold text-brand-dark">
+                <h2 className="text-4xl md:text-6xl font-heading font-bold text-brand-dark">
                   Tým <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-dark">SpectraWash</span>
                 </h2>
              </div>
-             <div className="mt-6 md:mt-0 text-right">
+             <div className="mt-6 md:mt-0 md:text-right">
                <p className="text-xs font-bold uppercase tracking-widest text-gray-400">
                  Profesionálové v mytí vozů
                </p>
@@ -32,7 +33,7 @@ const Team: React.FC = () => {
       </div>
 
       {/* Horizontal Accordion Layout */}
-      <div className="w-full h-[70vh] flex flex-col md:flex-row border-t border-b border-gray-100">
+      <div className="w-full flex flex-col md:flex-row border-t border-b border-gray-100 md:h-[70vh]">
         {TEAM.map((member, index) => (
           <motion.div 
             key={member.name}
@@ -41,9 +42,9 @@ const Team: React.FC = () => {
             viewport={{ once: true }}
             onMouseEnter={() => setHoveredMember(index)}
             onMouseLeave={() => setHoveredMember(null)}
-            className={`relative group overflow-hidden border-r border-gray-200 transition-all duration-700 ease-[0.22, 1, 0.36, 1] ${
-              hoveredMember === index ? 'flex-[3]' : 'flex-[1]'
-            } flex flex-col justify-end min-h-[300px] md:min-h-auto`}
+            className={`relative group overflow-hidden border-b md:border-b-0 md:border-r border-gray-200 transition-all duration-700 ease-[0.22, 1, 0.36, 1] ${
+              hoveredMember === index ? 'md:flex-[3]' : 'md:flex-[1]'
+            } flex flex-col justify-end min-h-[400px] md:min-h-auto`}
           >
             {/* Image Layer */}
             <div className="absolute inset-0 w-full h-full">
@@ -65,13 +66,13 @@ const Team: React.FC = () => {
               
               {/* Role: Top Left, Vertical, Readable */}
               <div className={`absolute top-0 left-0 pt-10 pl-6 h-full pointer-events-none transition-all duration-500 ${hoveredMember === index ? 'opacity-0' : 'opacity-100'}`}>
-                 <span className="block text-white/50 text-xs font-bold uppercase tracking-[0.25em] whitespace-nowrap" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+                 <span className="block text-white/50 text-xs font-bold uppercase tracking-[0.25em] whitespace-nowrap md:[writing-mode:vertical-rl] md:rotate-180">
                    {member.role}
                  </span>
               </div>
 
               {/* Name: Bottom Left, Horizontal, Just First Name, Blue */}
-              <div className={`transition-all duration-500 absolute bottom-10 left-12 md:left-14 ${hoveredMember === index ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+              <div className={`transition-all duration-500 absolute bottom-10 left-10 md:left-14 ${hoveredMember === index ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
                  <h3 className="text-4xl md:text-6xl font-heading font-bold text-brand-blue uppercase tracking-tighter">
                    {member.name.split(" ")[0]}
                  </h3>

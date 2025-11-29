@@ -8,6 +8,14 @@ import Contact from '../components/Contact';
 import { MERCHANDISE } from '../constants';
 
 const Shop: React.FC = () => {
+  const addToCart = (product: string) => {
+    alert(`Produkt "${product}" byl přidán do košíku. (Demo)`);
+  };
+
+  const showAllMerch = () => {
+    alert("Zobrazuji všechny produkty... (Demo)");
+  };
+
   return (
     <div className="pt-24 w-full">
       {/* Shop Hero */}
@@ -26,10 +34,10 @@ const Shop: React.FC = () => {
               <span className="text-brand-blue font-bold tracking-[0.3em] uppercase text-xs mb-6 block border-l-2 border-brand-blue pl-4">
                 SpectraWash Shop
               </span>
-              <h1 className="text-5xl md:text-7xl font-heading font-bold mb-8 leading-tight">
+              <h1 className="text-4xl md:text-7xl font-heading font-bold mb-8 leading-tight">
                 Vouchery & <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">Autokosmetika</span>
               </h1>
-              <p className="text-xl text-gray-400 max-w-xl mb-10 font-light leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-400 max-w-xl mb-10 font-light leading-relaxed">
                 Darujte dokonalou čistotu nebo si dopřejte profesionální produkty pro údržbu vašeho vozu u vás doma.
               </p>
             </motion.div>
@@ -42,7 +50,7 @@ const Shop: React.FC = () => {
       {/* Merchandise Section */}
       <section className="py-24 bg-white relative">
         <div className="container mx-auto px-6">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16">
                 <motion.div 
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -57,7 +65,7 @@ const Shop: React.FC = () => {
                     </h2>
                 </motion.div>
                 
-                <Button variant="outline" className="border-gray-200 text-brand-dark hover:bg-brand-dark hover:text-white hover:border-brand-dark">
+                <Button onClick={showAllMerch} variant="outline" className="border-gray-200 text-brand-dark hover:bg-brand-dark hover:text-white hover:border-brand-dark">
                     Zobrazit vše
                 </Button>
             </div>
@@ -85,7 +93,10 @@ const Shop: React.FC = () => {
                             />
                             {/* Overlay CTA */}
                             <div className="absolute inset-0 bg-brand-dark/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <Button className="scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 delay-100">
+                                <Button 
+                                  onClick={() => addToCart(item.title)}
+                                  className="scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 delay-100"
+                                >
                                     Do košíku
                                 </Button>
                             </div>
