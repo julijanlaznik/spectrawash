@@ -15,7 +15,7 @@ export const HERO_SLIDES = [
     id: 1,
     image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070&auto=format&fit=crop',
     title: 'Precizní ruční mytí',
-    subtitle: 'Šetrná péče o váš vůz v srdci Prahy. Používáme nejšetrnější metody a prémiovou autokosmetiku.',
+    subtitle: 'Šetrná péče o váš vůz. Používáme nejšetrnější metody a prémiovou autokosmetiku.',
   },
   {
     id: 2,
@@ -188,11 +188,11 @@ export const PORTFOLIO_ITEMS = [
 ];
 
 export const PARTNERS = [
-  { name: 'Gyeon', logo: 'https://placehold.co/200x80/1E63B3/FFFFFF?text=GYEON&font=montserrat' },
-  { name: 'Koch Chemie', logo: 'https://placehold.co/200x80/1E63B3/FFFFFF?text=KOCH&font=montserrat' },
-  { name: 'Rupes', logo: 'https://placehold.co/200x80/1E63B3/FFFFFF?text=RUPES&font=montserrat' },
-  { name: 'Meguiars', logo: 'https://placehold.co/200x80/1E63B3/FFFFFF?text=MEGUIARS&font=montserrat' },
-  { name: 'Sonax', logo: 'https://placehold.co/200x80/1E63B3/FFFFFF?text=SONAX&font=montserrat' },
+  { name: 'Gyeon', logo: 'https://placehold.co/200x80/3FD5D3/FFFFFF?text=GYEON&font=montserrat' },
+  { name: 'Koch Chemie', logo: 'https://placehold.co/200x80/3FD5D3/FFFFFF?text=KOCH&font=montserrat' },
+  { name: 'Rupes', logo: 'https://placehold.co/200x80/3FD5D3/FFFFFF?text=RUPES&font=montserrat' },
+  { name: 'Meguiars', logo: 'https://placehold.co/200x80/3FD5D3/FFFFFF?text=MEGUIARS&font=montserrat' },
+  { name: 'Sonax', logo: 'https://placehold.co/200x80/3FD5D3/FFFFFF?text=SONAX&font=montserrat' },
 ];
 
 export const TEAM = [
@@ -217,8 +217,8 @@ export const TEAM = [
 ];
 
 export const CONTACT_INFO = {
-  address: 'Milevská 2095/5, Praha 4 – Krč',
-  phone: '+420 777 888 999',
+  address: 'Přílepská 1901, 252 63 Roztoky',
+  phone: '+420 606 782 745',
   email: 'info@spectrawash.cz',
   hours: 'Po-Pá: 8:00 - 18:00',
 };
