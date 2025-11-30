@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { CONTACT_INFO, SERVICES } from '../constants';
 import Button from './Button';
 import { motion, useScroll, useTransform, Variants, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon, MapPin, Navigation, Phone, Mail, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon, MapPin, Navigation, Phone, Mail, Check, X } from 'lucide-react';
 
 const Contact: React.FC = () => {
   const containerRef = useRef(null);
@@ -48,6 +48,10 @@ const Contact: React.FC = () => {
   
   // PICKUP STATE
   const [isPickup, setIsPickup] = useState(false);
+
+  // SUCCESS MODAL STATE
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [submittedName, setSubmittedName] = useState("");
 
   // Generate calendar days
   const getDaysInMonth = (date: Date) => {
@@ -105,8 +109,16 @@ const Contact: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const pickupMsg = isPickup ? " + Pick-up servis" : "";
-    alert(`Děkujeme za vaši poptávku! Budeme vás brzy kontaktovat.${pickupMsg}`);
+    
+    // Get Name from input
+    const form = e.target as HTMLFormElement;
+    const nameInput = form.elements.namedItem('name') as HTMLInputElement;
+    setSubmittedName(nameInput.value || "zákazníku");
+
+    // Show Custom Modal
+    setShowSuccessModal(true);
+    
+    // Reset form logic would go here in a real app
   };
 
   const MAP_URL = "https://www.google.com/maps/dir/?api=1&destination=Přílepská+1901,+252+63+Roztoky";
@@ -231,6 +243,7 @@ const Contact: React.FC = () => {
                     <input 
                       type="text" 
                       id="name" 
+                      name="name"
                       className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent"
                       placeholder="Jméno"
                       required
@@ -373,11 +386,11 @@ const Contact: React.FC = () => {
                              <>
                                {/* Calendar Header */}
                                <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                                  <button onClick={(e) => { e.preventDefault(); changeMonth(-1); }} className="p-1 hover:bg-gray-50"><ChevronLeft size={16}/></button>
+                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeMonth(-1); }} className="p-1 hover:bg-gray-50"><ChevronLeft size={16}/></button>
                                   <span className="font-bold text-sm uppercase tracking-wider text-brand-dark">
                                     {currentMonth.toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' })}
                                   </span>
-                                  <button onClick={(e) => { e.preventDefault(); changeMonth(1); }} className="p-1 hover:bg-gray-50"><ChevronRight size={16}/></button>
+                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeMonth(1); }} className="p-1 hover:bg-gray-50"><ChevronRight size={16}/></button>
                                </div>
                                {/* Calendar Grid */}
                                <div className="grid grid-cols-7 gap-1 text-center text-xs mb-2 text-gray-400 font-medium">
@@ -388,7 +401,7 @@ const Contact: React.FC = () => {
                                   {daysArray.map(day => (
                                     <button
                                       key={day}
-                                      onClick={(e) => { e.preventDefault(); handleDateClick(day); }}
+                                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDateClick(day); }}
                                       className="w-8 h-8 flex items-center justify-center text-sm hover:bg-brand-blue hover:text-white transition-colors rounded-none"
                                     >
                                       {day}
@@ -399,7 +412,7 @@ const Contact: React.FC = () => {
                            ) : (
                              <>
                                {/* Time Slots */}
-                               <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100 cursor-pointer" onClick={() => setPickerStep('date')}>
+                               <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100 cursor-pointer" onClick={(e) => { e.stopPropagation(); setPickerStep('date'); }}>
                                  <ChevronLeft size={14} className="text-gray-400" />
                                  <span className="font-bold text-sm uppercase tracking-wider text-brand-dark">Vybrat čas</span>
                                </div>
@@ -452,6 +465,72 @@ const Contact: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* --- SUCCESS POPUP MODAL --- */}
+      <AnimatePresence>
+        {showSuccessModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
+            {/* Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/60 backdrop-blur-md"
+              onClick={() => setShowSuccessModal(false)}
+            />
+            
+            {/* Modal Content */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="relative bg-brand-dark border border-brand-blue p-8 md:p-12 max-w-lg w-full shadow-[0_0_50px_rgba(63,213,211,0.2)]"
+            >
+              {/* Close Icon */}
+              <button 
+                onClick={() => setShowSuccessModal(false)}
+                className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="flex flex-col items-center text-center">
+                {/* Success Icon */}
+                <div className="w-20 h-20 rounded-full border-2 border-brand-blue flex items-center justify-center mb-6 text-brand-blue shadow-[0_0_20px_rgba(63,213,211,0.3)]">
+                   <Check size={40} strokeWidth={3} />
+                </div>
+
+                <h3 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4 uppercase leading-none">
+                   Poptávka <br/><span className="text-brand-blue">Odeslána</span>
+                </h3>
+                
+                <p className="text-white text-lg mb-6">
+                  Děkujeme, {submittedName}!
+                </p>
+
+                <div className="text-gray-400 text-sm font-light leading-relaxed mb-8 max-w-xs mx-auto">
+                   Vaši rezervaci jsme úspěšně přijali. Náš tým vás bude kontaktovat do 24 hodin pro potvrzení termínu a detailů.
+                </div>
+
+                <div className="w-full h-[1px] bg-white/10 mb-8"></div>
+
+                <div className="flex flex-col gap-2 mb-8">
+                   <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Potřebujete to urgentně?</span>
+                   <a href={`tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`} className="text-xl text-white hover:text-brand-blue transition-colors font-bold">
+                     {CONTACT_INFO.phone}
+                   </a>
+                </div>
+
+                <Button onClick={() => setShowSuccessModal(false)} fullWidth>
+                  Zavřít okno
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
     </section>
   );
 };
