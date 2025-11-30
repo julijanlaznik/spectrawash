@@ -8,12 +8,15 @@ import Contact from '../components/Contact';
 import { MERCHANDISE } from '../constants';
 
 const Shop: React.FC = () => {
-  const addToCart = (product: string) => {
-    alert(`Produkt "${product}" byl přidán do košíku. (Demo)`);
+  const handleBuyMerch = (productTitle: string, price: string) => {
+    // TODO: HERE YOU WILL INSERT THE LOGIC TO REDIRECT TO STRIPE
+    // Example: window.location.href = `https://buy.stripe.com/link_for_${productID}`
+    
+    alert(`Přesměrování na platební bránu (Stripe) pro: ${productTitle} (${price})...\n\n(V ostré verzi zde bude odkaz na checkout)`);
   };
 
   const showAllMerch = () => {
-    alert("Zobrazuji všechny produkty... (Demo)");
+    alert("Zobrazuji kompletní katalog produktů... (Demo)");
   };
 
   return (
@@ -94,10 +97,10 @@ const Shop: React.FC = () => {
                             {/* Overlay CTA */}
                             <div className="absolute inset-0 bg-brand-dark/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                 <Button 
-                                  onClick={() => addToCart(item.title)}
+                                  onClick={() => handleBuyMerch(item.title, item.price)}
                                   className="scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 delay-100"
                                 >
-                                    Do košíku
+                                    Koupit
                                 </Button>
                             </div>
                         </div>

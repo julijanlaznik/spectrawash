@@ -216,6 +216,19 @@ export const TEAM = [
   },
 ];
 
+export const TESTIMONIALS = [
+  { name: 'David M.', car: 'Mercedes S-Class', text: 'Naprosto špičková práce. Auto vypadá lépe než když jsem ho kupoval nové.' },
+  { name: 'Jana K.', car: 'Porsche Macan', text: 'Skvělý přístup a perfektní čištění interiéru. Určitě se vrátím.' },
+  { name: 'Tomáš R.', car: 'Audi RS6', text: 'Keramická ochrana funguje neskutečně. Profesionálové na svém místě.' },
+];
+
+export const FAQ_ITEMS = [
+  { q: 'Jak dlouho trvá ruční mytí?', a: 'Základní program trvá cca 60-90 minut. Kompletní detailing může trvat 1-2 dny.' },
+  { q: 'Musím se objednat předem?', a: 'Ano, pro zajištění nejvyšší kvality pracujeme pouze na objednávku.' },
+  { q: 'Můžu platit kartou?', a: 'Ano, přijímáme všechny běžné platební karty i hotovost.' },
+  { q: 'Je auto pojištěné?', a: 'Samozřejmě. Po celou dobu, co je vůz u nás, je plně pojištěn.' },
+];
+
 export const CONTACT_INFO = {
   address: 'Přílepská 1901, 252 63 Roztoky',
   phone: '+420 606 782 745',

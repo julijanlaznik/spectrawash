@@ -6,8 +6,12 @@ import Button from './Button';
 import { motion } from 'framer-motion';
 
 const Vouchers: React.FC = () => {
-  const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  
+  const handleOrderVoucher = (voucherTitle: string, price: string) => {
+    // TODO: HERE YOU WILL INSERT THE LOGIC TO REDIRECT TO STRIPE
+    // Example: window.location.href = 'https://buy.stripe.com/...'
+    
+    alert(`Přesměrování na platební bránu (Stripe) pro: ${voucherTitle} (${price})...\n\n(V ostré verzi zde bude odkaz na checkout)`);
   };
 
   return (
@@ -78,12 +82,12 @@ const Vouchers: React.FC = () => {
               </ul>
 
               <Button 
-                onClick={scrollToContact} 
+                onClick={() => handleOrderVoucher(voucher.title, voucher.price)}
                 fullWidth 
                 variant="secondary" 
                 className="border-gray-200 hover:border-brand-blue group-hover:bg-brand-blue group-hover:text-white"
               >
-                Objednat voucher
+                Koupit Online
               </Button>
 
             </motion.div>

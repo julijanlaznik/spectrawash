@@ -7,6 +7,8 @@ import Partners from '../components/Partners';
 import Team from '../components/Team';
 import Contact from '../components/Contact';
 import SocialFeed from '../components/SocialFeed';
+import Testimonials from '../components/Testimonials';
+import FAQ from '../components/FAQ';
 
 const Home: React.FC = () => {
   return (
@@ -15,9 +17,13 @@ const Home: React.FC = () => {
       <Services />
       <SocialFeed />
       <Portfolio />
+      {/* Thin Testimonials Section before Team */}
+      <Testimonials />
       <Team />
       <Partners />
       <Contact />
+      {/* FAQ at the very bottom */}
+      <FAQ />
     </div>
   );
 };

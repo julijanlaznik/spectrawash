@@ -68,6 +68,14 @@ const Contact: React.FC = () => {
   const daysArray = Array.from({ length: totalDays }, (_, i) => i + 1);
   const emptyDays = Array.from({ length: startDay }, (_, i) => i);
 
+  // Helper to identify today
+  const today = new Date();
+  const isToday = (day: number) => {
+    return day === today.getDate() && 
+           currentMonth.getMonth() === today.getMonth() && 
+           currentMonth.getFullYear() === today.getFullYear();
+  };
+
   const handleDateClick = (day: number) => {
     const newDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     setSelectedDate(newDate);
@@ -87,10 +95,13 @@ const Contact: React.FC = () => {
     return `${dateStr} – ${selectedTime}`;
   };
 
+  // Expanded 30-minute intervals
   const TIME_SLOTS = [
-    "08:00", "09:00", "10:00", "11:00", 
-    "12:00", "13:00", "14:00", "15:00", 
-    "16:00", "17:00"
+    "08:00", "08:30", "09:00", "09:30", 
+    "10:00", "10:30", "11:00", "11:30", 
+    "12:00", "12:30", "13:00", "13:30", 
+    "14:00", "14:30", "15:00", "15:30", 
+    "16:00", "16:30", "17:00", "17:30"
   ];
 
   const changeMonth = (delta: number) => {
@@ -380,7 +391,7 @@ const Contact: React.FC = () => {
                           initial={{ opacity: 0, y: 10, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          className="absolute top-full left-0 z-50 mt-2 w-72 bg-white border border-gray-100 shadow-2xl p-4"
+                          className="absolute top-full left-0 z-50 mt-2 w-80 bg-white border border-gray-100 shadow-2xl p-4"
                         >
                            {pickerStep === 'date' ? (
                              <>
@@ -398,15 +409,20 @@ const Contact: React.FC = () => {
                                </div>
                                <div className="grid grid-cols-7 gap-1">
                                   {emptyDays.map(d => <div key={`empty-${d}`} />)}
-                                  {daysArray.map(day => (
-                                    <button
-                                      key={day}
-                                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDateClick(day); }}
-                                      className="w-8 h-8 flex items-center justify-center text-sm hover:bg-brand-blue hover:text-white transition-colors rounded-none"
-                                    >
-                                      {day}
-                                    </button>
-                                  ))}
+                                  {daysArray.map(day => {
+                                    const todayHighlight = isToday(day);
+                                    return (
+                                      <button
+                                        key={day}
+                                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDateClick(day); }}
+                                        className={`w-8 h-8 flex items-center justify-center text-sm transition-colors rounded-none
+                                          ${todayHighlight ? 'text-brand-blue font-bold ring-1 ring-brand-blue' : 'hover:bg-brand-blue hover:text-white'}
+                                        `}
+                                      >
+                                        {day}
+                                      </button>
+                                    );
+                                  })}
                                </div>
                              </>
                            ) : (
@@ -416,12 +432,12 @@ const Contact: React.FC = () => {
                                  <ChevronLeft size={14} className="text-gray-400" />
                                  <span className="font-bold text-sm uppercase tracking-wider text-brand-dark">Vybrat čas</span>
                                </div>
-                               <div className="grid grid-cols-2 gap-2">
+                               <div className="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-gray-200">
                                  {TIME_SLOTS.map(time => (
                                    <button
                                      key={time}
                                      onClick={(e) => { e.preventDefault(); handleTimeClick(time); }}
-                                     className="py-2 px-3 border border-gray-100 text-sm hover:border-brand-blue hover:text-brand-blue transition-colors text-center"
+                                     className="py-2 px-1 border border-gray-100 text-xs hover:border-brand-blue hover:text-brand-blue transition-colors text-center"
                                    >
                                      {time}
                                    </button>
@@ -502,7 +518,7 @@ const Contact: React.FC = () => {
                 </div>
 
                 <h3 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4 uppercase leading-none">
-                   Poptávka <br/><span className="text-brand-blue">Odeslána</span>
+                   Rezervace <br/><span className="text-brand-blue">Odeslána</span>
                 </h3>
                 
                 <p className="text-white text-lg mb-6">
@@ -510,7 +526,7 @@ const Contact: React.FC = () => {
                 </p>
 
                 <div className="text-gray-400 text-sm font-light leading-relaxed mb-8 max-w-xs mx-auto">
-                   Vaši rezervaci jsme úspěšně přijali. Náš tým vás bude kontaktovat do 24 hodin pro potvrzení termínu a detailů.
+                   Vaše objednávka byla úspěšně přijata ke zpracování. Prosím vyčkejte na potvrzení termínu, které vám zašleme e-mailem nebo telefonicky.
                 </div>
 
                 <div className="w-full h-[1px] bg-white/10 mb-8"></div>

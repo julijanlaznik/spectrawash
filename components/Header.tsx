@@ -13,6 +13,9 @@ const Header: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Detect if we are on the Shop page
+  const isShopPage = location.pathname === '/shop';
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -25,7 +28,6 @@ const Header: React.FC = () => {
   // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
-    // Enable scroll on body when menu closes
     document.body.style.overflow = 'auto';
   }, [location]);
 
@@ -42,10 +44,8 @@ const Header: React.FC = () => {
     if (path.includes('#')) {
       const id = path.split('#')[1];
       
-      // If we are not on home and trying to scroll to a home section
       if (location.pathname !== '/' && path.startsWith('/#')) {
         navigate('/');
-        // Wait for navigation then scroll
         setTimeout(() => {
           const element = document.getElementById(id);
           if (element) {
@@ -53,7 +53,6 @@ const Header: React.FC = () => {
           }
         }, 100);
       } else {
-        // We are on the page or it's a simple hash
         const element = document.getElementById(id);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
@@ -69,6 +68,11 @@ const Header: React.FC = () => {
     handleScrollToSection('/#contact');
   };
 
+  // Determine text color based on state
+  // On Shop page or when scrolled: Dark Text. Otherwise (Home top): White Text.
+  const textColorClass = isScrolled || isMobileMenuOpen || isShopPage ? 'text-brand-dark' : 'text-white';
+  const subTextColorClass = isScrolled || isMobileMenuOpen || isShopPage ? 'text-brand-dark' : 'text-white/90';
+
   return (
     <>
       <header 
@@ -78,38 +82,34 @@ const Header: React.FC = () => {
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
           {/* Logo */}
-          <NavLink to="/" className={`z-50 group relative transition-colors duration-300 ${
-            isMobileMenuOpen ? 'text-brand-dark' : (isScrolled ? 'text-brand-blue' : 'text-white')
-          }`}>
+          <NavLink to="/" className={`z-50 group relative transition-colors duration-300 ${textColorClass}`}>
             <Logo />
           </NavLink>
 
-          {/* Desktop Navigation - Changed breakpoint to xl (1280px) strictly */}
+          {/* Desktop Navigation */}
           <nav className="hidden xl:flex items-center space-x-12">
             {NAV_LINKS.map((link) => (
               <div key={link.name} className="relative group overflow-hidden">
                 <button
                   onClick={() => handleScrollToSection(link.path)}
-                  className={`text-[11px] font-light tracking-[0.25em] uppercase transition-colors duration-300 block py-4 ${
-                     (isScrolled ? 'text-brand-dark' : 'text-white/90')
-                  } hover:text-brand-blue`}
+                  className={`text-[11px] font-light tracking-[0.25em] uppercase transition-colors duration-300 block py-4 hover:text-brand-blue ${subTextColorClass}`}
                 >
                   {link.name}
                 </button>
-                {/* Hover Underline Effect - Thicker (2px) and strictly at bottom with gap */}
                 <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-brand-blue transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out`} />
               </div>
             ))}
             <Button 
-              variant={isScrolled ? "primary" : "outline"}
-              className={!isScrolled ? "border-white/30 hover:border-white" : ""}
+              // Force primary button on Shop page so it's visible against white background
+              variant={isScrolled || isShopPage ? "primary" : "outline"}
+              className={!isScrolled && !isShopPage ? "border-white/30 hover:border-white" : ""}
               onClick={handleBookingClick}
             >
               Rezervovat
             </Button>
           </nav>
 
-          {/* Mobile Menu Toggle - Visible below XL (1280px) */}
+          {/* Mobile Menu Toggle */}
           <button 
             className="xl:hidden z-50 focus:outline-none group"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -132,7 +132,7 @@ const Header: React.FC = () => {
                       animate={{ opacity: 1, rotate: 0 }}
                       exit={{ opacity: 0, rotate: -90 }}
                     >
-                      <Menu className={`h-8 w-8 ${isScrolled ? 'text-brand-dark' : 'text-white'} stroke-1`} />
+                      <Menu className={`h-8 w-8 stroke-1 ${textColorClass}`} />
                     </motion.div>
                  )}
                </AnimatePresence>
@@ -163,7 +163,6 @@ const Header: React.FC = () => {
                 className="text-2xl font-heading font-light text-brand-dark hover:text-brand-blue transition-colors uppercase tracking-[0.25em] relative group block pb-3 mb-2"
               >
                 <span className="relative z-10">{link.name}</span>
-                {/* Thicker line, explicit gap via padding-bottom on link */}
                 <span className="absolute left-0 bottom-0 w-full h-[2px] bg-brand-blue -z-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
               </button>
             </motion.div>
