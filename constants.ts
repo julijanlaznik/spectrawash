@@ -133,24 +133,27 @@ export const SERVICES = [
 export const VOUCHERS = [
   {
     id: 1,
-    title: 'Voucher P1',
-    price: '650 Kč',
-    description: 'Ruční mytí exteriéru.',
-    features: ['Předmytí a mytí', 'Čištění kol', 'Vyleštění oken']
+    title: 'Smart Care',
+    price: '2 500 Kč',
+    description: 'Komplexní péče o exteriér i interiér. Ideální volba pro pravidelnou údržbu vozu.',
+    features: ['Šetrné ruční mytí exteriéru', 'Vyčištění interiéru a oken', 'Impregnace pneu a plastů'],
+    tag: null
   },
   {
     id: 2,
-    title: 'Voucher P2',
-    price: '1 950 Kč',
-    description: 'Exteriér + Interiér bez tepování.',
-    features: ['Kompletní mytí', 'Luxování', 'Čištění plastů']
+    title: 'Deep Detail',
+    price: '3 800 Kč',
+    description: 'Hloubkový detailing pro náročné. Včetně tepování sedaček a detailního čištění.',
+    features: ['Vše z balíčku Smart Care', 'Hloubkové tepování sedaček', 'Detailing kol a podběhů'],
+    tag: 'Nejoblíbenější'
   },
   {
     id: 3,
-    title: 'Voucher P3',
-    price: '3 250 Kč',
-    description: 'Exteriér + Interiér s tepováním.',
-    features: ['Kompletní mytí', 'Tepování sedaček', 'Ošetření kůže']
+    title: 'Exclusive Limit',
+    price: '5 000 Kč',
+    description: 'Otevřený voucher na libovolné služby. Lze využít i na keramiku či leštění laku.',
+    features: ['Volný výběr služeb studia', 'Aplikace vosků a keramik', 'Možnost čerpání po částech'],
+    tag: 'Tip na dárek'
   }
 ];
 
