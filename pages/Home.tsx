@@ -1,9 +1,9 @@
 
+
 import React from 'react';
 import Hero from '../components/Hero';
 import Services from '../components/Services';
 import Portfolio from '../components/Portfolio';
-import Partners from '../components/Partners';
 import Team from '../components/Team';
 import Contact from '../components/Contact';
 import SocialFeed from '../components/SocialFeed';
@@ -20,7 +20,7 @@ const Home: React.FC = () => {
       {/* Thin Testimonials Section before Team */}
       <Testimonials />
       <Team />
-      <Partners />
+      {/* Partners section removed */}
       <Contact />
       {/* FAQ at the very bottom */}
       <FAQ />

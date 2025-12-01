@@ -1,12 +1,10 @@
 
-import { Car, ShieldCheck, Sparkles, Briefcase, MapPin, Phone, Mail, Clock, Armchair, Gift, ShoppingBag, Star, Gem, Percent, Wrench, Calendar } from 'lucide-react';
+import { Car, ShieldCheck, Sparkles, Briefcase, MapPin, Phone, Mail, Clock, Armchair, Gift, ShoppingBag, Star, Gem, Percent, Wrench, Calendar, PlusCircle } from 'lucide-react';
 
 export const NAV_LINKS = [
-  { name: 'Domů', path: '/' },
   { name: 'Služby', path: '/#services' },
-  { name: 'Portfolio', path: '/#portfolio' },
-  { name: 'O nás', path: '/#about' },
-  { name: 'Shop', path: '/shop' },
+  { name: 'Reference', path: '/#testimonials' },
+  // Vouchery removed from text links, will be a button
   { name: 'Kontakt', path: '/#contact' },
 ];
 
@@ -14,7 +12,7 @@ export const HERO_SLIDES = [
   {
     id: 1,
     image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070&auto=format&fit=crop',
-    title: 'Precizní ruční mytí',
+    title: 'Precizní\nruční mytí',
     subtitle: 'Šetrná péče o váš vůz. Používáme nejšetrnější metody a prémiovou autokosmetiku.',
   },
   {
@@ -33,84 +31,126 @@ export const HERO_SLIDES = [
 
 export const SERVICES = [
   {
-    id: 'wash',
+    id: 'p1',
     icon: Sparkles,
-    title: 'Ruční mytí a čištění interiéru',
+    title: 'P1: Ruční mytí exteriéru',
+    price: 'od 690 Kč',
+    basePrice: 690,
+    duration: '60 min',
     image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1470&auto=format&fit=crop',
-    description: 'Základní i komplexní programy údržby. Od šetrného ručního mytí karoserie až po hloubkové tepování sedaček a čištění kůže. Používáme pH neutrální chemii.',
-    details: ['Šetrné ruční mytí', 'Tepování interiéru', 'Čištění a impregnace kůže', 'Detailní vysávání']
+    description: 'Základní program pro perfektní čistotu exteriéru.',
+    details: [
+      'Předmytí a čištění kol',
+      'Mytí karoserie pH neutrálním šamponem',
+      'Vysušení karoserie',
+      'Ošetření mezidveřního prostoru',
+      'Impregnace pneumatik',
+      'Vyleštění oken zvenku'
+    ]
   },
   {
-    id: 'paint',
-    icon: Star,
-    title: 'Leštění laku karoserie',
+    id: 'p2',
+    icon: Armchair,
+    title: 'P2: P1 + Interiér bez tepování',
+    price: 'od 1 950 Kč',
+    basePrice: 1950,
+    duration: '150 min',
     image: 'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?q=80&w=1582&auto=format&fit=crop',
-    description: 'Navrátíme vašemu vozu showroom lesk. Vícestupňové strojní leštění odstraní škrábance, oxidaci a hologramy z laku.',
-    details: ['Odstranění škrábanců', 'Zvýšení lesku', 'Korekce laku', 'Odstranění hologramů']
+    description: 'Kompletní péče o exteriér a důkladný úklid interiéru (bez mokrého tepování).',
+    details: [
+      'Vše z programu P1',
+      'Luxování celého vozu',
+      'Tepování vkládaných koberců / ošetření gumových',
+      'Čištění a impregnace vnitřních plastů',
+      'Leštění vnitřních oken a zrcátek'
+    ]
   },
   {
-    id: 'ppf',
-    icon: ShieldCheck,
-    title: 'Ochranné PPF fólie',
-    image: 'https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=1287&auto=format&fit=crop',
-    description: 'Nejúčinnější ochrana laku proti kamínkům, oděrkám a vandalismu. Čirá, samoozdravná fólie, která je na voze prakticky neviditelná.',
-    details: ['Ochrana před kamínky', 'Samoozdravná schopnost', 'Záruka 5-10 let', 'Hydrofobní povrch']
+    id: 'p3',
+    icon: Star,
+    title: 'P3: P2 + Interiér s tepováním',
+    price: 'od 3 250 Kč',
+    basePrice: 3250,
+    duration: '210 min',
+    image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1470&auto=format&fit=crop',
+    description: 'Maximální program včetně hloubkového tepování sedaček a čištění kůže.',
+    details: [
+      'Vše z programu P2',
+      'Hloubkové tepování všech sedaček (textil/kůže)',
+      'Tepování zavazadlového prostoru',
+      'Čištění zádveří a prahů'
+    ]
   },
   {
-    id: 'ceramic',
+    id: 'pi',
     icon: Gem,
-    title: 'Keramická ochrana laku',
+    title: 'Pi: Leštění laku & Keramická ochrana',
+    price: 'od 5 000 Kč',
+    basePrice: 5000, 
+    duration: 'Individuální',
     image: 'https://images.unsplash.com/photo-1619405399517-d7fce0f13302?q=80&w=1374&auto=format&fit=crop',
-    description: 'Aplikace certifikované keramiky pro extrémní lesk a ochranu před UV zářením, solí a nečistotami. Vůz se méně špiní a snadněji umývá.',
-    details: ['Výdrž 1-5 let', 'Extrémní lesk', 'Chemická odolnost', 'Samočistící efekt']
+    description: 'Specializované služby pro náročné klienty. Leštění laku a keramická ochrana.',
+    details: [
+      'Leštění laku karoserie',
+      'Nanesení keramické ochrany',
+      'Korekce laku',
+      'Individuální domluva'
+    ]
   },
   {
-    id: 'tint',
-    icon: Percent,
-    title: 'Tónování skel',
-    image: 'https://images.unsplash.com/photo-1621996538531-1823772652b0?q=80&w=1470&auto=format&fit=crop',
-    description: 'Profesionální instalace protislunečních fólií. Zvýšení soukromí, snížení teploty v interiéru a ochrana před UV zářením. Vše s atestem 8SD.',
-    details: ['Snížení teploty', 'UV ochrana', 'Soukromí', 'Atest 8SD']
-  },
-  {
-    id: 'pdr',
-    icon: Wrench,
-    title: 'Opravy důlků metodou PDR',
-    image: 'https://images.unsplash.com/photo-1562259194-e952a6281735?q=80&w=1470&auto=format&fit=crop',
-    description: 'Paintless Dent Repair - oprava promáčklin (např. od krupobití nebo parkování) vytahováním za studena bez nutnosti lakování.',
-    details: ['Bez lakování', 'Zachování originálního laku', 'Rychlá oprava', 'Nižší náklady']
+    id: 'addons',
+    icon: PlusCircle,
+    title: 'Doplňkové služby',
+    price: 'Ceník',
+    basePrice: 0,
+    duration: '',
+    image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=1200&auto=format&fit=crop',
+    description: 'Rozšiřující služby k programům.',
+    details: [
+      'Interiér bez tepování (1 350 Kč)',
+      'Interiér s tepováním (2 650 Kč)',
+      'Odstranění psích chlupů (600 Kč)',
+      'Dezinfekce klimatizace (600 Kč)',
+      'Aplikace tekutých stěračů (500 Kč)',
+      'Mytí motoru vč. impregnace (650 Kč)',
+      'Tekutý vosk - 3 měsíce (700 Kč)',
+      'Tuhý vosk - 8 měsíců (1 350 Kč)',
+      'Oživení světlometů (1 500 Kč)'
+    ]
   },
   {
     id: 'pickup',
     icon: MapPin,
     title: 'Pick-up servis',
+    price: 'Individuální',
+    basePrice: 500,
     image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1470&auto=format&fit=crop',
-    description: 'Nemáte čas k nám jezdit? Vůz si u vás vyzvedneme (doma či v kanceláři) a po dokončení služeb ho přistavíme zpět čistý.',
-    details: ['Vyzvednutí vozu', 'Přistavení zpět', 'Pojištění převozu', 'Úspora času']
+    description: 'Vůz si u vás vyzvedneme a vrátíme čistý.',
+    details: ['Vyzvednutí vozu', 'Přistavení zpět']
   }
 ];
 
 export const VOUCHERS = [
   {
     id: 1,
-    title: 'Program STANDARD',
-    price: '1 890 Kč',
-    description: 'Ideální pro pravidelnou údržbu. Důkladné mytí exteriéru a základní úklid interiéru.',
-    features: ['Ruční mytí karoserie', 'Vysátí interiéru', 'Otření prachu', 'Čištění oken a zádveří']
+    title: 'Voucher P1',
+    price: '650 Kč',
+    description: 'Ruční mytí exteriéru.',
+    features: ['Předmytí a mytí', 'Čištění kol', 'Vyleštění oken']
   },
   {
     id: 2,
-    title: 'Program EXCLUSIVE',
-    price: '3 490 Kč',
-    description: 'Kompletní péče o vůz. Zahrnuje detailní čištění interiéru a tvrdý vosk.',
-    features: ['Vše z programu Standard', 'Tuhý vosk (ochrana 6 měsíců)', 'Hloubkové čištění plastů', 'Impregnace pneu a plastů']
+    title: 'Voucher P2',
+    price: '1 950 Kč',
+    description: 'Exteriér + Interiér bez tepování.',
+    features: ['Kompletní mytí', 'Luxování', 'Čištění plastů']
   },
   {
     id: 3,
-    title: 'Program PREMIUM',
-    price: '5 990 Kč',
-    description: 'Maximální péče pro náročné. Tepování sedaček nebo čištění kůže a dekontaminace laku.',
-    features: ['Tepování / Čištění kůže', 'Chemická dekontaminace laku', 'Dezinfekce ozonem', 'Detailing motorového prostoru']
+    title: 'Voucher P3',
+    price: '3 250 Kč',
+    description: 'Exteriér + Interiér s tepováním.',
+    features: ['Kompletní mytí', 'Tepování sedaček', 'Ošetření kůže']
   }
 ];
 
@@ -188,11 +228,11 @@ export const PORTFOLIO_ITEMS = [
 ];
 
 export const PARTNERS = [
-  { name: 'Gyeon', logo: 'https://placehold.co/200x80/3FD5D3/FFFFFF?text=GYEON&font=montserrat' },
-  { name: 'Koch Chemie', logo: 'https://placehold.co/200x80/3FD5D3/FFFFFF?text=KOCH&font=montserrat' },
-  { name: 'Rupes', logo: 'https://placehold.co/200x80/3FD5D3/FFFFFF?text=RUPES&font=montserrat' },
-  { name: 'Meguiars', logo: 'https://placehold.co/200x80/3FD5D3/FFFFFF?text=MEGUIARS&font=montserrat' },
-  { name: 'Sonax', logo: 'https://placehold.co/200x80/3FD5D3/FFFFFF?text=SONAX&font=montserrat' },
+  { name: 'Gyeon', logo: 'https://placehold.co/200x80/66FFCC/FFFFFF?text=GYEON&font=montserrat' },
+  { name: 'Koch Chemie', logo: 'https://placehold.co/200x80/66FFCC/FFFFFF?text=KOCH&font=montserrat' },
+  { name: 'Rupes', logo: 'https://placehold.co/200x80/66FFCC/FFFFFF?text=RUPES&font=montserrat' },
+  { name: 'Meguiars', logo: 'https://placehold.co/200x80/66FFCC/FFFFFF?text=MEGUIARS&font=montserrat' },
+  { name: 'Sonax', logo: 'https://placehold.co/200x80/66FFCC/FFFFFF?text=SONAX&font=montserrat' },
 ];
 
 export const TEAM = [

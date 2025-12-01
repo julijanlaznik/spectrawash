@@ -4,9 +4,12 @@ import { CONTACT_INFO, SERVICES } from '../constants';
 import Button from './Button';
 import { motion, useScroll, useTransform, Variants, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon, MapPin, Navigation, Phone, Mail, Check, X } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 const Contact: React.FC = () => {
   const containerRef = useRef(null);
+  const location = useLocation();
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
@@ -14,28 +17,38 @@ const Contact: React.FC = () => {
 
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
+  // Staggered animation variants for a "pop-up" feel
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.1,
         delayChildren: 0.2
       }
     }
   };
 
   const itemVariants: Variants = {
-    hidden: { y: 30, opacity: 0, scale: 0.95 },
+    hidden: { y: 20, opacity: 0, scale: 0.95 },
     visible: {
       y: 0,
       opacity: 1,
       scale: 1,
       transition: {
         type: "spring",
-        stiffness: 70,
+        stiffness: 100,
         damping: 15
       }
+    }
+  };
+
+  const glassVariants: Variants = {
+    hidden: { x: -50, opacity: 0 },
+    visible: { 
+      x: 0, 
+      opacity: 1,
+      transition: { duration: 0.8, ease: "easeOut" }
     }
   };
 
@@ -46,8 +59,50 @@ const Contact: React.FC = () => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   
-  // PICKUP STATE
+  // FORM STATE
   const [isPickup, setIsPickup] = useState(false);
+  const [selectedService, setSelectedService] = useState("");
+  const [message, setMessage] = useState("");
+  // NEW STATE FOR ADDONS
+  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+
+  // AUTO-FILL FROM URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const serviceParam = params.get('service');
+    const pickupParam = params.get('pickup');
+    const detailsParam = params.get('details');
+
+    if (pickupParam === 'true') {
+      setIsPickup(true);
+    }
+
+    if (serviceParam) {
+      setSelectedService(serviceParam);
+    }
+
+    if (detailsParam) {
+      setMessage(detailsParam);
+    }
+  }, [location]);
+
+  // RESET ADDONS IF SERVICE CHANGES
+  useEffect(() => {
+    if (selectedService !== 'Doplňkové služby') {
+      setSelectedAddons([]);
+    }
+  }, [selectedService]);
+
+  const toggleAddon = (addon: string) => {
+    if (selectedAddons.includes(addon)) {
+      setSelectedAddons(prev => prev.filter(a => a !== addon));
+    } else {
+      setSelectedAddons(prev => [...prev, addon]);
+    }
+  };
+
+  const addonsList = SERVICES.find(s => s.id === 'addons')?.details || [];
+  const showAddons = selectedService === 'Doplňkové služby';
 
   // SUCCESS MODAL STATE
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -135,7 +190,7 @@ const Contact: React.FC = () => {
   const MAP_URL = "https://www.google.com/maps/dir/?api=1&destination=Přílepská+1901,+252+63+Roztoky";
 
   return (
-    <section id="contact" ref={containerRef} className="py-24 md:py-32 relative overflow-hidden bg-gray-50">
+    <section id="contact" ref={containerRef} className="py-24 md:py-32 relative overflow-hidden bg-gray-100">
       <style>{`
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
@@ -151,229 +206,309 @@ const Contact: React.FC = () => {
         }
       `}</style>
 
-      {/* SECTION BACKGROUND */}
+      {/* SECTION BACKGROUND - Enhanced for Glassmorphism Context */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[100px] transform translate-x-1/3 -translate-y-1/3"></div>
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-dark/5 rounded-full blur-[80px] transform -translate-x-1/3 translate-y-1/3"></div>
+        {/* Large abstract shapes to be seen through the glass */}
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-blue/10 rounded-full blur-[120px] transform translate-x-1/3 -translate-y-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-[700px] h-[700px] bg-brand-dark/10 rounded-full blur-[100px] transform -translate-x-1/3 translate-y-1/3"></div>
+        {/* Grid pattern for technical feel */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#2F2F2F 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col lg:flex-row shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="flex flex-col lg:flex-row shadow-2xl rounded-none overflow-hidden"
+        >
           
-          {/* --- INFO PANEL (Left) - Clean Dark Design (No Image) --- */}
-          <div className="lg:w-5/12 relative min-h-[400px] lg:min-h-[650px] overflow-hidden bg-brand-dark flex flex-col justify-between p-6 lg:p-12">
+          {/* --- INFO PANEL (Left) - GLASSMORPHISM --- */}
+          <motion.div 
+            variants={glassVariants}
+            className="lg:w-5/12 relative min-h-[400px] lg:min-h-[700px] flex flex-col justify-between p-8 lg:p-12 border-r border-white/10"
+          >
+            {/* Glass Background Layer */}
+            <div className="absolute inset-0 bg-brand-dark/80 backdrop-blur-xl z-0"></div>
             
-            {/* Subtle Decor */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-blue/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2"></div>
-            
-            <motion.div 
-               initial={{ opacity: 0, x: -20 }}
-               whileInView={{ opacity: 1, x: 0 }}
-               viewport={{ once: true }}
-               className="relative z-20 h-full flex flex-col justify-between"
-            >
+            {/* Inner Sheen/Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none z-0"></div>
+
+            {/* Content */}
+            <div className="relative z-20 h-full flex flex-col justify-between">
                <div>
-                  <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs mb-6 block flex items-center gap-2">
-                    <MapPin size={16} /> Kde nás najdete
-                  </span>
-                  <h3 className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">
-                    KONTAKT
-                  </h3>
-                  <div className="w-12 h-[2px] bg-brand-blue mb-10"></div>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs mb-6 block flex items-center gap-2">
+                      <MapPin size={16} /> Kde nás najdete
+                    </span>
+                    <h3 className="text-4xl md:text-5xl font-heading font-bold text-white mb-2 tracking-tight">
+                      KONTAKT
+                    </h3>
+                    <div className="w-16 h-[3px] bg-brand-blue mb-10 shadow-[0_0_15px_#3FD5D3]"></div>
+                  </motion.div>
                   
-                  <div className="space-y-8 text-gray-300">
-                    <div className="flex items-start gap-4">
-                       <MapPin className="text-brand-blue mt-1 flex-shrink-0" size={24} />
-                       <div>
-                         <p className="text-white font-bold text-lg uppercase tracking-wide">Adresa</p>
-                         <p className="font-light">{CONTACT_INFO.address}</p>
+                  <motion.div 
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    className="space-y-8 text-gray-300"
+                  >
+                    <motion.div variants={itemVariants} className="flex items-start gap-5 group">
+                       <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-brand-blue/20 transition-colors">
+                          <MapPin className="text-brand-blue" size={20} />
                        </div>
-                    </div>
+                       <div>
+                         <p className="text-white font-bold text-sm uppercase tracking-widest mb-1">Adresa</p>
+                         <p className="font-light text-white/80">{CONTACT_INFO.address}</p>
+                       </div>
+                    </motion.div>
                     
-                    <div className="flex items-start gap-4">
-                       <Phone className="text-brand-blue mt-1 flex-shrink-0" size={24} />
-                       <div>
-                         <p className="text-white font-bold text-lg uppercase tracking-wide">Telefon</p>
-                         <p className="font-light">{CONTACT_INFO.phone}</p>
+                    <motion.div variants={itemVariants} className="flex items-start gap-5 group">
+                       <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-brand-blue/20 transition-colors">
+                          <Phone className="text-brand-blue" size={20} />
                        </div>
-                    </div>
+                       <div>
+                         <p className="text-white font-bold text-sm uppercase tracking-widest mb-1">Telefon</p>
+                         <p className="font-light text-white/80">{CONTACT_INFO.phone}</p>
+                       </div>
+                    </motion.div>
 
-                    <div className="flex items-start gap-4">
-                       <Mail className="text-brand-blue mt-1 flex-shrink-0" size={24} />
-                       <div>
-                         <p className="text-white font-bold text-lg uppercase tracking-wide">Email</p>
-                         <p className="font-light">{CONTACT_INFO.email}</p>
+                    <motion.div variants={itemVariants} className="flex items-start gap-5 group">
+                       <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-brand-blue/20 transition-colors">
+                          <Mail className="text-brand-blue" size={20} />
                        </div>
-                    </div>
+                       <div>
+                         <p className="text-white font-bold text-sm uppercase tracking-widest mb-1">Email</p>
+                         <p className="font-light text-white/80">{CONTACT_INFO.email}</p>
+                       </div>
+                    </motion.div>
 
-                    <div className="flex items-start gap-4">
-                       <Clock className="text-brand-blue mt-1 flex-shrink-0" size={24} />
-                       <div>
-                         <p className="text-white font-bold text-lg uppercase tracking-wide">Otevírací doba</p>
-                         <p className="font-light">{CONTACT_INFO.hours}</p>
+                    <motion.div variants={itemVariants} className="flex items-start gap-5 group">
+                       <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-brand-blue/20 transition-colors">
+                          <Clock className="text-brand-blue" size={20} />
                        </div>
-                    </div>
-                  </div>
+                       <div>
+                         <p className="text-white font-bold text-sm uppercase tracking-widest mb-1">Otevírací doba</p>
+                         <p className="font-light text-white/80">{CONTACT_INFO.hours}</p>
+                       </div>
+                    </motion.div>
+                  </motion.div>
                </div>
                
-               <div className="mt-12">
+               <motion.div 
+                 initial={{ opacity: 0 }}
+                 whileInView={{ opacity: 1 }}
+                 transition={{ delay: 0.8 }}
+                 className="mt-12"
+               >
                  <button 
                    onClick={() => window.open(MAP_URL, '_blank')}
-                   className="flex items-center gap-3 text-brand-blue font-bold uppercase tracking-widest hover:text-white transition-colors group/link"
+                   className="flex items-center gap-3 text-brand-blue font-bold uppercase tracking-widest hover:text-white transition-colors group/link px-6 py-4 border border-brand-blue/30 hover:bg-brand-blue/10 w-fit"
                  >
-                   <Navigation size={20} className="group-hover/link:animate-pulse" /> Navigovat do studia
+                   <Navigation size={20} className="group-hover/link:animate-pulse" /> Navigovat k nám
                  </button>
-               </div>
-            </motion.div>
-          </div>
+               </motion.div>
+            </div>
+          </motion.div>
 
           {/* --- CONTACT FORM (Right) --- */}
-          <div className="lg:w-7/12 bg-white p-6 md:p-12 lg:p-16 relative">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.div variants={itemVariants} className="mb-10">
-                <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs mb-3 block">
-                   Rezervace
-                </span>
-                <h3 className="text-3xl md:text-4xl font-heading font-bold text-brand-dark mb-4">
-                  Napište nám
-                </h3>
-                <p className="text-gray-500 font-light max-w-md">
-                   Vyplňte formulář níže pro nezávaznou poptávku detailingu. Ozveme se vám obratem.
-                </p>
-              </motion.div>
+          <motion.div 
+            className="lg:w-7/12 bg-white p-8 md:p-12 lg:p-16 relative z-10"
+            variants={containerVariants}
+          >
+            <motion.div variants={itemVariants} className="mb-10">
+              <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs mb-3 block">
+                 Rezervace
+              </span>
+              <h3 className="text-3xl md:text-4xl font-heading font-bold text-brand-dark mb-4">
+                Napište nám
+              </h3>
+              <p className="text-gray-500 font-light max-w-md">
+                 Vyplňte formulář níže pro nezávaznou poptávku našich služeb. Ozveme se vám obratem.
+              </p>
+            </motion.div>
 
-              <form onSubmit={handleSubmit} className="space-y-8 group/form">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <motion.div variants={itemVariants} className="relative group/input">
-                    <input 
-                      type="text" 
-                      id="name" 
-                      name="name"
-                      className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent"
-                      placeholder="Jméno"
-                      required
-                    />
-                    <label 
-                      htmlFor="name" 
-                      className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
-                    >
-                      Jméno
-                    </label>
-                  </motion.div>
-
-                  <motion.div variants={itemVariants} className="relative group/input">
-                    <input 
-                      type="tel" 
-                      id="phone" 
-                      className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent"
-                      placeholder="Telefon"
-                      required
-                    />
-                    <label 
-                      htmlFor="phone" 
-                      className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
-                    >
-                      Telefon
-                    </label>
-                  </motion.div>
-                </div>
-
+            <form onSubmit={handleSubmit} className="space-y-8 group/form">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <motion.div variants={itemVariants} className="relative group/input">
-                  <input 
-                    type="email" 
-                    id="email" 
-                    className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent"
-                    placeholder="Email"
+                  <motion.input 
+                    whileFocus={{ scale: 1.02, x: 5 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                    type="text" 
+                    id="name" 
+                    name="name"
+                    className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent relative z-10"
+                    placeholder="Jméno"
                     required
                   />
                   <label 
-                    htmlFor="email" 
+                    htmlFor="name" 
                     className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
                   >
-                    Email
+                    Jméno
                   </label>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                  <div className="flex flex-col">
-                    <motion.div variants={itemVariants} className="relative group/input">
-                      <select 
-                        id="service" 
-                        className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors appearance-none cursor-pointer"
-                        required
-                        defaultValue=""
-                      >
-                        <option value="" disabled hidden></option>
-                        {/* Filter out 'pickup' id so it doesn't show in dropdown */}
-                        {SERVICES.filter(s => s.id !== 'pickup').map(s => (
-                          <option key={s.id} value={s.title}>{s.title}</option>
-                        ))}
-                        <option value="Jiné">Jiné / Individuální</option>
-                      </select>
-                      <label 
-                        htmlFor="service" 
-                        className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider pointer-events-none"
-                      >
-                        Služba
-                      </label>
-                      <div className="absolute right-0 top-3 pointer-events-none text-gray-400">
-                        <ChevronRight size={16} className="rotate-90" />
-                      </div>
-                    </motion.div>
+                <motion.div variants={itemVariants} className="relative group/input">
+                  <motion.input 
+                    whileFocus={{ scale: 1.02, x: 5 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                    type="tel" 
+                    id="phone" 
+                    className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent relative z-10"
+                    placeholder="Telefon"
+                    required
+                  />
+                  <label 
+                    htmlFor="phone" 
+                    className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
+                  >
+                    Telefon
+                  </label>
+                </motion.div>
+              </div>
 
-                    {/* PICKUP CHECKBOX EXTRA OPTION */}
-                    <div 
-                      onClick={() => setIsPickup(!isPickup)}
-                      className="mt-6 flex items-center gap-3 cursor-pointer group/check select-none"
+              <motion.div variants={itemVariants} className="relative group/input">
+                <motion.input 
+                  whileFocus={{ scale: 1.01, x: 5 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                  type="email" 
+                  id="email" 
+                  className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent relative z-10"
+                  placeholder="Email"
+                  required
+                />
+                <label 
+                  htmlFor="email" 
+                  className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
+                >
+                  Email
+                </label>
+              </motion.div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                {/* --- LEFT COLUMN (Service Selection) --- */}
+                <div className="flex flex-col">
+                  <motion.div variants={itemVariants} className="relative group/input">
+                    <motion.select 
+                      whileFocus={{ scale: 1.02, x: 5 }}
+                      transition={{ type: 'spring', stiffness: 300 }}
+                      id="service" 
+                      className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors appearance-none cursor-pointer relative z-10"
+                      required
+                      value={selectedService}
+                      onChange={(e) => setSelectedService(e.target.value)}
                     >
-                       <div className={`w-5 h-5 border transition-all duration-300 flex items-center justify-center ${isPickup ? 'bg-brand-blue border-brand-blue' : 'border-gray-300 group-hover/check:border-brand-blue'}`}>
-                          {isPickup && <Check size={14} className="text-brand-dark" strokeWidth={3} />}
-                       </div>
-                       <span className={`text-sm transition-colors ${isPickup ? 'text-brand-dark font-medium' : 'text-gray-500 group-hover/check:text-brand-blue'}`}>
-                         Chci využít Pick-up servis (vyzvednutí vozu)
-                       </span>
+                      <option value="" disabled hidden></option>
+                      {/* Filter out 'pickup' id so it doesn't show in dropdown */}
+                      {SERVICES.filter(s => s.id !== 'pickup').map(s => (
+                        <option key={s.id} value={s.title}>{s.title}</option>
+                      ))}
+                      <option value="Jiné">Jiné / Individuální</option>
+                    </motion.select>
+                    <label 
+                      htmlFor="service" 
+                      className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider pointer-events-none"
+                    >
+                      Služba
+                    </label>
+                    <div className="absolute right-0 top-3 pointer-events-none text-gray-400">
+                      <ChevronRight size={16} className="rotate-90" />
                     </div>
+                  </motion.div>
 
-                    {/* DYNAMIC PICKUP ADDRESS INPUT */}
-                    <AnimatePresence>
-                      {isPickup && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                          animate={{ opacity: 1, height: 'auto', marginTop: 24 }}
-                          exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                          className="relative group/input overflow-hidden"
+                  {/* PICKUP CHECKBOX EXTRA OPTION */}
+                  <motion.div 
+                    variants={itemVariants}
+                    onClick={() => setIsPickup(!isPickup)}
+                    className="mt-6 flex items-center gap-3 cursor-pointer group/check select-none"
+                  >
+                     <motion.div 
+                        whileTap={{ scale: 0.9 }}
+                        className={`w-5 h-5 border transition-all duration-300 flex items-center justify-center ${isPickup ? 'bg-brand-blue border-brand-blue' : 'border-gray-300 group-hover/check:border-brand-blue'}`}
+                     >
+                        {isPickup && <Check size={14} className="text-brand-dark" strokeWidth={3} />}
+                     </motion.div>
+                     <span className={`text-sm transition-colors ${isPickup ? 'text-brand-dark font-medium' : 'text-gray-500 group-hover/check:text-brand-blue'}`}>
+                       Chci využít Pick-up servis (vyzvednutí vozu)
+                     </span>
+                  </motion.div>
+
+                  {/* DYNAMIC PICKUP ADDRESS INPUT */}
+                  <AnimatePresence>
+                    {isPickup && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                        animate={{ opacity: 1, height: 'auto', marginTop: 24 }}
+                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                        className="relative group/input overflow-hidden"
+                      >
+                        <motion.input 
+                          initial={{ x: -20 }}
+                          animate={{ x: 0 }}
+                          type="text" 
+                          id="pickup_address" 
+                          className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent"
+                          placeholder="Adresa vyzvednutí"
+                          required={isPickup}
+                        />
+                        <label 
+                          htmlFor="pickup_address" 
+                          className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
                         >
-                          <input 
-                            type="text" 
-                            id="pickup_address" 
-                            className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent"
-                            placeholder="Adresa vyzvednutí"
-                            required={isPickup}
-                          />
-                          <label 
-                            htmlFor="pickup_address" 
-                            className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
-                          >
-                            Adresa vyzvednutí
-                          </label>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                          Adresa vyzvednutí
+                        </label>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                
+                {/* --- RIGHT COLUMN (Addons + Date Picker) --- */}
+                <div className="flex flex-col gap-6">
+                  {/* DYNAMIC ADDONS MENU */}
+                  <AnimatePresence>
+                    {showAddons && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, height: 0 }}
+                        animate={{ opacity: 1, y: 0, height: 'auto' }}
+                        exit={{ opacity: 0, y: -10, height: 0 }}
+                        className="bg-white border border-gray-100 shadow-sm p-6 relative overflow-hidden group/menu"
+                      >
+                        <div className="absolute top-0 left-0 w-1 h-full bg-brand-blue"></div>
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-brand-dark mb-4 flex items-center gap-2">
+                           Vyberte doplňkové služby
+                        </h4>
+                        <div className="space-y-2">
+                          {addonsList.map(addon => (
+                             <div 
+                                key={addon} 
+                                onClick={() => toggleAddon(addon)}
+                                className="flex items-start gap-3 cursor-pointer group/addon hover:bg-gray-50 p-2 -mx-2 rounded transition-colors"
+                             >
+                                <div className={`mt-0.5 w-4 h-4 border flex items-center justify-center transition-colors ${selectedAddons.includes(addon) ? 'bg-brand-blue border-brand-blue' : 'border-gray-300 bg-white'}`}>
+                                   {selectedAddons.includes(addon) && <Check size={12} className="text-white" strokeWidth={3} />}
+                                </div>
+                                <span className={`text-sm leading-tight ${selectedAddons.includes(addon) ? 'text-brand-dark font-medium' : 'text-gray-600'}`}>
+                                   {addon}
+                                </span>
+                             </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   {/* CUSTOM DATE PICKER TRIGGER */}
                   <motion.div variants={itemVariants} className="relative group/input custom-picker-container">
                     <div 
                       onClick={() => setIsPickerOpen(!isPickerOpen)}
-                      className="peer w-full border-b border-gray-300 py-3 text-brand-dark cursor-pointer flex items-center justify-between"
+                      className="peer w-full border-b border-gray-300 py-3 text-brand-dark cursor-pointer flex items-center justify-between hover:bg-gray-50 transition-colors"
                     >
-                       <span className={selectedDate ? 'text-brand-dark' : 'text-transparent'}>
+                       <span className={selectedDate ? 'text-brand-dark font-medium' : 'text-transparent'}>
                          {selectedDate ? formatDisplayDate() : 'Vybrat datum'}
                        </span>
                        <CalendarIcon size={16} className="text-gray-400" />
@@ -391,17 +526,18 @@ const Contact: React.FC = () => {
                           initial={{ opacity: 0, y: 10, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          className="absolute top-full left-0 z-50 mt-2 w-80 bg-white border border-gray-100 shadow-2xl p-4"
+                          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                          className="absolute top-full left-0 z-50 mt-2 w-80 bg-white border border-gray-100 shadow-2xl p-4 rounded-none"
                         >
                            {pickerStep === 'date' ? (
                              <>
                                {/* Calendar Header */}
                                <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeMonth(-1); }} className="p-1 hover:bg-gray-50"><ChevronLeft size={16}/></button>
+                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeMonth(-1); }} className="p-1 hover:bg-gray-50 rounded-full transition-colors"><ChevronLeft size={16}/></button>
                                   <span className="font-bold text-sm uppercase tracking-wider text-brand-dark">
                                     {currentMonth.toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' })}
                                   </span>
-                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeMonth(1); }} className="p-1 hover:bg-gray-50"><ChevronRight size={16}/></button>
+                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeMonth(1); }} className="p-1 hover:bg-gray-50 rounded-full transition-colors"><ChevronRight size={16}/></button>
                                </div>
                                {/* Calendar Grid */}
                                <div className="grid grid-cols-7 gap-1 text-center text-xs mb-2 text-gray-400 font-medium">
@@ -415,7 +551,7 @@ const Contact: React.FC = () => {
                                       <button
                                         key={day}
                                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDateClick(day); }}
-                                        className={`w-8 h-8 flex items-center justify-center text-sm transition-colors rounded-none
+                                        className={`w-8 h-8 flex items-center justify-center text-sm transition-all rounded-none
                                           ${todayHighlight ? 'text-brand-blue font-bold ring-1 ring-brand-blue' : 'hover:bg-brand-blue hover:text-white'}
                                         `}
                                       >
@@ -428,19 +564,22 @@ const Contact: React.FC = () => {
                            ) : (
                              <>
                                {/* Time Slots */}
-                               <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100 cursor-pointer" onClick={(e) => { e.stopPropagation(); setPickerStep('date'); }}>
-                                 <ChevronLeft size={14} className="text-gray-400" />
-                                 <span className="font-bold text-sm uppercase tracking-wider text-brand-dark">Vybrat čas</span>
+                               <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100 cursor-pointer group/back" onClick={(e) => { e.stopPropagation(); setPickerStep('date'); }}>
+                                 <ChevronLeft size={14} className="text-gray-400 group-hover/back:text-brand-dark" />
+                                 <span className="font-bold text-sm uppercase tracking-wider text-brand-dark group-hover/back:text-brand-blue transition-colors">Vybrat čas</span>
                                </div>
                                <div className="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-gray-200">
-                                 {TIME_SLOTS.map(time => (
-                                   <button
+                                 {TIME_SLOTS.map((time, idx) => (
+                                   <motion.button
                                      key={time}
+                                     initial={{ opacity: 0, y: 10 }}
+                                     animate={{ opacity: 1, y: 0 }}
+                                     transition={{ delay: idx * 0.03 }}
                                      onClick={(e) => { e.preventDefault(); handleTimeClick(time); }}
-                                     className="py-2 px-1 border border-gray-100 text-xs hover:border-brand-blue hover:text-brand-blue transition-colors text-center"
+                                     className="py-2 px-1 border border-gray-100 text-xs hover:border-brand-blue hover:text-brand-blue transition-colors text-center bg-gray-50 hover:bg-white"
                                    >
                                      {time}
-                                   </button>
+                                   </motion.button>
                                  ))}
                                </div>
                              </>
@@ -450,36 +589,40 @@ const Contact: React.FC = () => {
                     </AnimatePresence>
                   </motion.div>
                 </div>
+              </div>
 
-                <motion.div variants={itemVariants} className="relative group/input">
-                  <textarea 
-                    id="message" 
-                    rows={4}
-                    className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent resize-none"
-                    placeholder="Zpráva"
-                  ></textarea>
-                  <label 
-                    htmlFor="message" 
-                    className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
-                  >
-                    Zpráva / Specifikace vozu
-                  </label>
-                </motion.div>
+              <motion.div variants={itemVariants} className="relative group/input">
+                <motion.textarea 
+                  whileFocus={{ scale: 1.01, x: 5 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                  id="message" 
+                  rows={4}
+                  className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent resize-none relative z-10"
+                  placeholder="Zpráva"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                ></motion.textarea>
+                <label 
+                  htmlFor="message" 
+                  className={`absolute left-0 transition-all uppercase tracking-wider ${message ? '-top-3.5 text-xs font-bold text-brand-blue' : 'top-3 text-base text-gray-400 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue'}`}
+                >
+                  Zpráva / Specifikace vozu
+                </label>
+              </motion.div>
 
-                <motion.div variants={itemVariants} className="pt-4">
-                  <Button 
-                    type="submit" 
-                    variant="dark"
-                    fullWidth 
-                    className="shadow-xl"
-                  >
-                    Odeslat poptávku
-                  </Button>
-                </motion.div>
-              </form>
-            </motion.div>
-          </div>
-        </div>
+              <motion.div variants={itemVariants} className="pt-4">
+                <Button 
+                  type="submit" 
+                  variant="dark"
+                  fullWidth 
+                  className="shadow-xl"
+                >
+                  Odeslat poptávku
+                </Button>
+              </motion.div>
+            </form>
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* --- SUCCESS POPUP MODAL --- */}
@@ -497,9 +640,9 @@ const Contact: React.FC = () => {
             
             {/* Modal Content */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.9, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              exit={{ opacity: 0, scale: 0.9, y: 50 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
               className="relative bg-brand-dark border border-brand-blue p-8 md:p-12 max-w-lg w-full shadow-[0_0_50px_rgba(63,213,211,0.2)]"
             >
@@ -513,9 +656,14 @@ const Contact: React.FC = () => {
 
               <div className="flex flex-col items-center text-center">
                 {/* Success Icon */}
-                <div className="w-20 h-20 rounded-full border-2 border-brand-blue flex items-center justify-center mb-6 text-brand-blue shadow-[0_0_20px_rgba(63,213,211,0.3)]">
+                <motion.div 
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: 0.2, type: "spring" }}
+                  className="w-20 h-20 rounded-full border-2 border-brand-blue flex items-center justify-center mb-6 text-brand-blue shadow-[0_0_20px_rgba(63,213,211,0.3)]"
+                >
                    <Check size={40} strokeWidth={3} />
-                </div>
+                </motion.div>
 
                 <h3 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4 uppercase leading-none">
                    Rezervace <br/><span className="text-brand-blue">Odeslána</span>

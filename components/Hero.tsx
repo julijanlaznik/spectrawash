@@ -96,7 +96,7 @@ const Hero: React.FC = () => {
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-4xl md:text-8xl lg:text-9xl font-heading font-bold text-white leading-[1.1] tracking-tighter max-w-4xl"
+              className="text-4xl md:text-8xl lg:text-9xl font-heading font-bold text-white leading-[1.1] tracking-tighter max-w-4xl whitespace-pre-line"
             >
               {HERO_SLIDES[currentSlide].title}
             </motion.h1>

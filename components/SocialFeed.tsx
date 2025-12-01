@@ -54,7 +54,7 @@ const SocialFeed: React.FC = () => {
            className="mt-8 md:mt-0"
         >
           <a 
-            href="https://www.instagram.com/cleanstylecz/" 
+            href="https://www.instagram.com/spectra_wash/" 
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center text-white group"

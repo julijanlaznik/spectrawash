@@ -1,12 +1,18 @@
+
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Facebook, Instagram, Linkedin, ArrowUp, Send } from 'lucide-react';
+import { Facebook, Instagram, ArrowUp, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Logo from './Logo';
 
 const Footer: React.FC = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const resetCookies = () => {
+    window.dispatchEvent(new Event('resetCookieConsent'));
+    scrollToTop();
   };
 
   return (
@@ -81,15 +87,22 @@ const Footer: React.FC = () => {
           {/* Connect Column */}
           <div className="col-span-1 md:col-span-2">
             <h4 className="text-xs font-bold uppercase tracking-[0.2em] mb-8 text-white/40">Sledujte nás</h4>
-            <div className="flex gap-4">
-              <a href="#" className="w-12 h-12 border border-white/10 flex items-center justify-center hover:bg-brand-blue hover:border-brand-blue transition-all duration-300 group">
-                <Instagram size={18} className="text-gray-400 group-hover:text-white transition-colors" />
+            <div className="flex gap-6 items-center">
+              <a 
+                href="https://www.instagram.com/spectra_wash/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="group"
+              >
+                <Instagram size={24} className="text-gray-400 group-hover:text-white transition-colors" />
               </a>
-              <a href="#" className="w-12 h-12 border border-white/10 flex items-center justify-center hover:bg-brand-blue hover:border-brand-blue transition-all duration-300 group">
-                <Facebook size={18} className="text-gray-400 group-hover:text-white transition-colors" />
-              </a>
-              <a href="#" className="w-12 h-12 border border-white/10 flex items-center justify-center hover:bg-brand-blue hover:border-brand-blue transition-all duration-300 group">
-                <Linkedin size={18} className="text-gray-400 group-hover:text-white transition-colors" />
+              <a 
+                href="https://www.facebook.com/spectrawash" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="group"
+              >
+                <Facebook size={24} className="text-gray-400 group-hover:text-white transition-colors" />
               </a>
             </div>
           </div>
@@ -98,8 +111,9 @@ const Footer: React.FC = () => {
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 uppercase tracking-wider">
           <p>&copy; {new Date().getFullYear()} SpectraWash.</p>
           <div className="flex items-center mt-6 md:mt-0 space-x-8">
-            <a href="#" className="hover:text-white transition-colors">Ochrana dat</a>
-            <a href="#" className="hover:text-white transition-colors">Podmínky</a>
+            <NavLink to="/privacy" className="hover:text-white transition-colors">Ochrana dat</NavLink>
+            <NavLink to="/terms" className="hover:text-white transition-colors">Podmínky</NavLink>
+            <button onClick={resetCookies} className="hover:text-white transition-colors">Nastavení cookies</button>
             <button 
               onClick={scrollToTop}
               className="w-10 h-10 flex items-center justify-center border border-white/10 hover:bg-white hover:text-brand-dark transition-all duration-300 group"

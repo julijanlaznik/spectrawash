@@ -1,7 +1,8 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Gift } from 'lucide-react';
 import { NAV_LINKS } from '../constants';
 import Button from './Button';
 import Logo from './Logo';
@@ -68,16 +69,20 @@ const Header: React.FC = () => {
     handleScrollToSection('/#contact');
   };
 
+  const handleVouchersClick = () => {
+    navigate('/shop');
+  };
+
   // Determine text color based on state
-  // On Shop page or when scrolled: Dark Text. Otherwise (Home top): White Text.
   const textColorClass = isScrolled || isMobileMenuOpen || isShopPage ? 'text-brand-dark' : 'text-white';
   const subTextColorClass = isScrolled || isMobileMenuOpen || isShopPage ? 'text-brand-dark' : 'text-white/90';
+  const giftIconColor = isScrolled || isMobileMenuOpen || isShopPage ? 'text-brand-dark' : 'text-white';
 
   return (
     <>
       <header 
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-          isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-8'
+          isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-6'
         }`}
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
@@ -87,26 +92,43 @@ const Header: React.FC = () => {
           </NavLink>
 
           {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center space-x-12">
-            {NAV_LINKS.map((link) => (
+          <nav className="hidden xl:flex items-center space-x-10">
+            {NAV_LINKS.map((link) => {
+              return (
               <div key={link.name} className="relative group overflow-hidden">
                 <button
                   onClick={() => handleScrollToSection(link.path)}
-                  className={`text-[11px] font-light tracking-[0.25em] uppercase transition-colors duration-300 block py-4 hover:text-brand-blue ${subTextColorClass}`}
+                  className={`text-[11px] tracking-[0.25em] uppercase transition-colors duration-300 block py-4 hover:text-brand-blue 
+                    font-light ${subTextColorClass}`}
                 >
                   {link.name}
                 </button>
-                <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-brand-blue transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out`} />
+                {/* FIXED: Added opacity-0 group-hover:opacity-100 to prevent 1px artifact (blue dot) when idle */}
+                <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-brand-blue transform -translate-x-full group-hover:translate-x-0 transition-all duration-300 ease-out opacity-0 group-hover:opacity-100`} />
               </div>
-            ))}
-            <Button 
-              // Force primary button on Shop page so it's visible against white background
-              variant={isScrolled || isShopPage ? "primary" : "outline"}
-              className={!isScrolled && !isShopPage ? "border-white/30 hover:border-white" : ""}
-              onClick={handleBookingClick}
-            >
-              Rezervovat
-            </Button>
+            )})}
+            
+            {/* VOUCHER LINK */}
+            <div className="relative group overflow-hidden">
+              <button 
+                onClick={handleVouchersClick}
+                className={`text-[11px] tracking-[0.25em] uppercase transition-colors duration-300 block py-4 hover:text-brand-blue 
+                  font-medium ${subTextColorClass} flex items-center gap-2`}
+              >
+                <Gift size={16} className={`mb-0.5 ${giftIconColor}`} /> VOUCHERS
+              </button>
+              <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-brand-blue transform -translate-x-full group-hover:translate-x-0 transition-all duration-300 ease-out opacity-0 group-hover:opacity-100`} />
+            </div>
+            
+            <div className="flex items-center gap-4 ml-2">
+              <Button 
+                variant="primary"
+                onClick={handleBookingClick}
+                className="shadow-[0_0_20px_rgba(63,213,211,0.3)] hover:shadow-[0_0_30px_rgba(63,213,211,0.5)] transition-shadow duration-300"
+              >
+                Rezervovat
+              </Button>
+            </div>
           </nav>
 
           {/* Mobile Menu Toggle */}
@@ -148,10 +170,10 @@ const Header: React.FC = () => {
         }`}
       >
         <div className="w-full h-full flex flex-col items-center justify-center space-y-2 relative overflow-hidden">
-           {/* Background Deco */}
            <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-brand-light rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
            
-           {NAV_LINKS.map((link, idx) => (
+           {NAV_LINKS.map((link, idx) => {
+             return (
             <motion.div
               key={link.name}
               initial={{ opacity: 0, y: 40 }}
@@ -160,13 +182,31 @@ const Header: React.FC = () => {
             >
               <button
                 onClick={() => handleScrollToSection(link.path)}
-                className="text-2xl font-heading font-light text-brand-dark hover:text-brand-blue transition-colors uppercase tracking-[0.25em] relative group block pb-3 mb-2"
+                className={`text-2xl font-heading hover:text-brand-blue transition-colors uppercase tracking-[0.25em] relative group block pb-3 mb-2 text-brand-dark font-light`}
               >
                 <span className="relative z-10">{link.name}</span>
                 <span className="absolute left-0 bottom-0 w-full h-[2px] bg-brand-blue -z-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
               </button>
             </motion.div>
-          ))}
+          )})}
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={isMobileMenuOpen ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ delay: 0.7 }}
+            className="mt-6"
+          >
+             <button
+                onClick={() => {
+                  navigate('/shop');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-2xl font-heading text-brand-dark hover:text-brand-blue font-light uppercase tracking-[0.25em] relative group block pb-3 mb-2 flex items-center gap-3"
+              >
+                <span className="relative z-10 flex items-center gap-3"><Gift size={24} /> VOUCHERS</span>
+                <span className="absolute left-0 bottom-0 w-full h-[2px] bg-brand-blue -z-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </button>
+          </motion.div>
           
           <motion.div 
             initial={{ opacity: 0 }}
@@ -174,7 +214,7 @@ const Header: React.FC = () => {
             transition={{ delay: 0.8 }}
             className="mt-12"
           >
-            <Button onClick={handleBookingClick}>
+            <Button onClick={handleBookingClick} variant="primary">
               Rezervovat Online
             </Button>
           </motion.div>

@@ -98,10 +98,9 @@ const Team: React.FC = () => {
                 <p className="text-white/80 text-sm font-light italic mb-6 border-l-2 border-white/30 pl-4 mt-6 max-w-md">
                   {member.quote}
                 </p>
+                
+                {/* Removed 'Zobrazit profil' link here */}
 
-                <p className="text-xs font-bold uppercase tracking-widest text-white mt-8 flex items-center gap-2 group/btn cursor-pointer">
-                  Zobrazit profil <Plus size={16} className="group-hover/btn:rotate-90 transition-transform"/>
-                </p>
               </div>
 
               {/* SIGNATURE (Fake Autograph) - Bottom Right on Hover */}
