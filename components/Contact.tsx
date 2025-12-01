@@ -187,7 +187,7 @@ const Contact: React.FC = () => {
     // Reset form logic would go here in a real app
   };
 
-  const MAP_URL = "https://www.google.com/maps/dir/?api=1&destination=Přílepská+1901,+252+63+Roztoky";
+  const MAP_URL = "https://www.google.com/maps/place/Spectra+Wash/@50.1604608,14.37045,46m/data=!3m1!1e3!4m6!3m5!1s0x470bc169266c69d7:0xd51032c3e7f78c0f!8m2!3d50.1604871!4d14.3706054!16s%2Fg%2F11t5njqnd9?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D";
 
   return (
     <section id="contact" ref={containerRef} className="py-24 md:py-32 relative overflow-hidden bg-gray-100">
