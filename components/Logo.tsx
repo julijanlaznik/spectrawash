@@ -5,20 +5,19 @@ const Logo: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
     <div className={`flex items-center gap-4 ${className}`}>
       {/* 
-        Custom SVG replicating the "SW" logo shape 1:1.
-        Features: Wide S, Sharp W, Geometric rounded corners.
-        Top bar of S connects to W.
+        Fixed SVG: Separated S and W.
+        S top bar shortened (H55) to avoid overlapping W (starts at 65).
       */}
       <svg 
         viewBox="0 0 110 34" 
         className="h-8 w-auto fill-current text-brand-blue"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* The 'S' Shape - Top bar extends to merge with W */}
-        <path d="M0 8 C0 3 4 0 10 0 H74 V9 H12 V11 H48 C55 11 60 15 60 22 V26 C60 31 56 34 50 34 H0 V25 H48 V23 H10 C4 23 0 19 0 12 V8 Z" />
+        {/* The 'S' Shape - Standard geometric S, top bar ends before W */}
+        <path d="M0 8 C0 3 4 0 10 0 H55 V9 H12 V11 H48 C55 11 60 15 60 22 V26 C60 31 56 34 50 34 H0 V25 H48 V23 H10 C4 23 0 19 0 12 V8 Z" />
         
-        {/* The 'W' Shape - Merges with the extended top bar of S */}
-        <path d="M68 0 H82 L87 18 L92 0 H106 L95 34 H81 L76 16 L71 34 H57 L68 0 Z" />
+        {/* The 'W' Shape - Distinct, sharp W starting with a gap from S */}
+        <path d="M65 0 H79 L84 18 L89 0 H103 L92 34 H78 L73 16 L68 34 H54 L65 0 Z" />
       </svg>
       
       {/* Typography Logo */}

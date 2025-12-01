@@ -107,7 +107,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-base md:text-xl text-gray-300 mb-10 max-w-xl font-light leading-relaxed border-l-2 border-brand-blue pl-6"
+            className="text-base md:text-xl text-gray-300 mb-10 max-w-xl font-light leading-relaxed border-l-2 border-brand-blue pl-6 whitespace-pre-line"
           >
             {HERO_SLIDES[currentSlide].subtitle}
           </motion.p>

@@ -110,10 +110,17 @@ const Footer: React.FC = () => {
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 uppercase tracking-wider">
           <p>&copy; {new Date().getFullYear()} SpectraWash.</p>
-          <div className="flex items-center mt-6 md:mt-0 space-x-8">
-            <NavLink to="/privacy" className="hover:text-white transition-colors">Ochrana dat</NavLink>
-            <NavLink to="/terms" className="hover:text-white transition-colors">Podmínky</NavLink>
-            <button onClick={resetCookies} className="hover:text-white transition-colors">Nastavení cookies</button>
+          <div className="flex flex-col md:flex-row items-center mt-6 md:mt-0 gap-6 md:gap-8">
+            <div className="flex gap-8">
+              <NavLink to="/privacy" className="hover:text-white transition-colors">Ochrana dat</NavLink>
+              <NavLink to="/terms" className="hover:text-white transition-colors">Podmínky</NavLink>
+              <button onClick={resetCookies} className="hover:text-white transition-colors">Nastavení cookies</button>
+            </div>
+            
+            <a href="https://www.smartdigital.cz/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors opacity-60 hover:opacity-100 normal-case">
+              created by <span className="font-bold">Smart digital</span>
+            </a>
+
             <button 
               onClick={scrollToTop}
               className="w-10 h-10 flex items-center justify-center border border-white/10 hover:bg-white hover:text-brand-dark transition-all duration-300 group"

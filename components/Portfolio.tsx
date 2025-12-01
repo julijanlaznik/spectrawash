@@ -26,10 +26,6 @@ const Portfolio: React.FC = () => {
     }
   };
 
-  const handleArchiveClick = () => {
-    alert("Zobrazuji kompletní archiv realizací... (Demo)");
-  };
-
   return (
     <section id="portfolio" className="py-24 md:py-32 bg-white">
       <div className="container mx-auto px-6">
@@ -122,17 +118,7 @@ const Portfolio: React.FC = () => {
           </AnimatePresence>
         </motion.div>
         
-        <div className="mt-12 md:mt-24 flex justify-center">
-            <button 
-              onClick={handleArchiveClick}
-              className="group relative px-8 py-3 bg-transparent overflow-hidden"
-            >
-                <span className="relative z-10 text-xs font-bold uppercase tracking-[0.2em] text-brand-dark group-hover:text-white transition-colors duration-300">
-                    Prozkoumat celý archiv
-                </span>
-                <div className="absolute inset-0 bg-brand-dark transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300 ease-in-out -z-0"></div>
-            </button>
-        </div>
+        {/* Button removed as requested */}
       </div>
     </section>
   );

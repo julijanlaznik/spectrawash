@@ -20,7 +20,7 @@ const PRICE_MAP: Record<string, number> = {
   'p1': 690,
   'p2': 1950,
   'p3': 3250,
-  'pickup': 500
+  'pickup': 0 // Base is irrelevant for pickup now, strictly calculated by zone
 };
 
 const ServiceCalculator: React.FC<ServiceCalculatorProps> = ({ 
@@ -34,7 +34,9 @@ const ServiceCalculator: React.FC<ServiceCalculatorProps> = ({
   const [distance, setDistance] = useState<DistanceZone>('zone1');
 
   // Determine effective base price (use prop or fallback)
-  const effectiveBasePrice = PRICE_MAP[serviceId] || basePrice || 0;
+  // FIX: Explicitly check for undefined so that 0 is accepted as a valid price
+  const mappedPrice = PRICE_MAP[serviceId];
+  const effectiveBasePrice = mappedPrice !== undefined ? mappedPrice : (basePrice || 0);
 
   // Identify service type
   const isPickup = serviceId === 'pickup';
@@ -52,8 +54,12 @@ const ServiceCalculator: React.FC<ServiceCalculatorProps> = ({
   let finalPrice = 0;
 
   if (isPickup) {
-    const distanceFees = { zone1: 0, zone2: 300, zone3: 600 };
-    finalPrice = effectiveBasePrice + distanceFees[distance];
+    // Strict pricing logic per request:
+    // Zone 1 (<10km): Free (0)
+    // Zone 2 (10-30km): 300
+    // Zone 3 (>30km): 600
+    const pickupPrices = { zone1: 0, zone2: 300, zone3: 600 };
+    finalPrice = pickupPrices[distance];
   } else {
     // STANDARD SERVICES (P1, P2, P3)
     // Logic: Base * Multiplier
@@ -82,8 +88,9 @@ const ServiceCalculator: React.FC<ServiceCalculatorProps> = ({
         details = `Vybraná konfigurace: ${sizeLabel}\nOdhadovaná cena: ${finalPrice} Kč`;
     }
     if (isPickup) {
-        const zoneLabel = distance === 'zone1' ? '<10km' : distance === 'zone2' ? '10-30km' : '>30km';
-        details = `Vzdálenost: ${zoneLabel}\nCena za výjezd: ${finalPrice} Kč`;
+        const zoneLabel = distance === 'zone1' ? 'Do 10 km' : distance === 'zone2' ? '10-30 km' : 'Nad 30 km';
+        const priceLabel = finalPrice === 0 ? 'Zdarma' : `${finalPrice} Kč`;
+        details = `Vzdálenost: ${zoneLabel}\nCena za výjezd: ${priceLabel}`;
     }
     
     if (details) params.append('details', details);
@@ -208,7 +215,9 @@ const ServiceCalculator: React.FC<ServiceCalculatorProps> = ({
                 <span className="text-gray-500 text-sm uppercase tracking-widest mb-2 font-bold">Konečná cena</span>
                 
                 <div className="text-5xl font-heading font-bold text-brand-dark mb-2">
-                  {finalPrice > 0 ? (
+                  {isPickup && finalPrice === 0 ? (
+                    <span className="text-brand-blue">Zdarma</span>
+                  ) : finalPrice > 0 ? (
                     <span>{finalPrice.toLocaleString('cs-CZ')} Kč</span>
                   ) : (
                     <span>Individuální</span>

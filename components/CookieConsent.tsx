@@ -9,7 +9,7 @@ const CookieConsent: React.FC = () => {
   useEffect(() => {
     // Check initial state
     const consent = localStorage.getItem('cookieConsent');
-    if (!consent) {
+    if (consent === null) {
       const timer = setTimeout(() => setIsVisible(true), 2000);
       return () => clearTimeout(timer);
     }
@@ -32,6 +32,11 @@ const CookieConsent: React.FC = () => {
     setIsVisible(false);
   };
 
+  const handleDecline = () => {
+    localStorage.setItem('cookieConsent', 'false');
+    setIsVisible(false);
+  };
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -46,7 +51,10 @@ const CookieConsent: React.FC = () => {
               <span className="font-bold text-brand-blue block mb-1 uppercase tracking-widest text-xs">Používáme cookies</span>
               Tento web používá soubory cookies k zajištění správného fungování a analýze návštěvnosti. Používáním webu s tím souhlasíte.
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 shrink-0">
+               <Button onClick={handleDecline} variant="outline" className="py-3 px-6 text-xs border-gray-600 text-gray-400 hover:text-white hover:border-white">
+                 Odmítnout
+               </Button>
                <Button onClick={handleAccept} className="py-3 px-8 text-xs">
                  Rozumím
                </Button>

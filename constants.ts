@@ -13,19 +13,19 @@ export const HERO_SLIDES = [
     id: 1,
     image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070&auto=format&fit=crop',
     title: 'Precizní\nruční mytí',
-    subtitle: 'Šetrná péče o váš vůz. Používáme nejšetrnější metody a prémiovou autokosmetiku.',
+    subtitle: 'Šetrná péče o váš vůz. Používáme nejšetrnější\nmetody a prémiovou autokosmetiku.',
   },
   {
     id: 2,
     image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1966&auto=format&fit=crop',
     title: 'Detailing interiéru',
-    subtitle: 'Hloubkové tepování, čištění kůže a dezinfekce. Váš interiér bude opět jako nový.',
+    subtitle: 'Hloubkové tepování, čištění kůže a dezinfekce.\nVáš interiér bude opět jako nový.',
   },
   {
     id: 3,
     image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop',
     title: 'Keramická ochrana',
-    subtitle: 'Dlouhodobá ochrana laku nanotechnologií. Extrémní lesk, hydrofobita a odolnost.',
+    subtitle: 'Dlouhodobá ochrana laku nanotechnologií.\nExtrémní lesk, hydrofobita a odolnost.',
   },
 ];
 
