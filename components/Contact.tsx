@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { CONTACT_INFO, SERVICES, VOUCHERS } from '../constants';
 import Button from './Button';
 import { motion, useScroll, useTransform, Variants, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon, MapPin, Navigation, Phone, Mail, Check, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon, MapPin, Navigation, Phone, Mail, Check, AlertCircle } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 
 const Contact: React.FC = () => {
@@ -17,7 +17,7 @@ const Contact: React.FC = () => {
 
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
-  // Staggered animation variants for a "pop-up" feel
+  // Staggered animation variants
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -63,7 +63,6 @@ const Contact: React.FC = () => {
   const [isPickup, setIsPickup] = useState(false);
   const [selectedService, setSelectedService] = useState("");
   const [message, setMessage] = useState("");
-  // NEW STATE FOR ADDONS
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
 
   // AUTO-FILL FROM URL
@@ -108,13 +107,15 @@ const Contact: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [submittedName, setSubmittedName] = useState("");
 
+  // Determine if it is a Voucher Redemption to show special message
+  const isVoucherRedemption = selectedService.toLowerCase().includes('uplatnění voucheru');
+
   // Generate calendar days
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const days = new Date(year, month + 1, 0).getDate();
     const firstDay = new Date(year, month, 1).getDay(); // 0 = Sun, 1 = Mon...
-    // Adjust for Monday start (Czech standard)
     const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1; 
     return { days, firstDay: adjustedFirstDay };
   };
@@ -123,7 +124,6 @@ const Contact: React.FC = () => {
   const daysArray = Array.from({ length: totalDays }, (_, i) => i + 1);
   const emptyDays = Array.from({ length: startDay }, (_, i) => i);
 
-  // Helper to identify today
   const today = new Date();
   const isToday = (day: number) => {
     return day === today.getDate() && 
@@ -134,13 +134,13 @@ const Contact: React.FC = () => {
   const handleDateClick = (day: number) => {
     const newDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     setSelectedDate(newDate);
-    setPickerStep('time'); // Auto-advance to time
+    setPickerStep('time');
   };
 
   const handleTimeClick = (time: string) => {
     setSelectedTime(time);
-    setIsPickerOpen(false); // Close picker
-    setPickerStep('date'); // Reset for next time
+    setIsPickerOpen(false);
+    setPickerStep('date');
   };
 
   const formatDisplayDate = () => {
@@ -150,7 +150,6 @@ const Contact: React.FC = () => {
     return `${dateStr} – ${selectedTime}`;
   };
 
-  // Expanded 30-minute intervals
   const TIME_SLOTS = [
     "08:00", "08:30", "09:00", "09:30", 
     "10:00", "10:30", "11:00", "11:30", 
@@ -163,7 +162,6 @@ const Contact: React.FC = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + delta, 1));
   };
 
-  // Close picker on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if ((e.target as HTMLElement).closest('.custom-picker-container')) return;
@@ -175,16 +173,10 @@ const Contact: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Get Name from input
     const form = e.target as HTMLFormElement;
     const nameInput = form.elements.namedItem('name') as HTMLInputElement;
     setSubmittedName(nameInput.value || "zákazníku");
-
-    // Show Custom Modal
     setShowSuccessModal(true);
-    
-    // Reset form logic would go here in a real app
   };
 
   const MAP_URL = "https://www.google.com/maps/place/Spectra+Wash/@50.1604608,14.37045,46m/data=!3m1!1e3!4m6!3m5!1s0x470bc169266c69d7:0xd51032c3e7f78c0f!8m2!3d50.1604871!4d14.3706054!16s%2Fg%2F11t5njqnd9?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D";
@@ -206,12 +198,10 @@ const Contact: React.FC = () => {
         }
       `}</style>
 
-      {/* SECTION BACKGROUND - Enhanced for Glassmorphism Context */}
+      {/* SECTION BACKGROUND */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Large abstract shapes to be seen through the glass */}
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-blue/10 rounded-full blur-[120px] transform translate-x-1/3 -translate-y-1/3"></div>
         <div className="absolute bottom-0 left-0 w-[700px] h-[700px] bg-brand-dark/10 rounded-full blur-[100px] transform -translate-x-1/3 translate-y-1/3"></div>
-        {/* Grid pattern for technical feel */}
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#2F2F2F 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
       </div>
 
@@ -223,18 +213,14 @@ const Contact: React.FC = () => {
           className="flex flex-col lg:flex-row shadow-2xl rounded-none overflow-hidden"
         >
           
-          {/* --- INFO PANEL (Left) - GLASSMORPHISM --- */}
+          {/* --- INFO PANEL --- */}
           <motion.div 
             variants={glassVariants}
             className="lg:w-5/12 relative min-h-[400px] lg:min-h-[700px] flex flex-col justify-between p-8 lg:p-12 border-r border-white/10"
           >
-            {/* Glass Background Layer */}
             <div className="absolute inset-0 bg-brand-dark/80 backdrop-blur-xl z-0"></div>
-            
-            {/* Inner Sheen/Gradient */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none z-0"></div>
 
-            {/* Content */}
             <div className="relative z-20 h-full flex flex-col justify-between">
                <div>
                   <motion.div 
@@ -315,7 +301,7 @@ const Contact: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* --- CONTACT FORM (Right) --- */}
+          {/* --- CONTACT FORM --- */}
           <motion.div 
             className="lg:w-7/12 bg-white p-8 md:p-12 lg:p-16 relative z-10"
             variants={containerVariants}
@@ -324,11 +310,12 @@ const Contact: React.FC = () => {
               <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs mb-3 block">
                  Poptávka
               </span>
-              <h3 className="text-3xl md:text-4xl font-heading font-bold text-brand-dark mb-4">
-                Nezávazná rezervace
+              <h3 className="text-3xl md:text-4xl font-heading font-bold text-brand-dark mb-4 leading-tight">
+                Nezávazná rezervace <br/>
+                <span className="text-brand-blue/70">& Uplatnění voucheru</span>
               </h3>
               <p className="text-gray-500 font-light max-w-md">
-                 Vyplňte formulář níže pro nezávaznou poptávku našich služeb. Vámi vybraný termín potvrdíme telefonicky nebo e-mailem.
+                 Vyplňte formulář níže pro nezávaznou poptávku našich služeb nebo rezervaci termínu pro dárkový voucher.
               </p>
             </motion.div>
 
@@ -410,15 +397,7 @@ const Contact: React.FC = () => {
                           <option key={s.id} value={s.title}>{s.title}</option>
                         ))}
                       </optgroup>
-
-                      {/* PURCHASE VOUCHERS - NEW GROUP */}
-                      <optgroup label="Objednávka voucheru">
-                        {VOUCHERS.map(v => (
-                           <option key={`buy-${v.id}`} value={`Objednávka voucheru: ${v.title}`}>Objednat: {v.title}</option>
-                        ))}
-                      </optgroup>
                       
-                      {/* REDEEM VOUCHERS */}
                       <optgroup label="Uplatnění voucheru">
                         {VOUCHERS.map(v => (
                            <option key={`redeem-${v.id}`} value={`Uplatnění voucheru: ${v.title}`}>Uplatnit: {v.title}</option>
@@ -442,7 +421,6 @@ const Contact: React.FC = () => {
                     </div>
                   </motion.div>
 
-                  {/* PICKUP CHECKBOX EXTRA OPTION */}
                   <motion.div 
                     variants={itemVariants}
                     onClick={() => setIsPickup(!isPickup)}
@@ -459,7 +437,6 @@ const Contact: React.FC = () => {
                      </span>
                   </motion.div>
 
-                  {/* DYNAMIC PICKUP ADDRESS INPUT */}
                   <AnimatePresence>
                     {isPickup && (
                       <motion.div
@@ -488,9 +465,8 @@ const Contact: React.FC = () => {
                   </AnimatePresence>
                 </div>
                 
-                {/* --- RIGHT COLUMN (Addons + Date Picker) --- */}
+                {/* --- RIGHT COLUMN (Addons + Date) --- */}
                 <div className="flex flex-col gap-6">
-                  {/* DYNAMIC ADDONS MENU */}
                   <AnimatePresence>
                     {showAddons && (
                       <motion.div
@@ -523,7 +499,6 @@ const Contact: React.FC = () => {
                     )}
                   </AnimatePresence>
 
-                  {/* CUSTOM DATE PICKER TRIGGER */}
                   <motion.div variants={itemVariants} className="relative group/input custom-picker-container">
                     <div 
                       onClick={() => setIsPickerOpen(!isPickerOpen)}
@@ -534,14 +509,12 @@ const Contact: React.FC = () => {
                        </span>
                        <CalendarIcon size={16} className="text-gray-400" />
                     </div>
-                    {/* CHANGED: Label text to 'Preferovaný termín' and improved styling to prevent overlap */}
                     <label 
                       className={`absolute left-0 transition-all uppercase tracking-wider pointer-events-none truncate max-w-full ${selectedDate || isPickerOpen ? '-top-3.5 text-xs font-bold text-brand-blue' : 'top-3 text-base text-gray-400'}`}
                     >
                       Preferovaný termín
                     </label>
 
-                    {/* DROPDOWN POPUP */}
                     <AnimatePresence>
                       {isPickerOpen && (
                         <motion.div 
@@ -553,7 +526,6 @@ const Contact: React.FC = () => {
                         >
                            {pickerStep === 'date' ? (
                              <>
-                               {/* Calendar Header */}
                                <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
                                   <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeMonth(-1); }} className="p-1 hover:bg-gray-50 rounded-full transition-colors"><ChevronLeft size={16}/></button>
                                   <span className="font-bold text-sm uppercase tracking-wider text-brand-dark">
@@ -561,7 +533,6 @@ const Contact: React.FC = () => {
                                   </span>
                                   <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeMonth(1); }} className="p-1 hover:bg-gray-50 rounded-full transition-colors"><ChevronRight size={16}/></button>
                                </div>
-                               {/* Calendar Grid */}
                                <div className="grid grid-cols-7 gap-1 text-center text-xs mb-2 text-gray-400 font-medium">
                                  <div>Po</div><div>Út</div><div>St</div><div>Čt</div><div>Pá</div><div>So</div><div>Ne</div>
                                </div>
@@ -585,7 +556,6 @@ const Contact: React.FC = () => {
                              </>
                            ) : (
                              <>
-                               {/* Time Slots */}
                                <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100 cursor-pointer group/back" onClick={(e) => { e.stopPropagation(); setPickerStep('date'); }}>
                                  <ChevronLeft size={14} className="text-gray-400 group-hover/back:text-brand-dark" />
                                  <span className="font-bold text-sm uppercase tracking-wider text-brand-dark group-hover/back:text-brand-blue transition-colors">Vybrat čas</span>
@@ -610,7 +580,6 @@ const Contact: React.FC = () => {
                 </div>
               </div>
 
-              {/* SUBMIT BUTTON */}
               <div className="mt-8 flex justify-end">
                 <Button type="submit" variant="dark" className="px-12">
                   Odeslat poptávku
@@ -645,9 +614,23 @@ const Contact: React.FC = () => {
                 <h3 className="text-3xl font-heading font-bold text-brand-dark mb-4">
                   Děkujeme, {submittedName}!
                 </h3>
-                <p className="text-gray-500 mb-8 leading-relaxed">
+                <p className="text-gray-500 mb-6 leading-relaxed">
                   Vaši nezávaznou poptávku jsme přijali. Co nejdříve se vám ozveme pro potvrzení termínu a detailů.
                 </p>
+
+                {/* VOUCHER REMINDER NOTICE */}
+                {isVoucherRedemption && (
+                   <div className="mb-8 p-4 bg-gray-50 border border-brand-blue/20 rounded-lg flex items-start gap-3 text-left">
+                      <AlertCircle className="text-brand-blue shrink-0 mt-1" size={20} />
+                      <div>
+                         <p className="text-sm font-bold text-brand-dark uppercase tracking-wide mb-1">Důležité</p>
+                         <p className="text-sm text-gray-600">
+                           Nezapomeňte mít při sobě připravený <strong>unikátní kód voucheru</strong>, který jste obdrželi v e-mailu. Budeme ho potřebovat k ověření platnosti.
+                         </p>
+                      </div>
+                   </div>
+                )}
+
                 <Button onClick={() => setShowSuccessModal(false)} fullWidth>
                   Zavřít
                 </Button>

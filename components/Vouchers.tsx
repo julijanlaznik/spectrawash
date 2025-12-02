@@ -1,10 +1,9 @@
 
 import React from 'react';
-import { Gift, Check, Printer, Mail, HelpCircle, ArrowRight, Calendar, Download, FileCheck } from 'lucide-react';
+import { Check, Printer, Mail, HelpCircle, Calendar, FileCheck } from 'lucide-react';
 import { VOUCHERS } from '../constants';
 import Button from './Button';
 import { motion } from 'framer-motion';
-import Logo from './Logo';
 
 const Vouchers: React.FC = () => {
   
@@ -17,26 +16,23 @@ const Vouchers: React.FC = () => {
 
     if (voucherId === 1) {
        // 1. Voucher: Light Refresh (2 500 Kč)
-       // SEM MEZI UVOZOVKY VLOŽTE ODKAZ:
-       link = "https://vase-platebni-brana.cz/light-refresh"; 
+       link = "https://buy.stripe.com/vase-odkaz-1"; 
     } 
     else if (voucherId === 2) {
        // 2. Voucher: Deep Complete (3 800 Kč)
-       // SEM MEZI UVOZOVKY VLOŽTE ODKAZ:
-       link = "https://vase-platebni-brana.cz/deep-complete";
+       link = "https://buy.stripe.com/vase-odkaz-2";
     } 
     else if (voucherId === 3) {
        // 3. Voucher: Premium Credit (5 000 Kč)
-       // SEM MEZI UVOZOVKY VLOŽTE ODKAZ:
-       link = "https://vase-platebni-brana.cz/premium-credit";
+       link = "https://buy.stripe.com/vase-odkaz-3";
     }
 
     // Pokud je odkaz nastaven, přesměrujeme uživatele
-    if (link && link !== "" && !link.includes("vase-platebni-brana")) {
+    if (link && link !== "" && !link.includes("vase-odkaz")) {
       window.location.href = link;
     } else {
       console.log("Platební odkaz není nastaven (ID: " + voucherId + ")");
-      // Fallback pokud není link (zatím scroluje na kontakt, dokud nedoplníte linky)
+      // Fallback: Scroll na kontakt pro objednávku formulářem
       document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -51,6 +47,16 @@ const Vouchers: React.FC = () => {
     { q: "Lze ho vytisknout?", a: "Ano, PDF je připraveno ve vysokém rozlišení pro tisk na formát DL nebo A4." },
     { q: "Jak se uplatňuje?", a: "Držitel voucheru si rezervuje termín přes náš formulář (vybere konkrétní voucher v nabídce služeb) nebo telefonicky. Při rezervaci nebo příjezdu se prokáže unikátním kódem uvedeným v e-mailu." },
   ];
+
+  // Helper function to get image path based on voucher ID
+  const getVoucherImage = (id: number) => {
+    switch(id) {
+        case 1: return '/voucher-light-refresh.png';
+        case 2: return '/voucher-deep-complete.png';
+        case 3: return '/voucher-premium-credit.png';
+        default: return '/voucher-light-refresh.png';
+    }
+  };
 
   return (
     <section id="vouchers" className="pt-32 pb-24 md:pt-40 md:pb-32 bg-gray-50 relative overflow-hidden">
@@ -97,8 +103,7 @@ const Vouchers: React.FC = () => {
           {VOUCHERS.map((voucher, index) => {
             // Determine styling based on type
             const isPremium = index === 2; // Credit 5000
-            const isStandard = index !== 2;
-
+            
             return (
               <motion.div
                 key={voucher.id}
@@ -121,37 +126,38 @@ const Vouchers: React.FC = () => {
                   {/* Gloss Effect */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
-                  {/* VOUCHER VISUAL SLOT (Image Placeholder) */}
+                  {/* VOUCHER VISUAL SLOT (Image Preview) */}
                   <div className="p-2">
                     <div 
                       className={`
-                        w-full aspect-[1.6/1] rounded-xl relative overflow-hidden flex flex-col justify-between p-6 shadow-inner
+                        w-full aspect-[1.6/1] rounded-xl relative overflow-hidden shadow-inner
                         ${isPremium 
-                          ? 'bg-gradient-to-br from-gray-800 to-black border border-white/5' 
-                          : 'bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200'
+                          ? 'bg-gray-900 border border-white/5' 
+                          : 'bg-gray-50 border border-gray-200'
                         }
                       `}
                     >
-                       {/* Card Decoration */}
-                       <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-[40px] transform translate-x-10 -translate-y-10 ${isPremium ? 'bg-brand-blue/20' : 'bg-brand-blue/10'}`}></div>
+                       {/* REAL IMAGE RENDER - Cropped/Centered */}
+                       <img 
+                          src={getVoucherImage(voucher.id)}
+                          alt={voucher.title}
+                          className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
+                          onError={(e) => {
+                            // Fallback styling if image missing
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.parentElement!.classList.add('flex', 'items-center', 'justify-center', 'p-4');
+                            e.currentTarget.parentElement!.innerHTML = `<span class="text-[10px] text-gray-400 text-center">Náhled voucheru<br/>(Nahrajte /public${getVoucherImage(voucher.id)})</span>`;
+                          }}
+                       />
                        
-                       <div className="relative z-10 flex justify-between items-start">
-                          <Logo className={isPremium ? 'text-white scale-75 origin-top-left' : 'text-brand-dark scale-75 origin-top-left'} />
-                          {voucher.tag && (
-                            <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-brand-blue text-white rounded-sm">
+                       {/* Tag overlay if needed */}
+                       {voucher.tag && (
+                          <div className="absolute top-2 right-2 z-10">
+                            <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-brand-blue text-white rounded-sm shadow-sm">
                               {voucher.tag}
                             </span>
-                          )}
-                       </div>
-
-                       <div className="relative z-10">
-                          <h4 className={`text-xl font-heading font-bold uppercase ${isPremium ? 'text-white' : 'text-brand-dark'}`}>
-                            {voucher.title}
-                          </h4>
-                          <p className={`text-xs font-bold uppercase tracking-widest ${isPremium ? 'text-brand-blue' : 'text-gray-400'}`}>
-                            {voucher.price}
-                          </p>
-                       </div>
+                          </div>
+                       )}
                     </div>
                   </div>
 
@@ -199,7 +205,7 @@ const Vouchers: React.FC = () => {
           })}
         </div>
 
-        {/* --- VISUAL PREVIEW SECTION (PDF MOCKUP) --- */}
+        {/* --- VISUAL PREVIEW SECTION (Stack) --- */}
         <div className="relative bg-brand-dark rounded-3xl p-8 md:p-16 mb-24 overflow-hidden border border-white/5">
            {/* Decorative Background */}
            <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-blue/10 via-transparent to-transparent"></div>
@@ -285,16 +291,16 @@ const Vouchers: React.FC = () => {
                           alt={card.alt}
                           className="w-full h-auto rounded-sm shadow-xl object-cover"
                           onError={(e) => {
-                            // Fallback if image not found during development
                             e.currentTarget.style.display = 'none';
+                            e.currentTarget.parentElement!.classList.add('bg-white');
                             e.currentTarget.parentElement!.innerHTML = `
-                              <div class="w-full aspect-[1/1.414] bg-white flex items-center justify-center text-center p-4 border-2 border-dashed border-gray-400">
+                              <div class="w-full aspect-[1/1.414] flex items-center justify-center text-center p-4 border-2 border-dashed border-gray-400">
                                 <span class="text-xs text-gray-500 font-mono">
                                   Zde se zobrazí obrázek:<br/><strong>${card.img}</strong><br/><br/>
                                   Nahrajte soubor do složky public.
                                 </span>
                               </div>
-                            `
+                            `;
                           }}
                        />
 
@@ -315,7 +321,7 @@ const Vouchers: React.FC = () => {
               </div>
               <div>
                  <h4 className="font-heading font-bold text-lg text-brand-dark uppercase">Máte již zakoupený voucher?</h4>
-                 <p className="text-sm text-gray-600">Rezervujte si termín online nebo telefonicky.</p>
+                 <p className="text-sm text-gray-600">Rezervujte si termín online nebo telefonicky. Nezapomeňte uvést kód voucheru.</p>
               </div>
            </div>
            <Button onClick={scrollToContact} variant="dark" className="whitespace-nowrap">
