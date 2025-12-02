@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Gift, Check, Printer, Mail, Clock } from 'lucide-react';
+import { Gift, Check, Printer, Mail, HelpCircle, ArrowRight, Calendar, Download, FileCheck } from 'lucide-react';
 import { VOUCHERS } from '../constants';
 import Button from './Button';
 import { motion } from 'framer-motion';
@@ -8,202 +8,338 @@ import Logo from './Logo';
 
 const Vouchers: React.FC = () => {
   
-  const handleOrderVoucher = (voucherTitle: string, price: string) => {
-    // TODO: HERE YOU WILL INSERT THE LOGIC TO REDIRECT TO STRIPE
-    alert(`Přesměrování na platební bránu (Stripe) pro: ${voucherTitle} (${price})...\n\n(V ostré verzi zde bude odkaz na checkout)`);
+  const handleBuyVoucher = (voucherId: number) => {
+    // -------------------------------------------------------------------------
+    // ZDE VLOŽTE ODKAZY NA PLATEBNÍ BRÁNU (STRIPE / PAYMENT LINK)
+    // -------------------------------------------------------------------------
+    
+    let link = "";
+
+    if (voucherId === 1) {
+       // 1. Voucher: Light Refresh (2 500 Kč)
+       // SEM MEZI UVOZOVKY VLOŽTE ODKAZ:
+       link = "https://vase-platebni-brana.cz/light-refresh"; 
+    } 
+    else if (voucherId === 2) {
+       // 2. Voucher: Deep Complete (3 800 Kč)
+       // SEM MEZI UVOZOVKY VLOŽTE ODKAZ:
+       link = "https://vase-platebni-brana.cz/deep-complete";
+    } 
+    else if (voucherId === 3) {
+       // 3. Voucher: Premium Credit (5 000 Kč)
+       // SEM MEZI UVOZOVKY VLOŽTE ODKAZ:
+       link = "https://vase-platebni-brana.cz/premium-credit";
+    }
+
+    // Pokud je odkaz nastaven, přesměrujeme uživatele
+    if (link && link !== "" && !link.includes("vase-platebni-brana")) {
+      window.location.href = link;
+    } else {
+      console.log("Platební odkaz není nastaven (ID: " + voucherId + ")");
+      // Fallback pokud není link (zatím scroluje na kontakt, dokud nedoplníte linky)
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const VOUCHER_FAQ = [
+    { q: "Jak voucher funguje?", a: "Vyberete si hodnotu, zaplatíte online a voucher vám ihned dorazí na e-mail." },
+    { q: "Jak ho obdržím?", a: "Voucher obdržíte v PDF formátu na zadaný e-mail ihned po připsání platby." },
+    { q: "Lze ho vytisknout?", a: "Ano, PDF je připraveno ve vysokém rozlišení pro tisk na formát DL nebo A4." },
+    { q: "Jak se uplatňuje?", a: "Držitel voucheru si rezervuje termín přes náš formulář (vybere konkrétní voucher v nabídce služeb) nebo telefonicky. Při rezervaci nebo příjezdu se prokáže unikátním kódem uvedeným v e-mailu." },
+  ];
+
   return (
-    <section id="vouchers" className="py-16 md:py-24 bg-brand-light relative overflow-hidden">
-      {/* Background Decor */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-white -skew-x-12 transform translate-x-20 pointer-events-none opacity-50"></div>
+    <section id="vouchers" className="pt-32 pb-24 md:pt-40 md:pb-32 bg-gray-50 relative overflow-hidden">
+      
+      {/* Background Ambience */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-dark/5 rounded-full blur-[100px] pointer-events-none"></div>
 
       <div className="container mx-auto px-6 relative z-10">
         
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+        {/* --- HERO HEADER --- */}
+        <div className="text-center max-w-2xl mx-auto mb-20">
+          <motion.span 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-6 md:mb-0"
+            className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs mb-4 block"
           >
-            <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs mb-3 block flex items-center gap-2">
-              <Gift size={16} /> Dárek, který potěší
-            </span>
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-brand-dark leading-tight">
-              Dárkové <br /> <span className="text-brand-blue">Vouchery</span>
-            </h2>
-          </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            Originální dárek
+          </motion.span>
+          <motion.h2 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-500 max-w-md text-sm leading-relaxed mb-2 flex flex-col gap-2"
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-heading font-bold text-brand-dark leading-tight mb-4"
           >
-             <p>Darujte dokonalou péči o vůz. Vyberte si voucher, který potěší každého automobilového nadšence.</p>
-          </motion.div>
+            Dárkové vouchery <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-dark">které dávají smysl</span>
+          </motion.h2>
+          <motion.p 
+             initial={{ opacity: 0, y: 10 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ delay: 0.2 }}
+             className="text-gray-500 text-lg font-light"
+          >
+            Vyberte si voucher a zakupte ho pohodlně online. Doručení e-mailem ihned po zaplacení.
+          </motion.p>
         </div>
 
-        {/* --- VOUCHER PREVIEW & INFO SECTION --- */}
-        <div className="mb-20 bg-white border border-gray-100 p-8 md:p-12 shadow-lg relative overflow-hidden">
-           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+        {/* --- 3D VOUCHER CARDS GRID --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch mb-32">
+          {VOUCHERS.map((voucher, index) => {
+            // Determine styling based on type
+            const isPremium = index === 2; // Credit 5000
+            const isStandard = index !== 2;
+
+            return (
+              <motion.div
+                key={voucher.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="group relative flex flex-col h-full"
+              >
+                {/* 3D CARD BOX */}
+                <div 
+                   className={`
+                      relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-500
+                      ${isPremium 
+                        ? 'bg-brand-dark text-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] border border-white/10' 
+                        : 'bg-white text-brand-dark shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] border border-gray-100 hover:shadow-2xl hover:-translate-y-2'
+                      }
+                   `}
+                >
+                  {/* Gloss Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                  {/* VOUCHER VISUAL SLOT (Image Placeholder) */}
+                  <div className="p-2">
+                    <div 
+                      className={`
+                        w-full aspect-[1.6/1] rounded-xl relative overflow-hidden flex flex-col justify-between p-6 shadow-inner
+                        ${isPremium 
+                          ? 'bg-gradient-to-br from-gray-800 to-black border border-white/5' 
+                          : 'bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200'
+                        }
+                      `}
+                    >
+                       {/* Card Decoration */}
+                       <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-[40px] transform translate-x-10 -translate-y-10 ${isPremium ? 'bg-brand-blue/20' : 'bg-brand-blue/10'}`}></div>
+                       
+                       <div className="relative z-10 flex justify-between items-start">
+                          <Logo className={isPremium ? 'text-white scale-75 origin-top-left' : 'text-brand-dark scale-75 origin-top-left'} />
+                          {voucher.tag && (
+                            <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-brand-blue text-white rounded-sm">
+                              {voucher.tag}
+                            </span>
+                          )}
+                       </div>
+
+                       <div className="relative z-10">
+                          <h4 className={`text-xl font-heading font-bold uppercase ${isPremium ? 'text-white' : 'text-brand-dark'}`}>
+                            {voucher.title}
+                          </h4>
+                          <p className={`text-xs font-bold uppercase tracking-widest ${isPremium ? 'text-brand-blue' : 'text-gray-400'}`}>
+                            {voucher.price}
+                          </p>
+                       </div>
+                    </div>
+                  </div>
+
+                  {/* CONTENT BODY */}
+                  <div className="p-8 flex-grow flex flex-col">
+                     <div className="mb-6">
+                        <h3 className={`text-2xl font-bold font-heading mb-2 ${isPremium ? 'text-white' : 'text-brand-dark'}`}>
+                            {voucher.title}
+                        </h3>
+                        <p className={`text-sm leading-relaxed ${isPremium ? 'text-gray-400' : 'text-gray-500'}`}>
+                           {voucher.description}
+                        </p>
+                     </div>
+
+                     {/* Features List */}
+                     <ul className="space-y-4 mb-8 mt-auto">
+                        {voucher.features.map((feature, i) => (
+                          <li key={i} className={`flex items-start text-sm ${isPremium ? 'text-gray-300' : 'text-gray-600'}`}>
+                              <div className={`mt-0.5 mr-3 rounded-full flex items-center justify-center w-4 h-4 shrink-0
+                                  ${isPremium ? 'bg-brand-blue/20 text-brand-blue' : 'bg-gray-100 text-brand-blue'}
+                              `}>
+                                  <Check size={10} strokeWidth={3} />
+                              </div>
+                              {feature}
+                          </li>
+                        ))}
+                     </ul>
+
+                     <Button 
+                       onClick={() => handleBuyVoucher(voucher.id)}
+                       fullWidth 
+                       variant={isPremium ? 'primary' : 'dark'}
+                       className="mt-2"
+                     >
+                       Koupit za {voucher.price}
+                     </Button>
+                     
+                     <div className="text-center mt-4">
+                        <span className="text-[10px] uppercase tracking-widest text-gray-400 opacity-60">Více detailů níže</span>
+                     </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* --- VISUAL PREVIEW SECTION (PDF MOCKUP) --- */}
+        <div className="relative bg-brand-dark rounded-3xl p-8 md:p-16 mb-24 overflow-hidden border border-white/5">
+           {/* Decorative Background */}
+           <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-blue/10 via-transparent to-transparent"></div>
+           
+           <div className="relative z-10 flex flex-col lg:flex-row items-center gap-16">
               
-              {/* Left: Info Text */}
-              <div className="lg:w-1/2 relative z-10">
-                 <h3 className="text-2xl font-heading font-bold text-brand-dark mb-4">
-                    Perfektní dárek pod stromeček
+              {/* Left Content */}
+              <div className="lg:w-1/2">
+                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-brand-blue text-[10px] font-bold uppercase tracking-widest mb-6">
+                    <Printer size={14} /> Připraveno k tisku
+                 </div>
+                 <h3 className="text-3xl md:text-5xl font-heading font-bold text-white mb-6">
+                    Jak voucher <br/> <span className="text-brand-blue">vypadá?</span>
                  </h3>
-                 <p className="text-gray-500 text-sm leading-relaxed mb-8">
-                    Nestíháte? Nevadí. Naše vouchery jsou navrženy tak, aby dělaly radost okamžitě.
-                    Po zaplacení vám dorazí <strong>stylové PDF připravené k tisku</strong>. Stačí vytisknout, vložit do obálky a máte vyřešený luxusní dárek.
+                 <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                    Ihned po zaplacení vám do e-mailu dorazí <strong>profesionální PDF voucher</strong> ve vysokém rozlišení. 
+                    Je navržen ve formátu A4, takže ho můžete snadno vytisknout doma, vložit do obálky a darovat pod stromeček.
                  </p>
                  
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="flex items-start gap-4">
-                       <div className="w-10 h-10 bg-brand-light flex items-center justify-center rounded-none text-brand-blue">
-                          <Mail size={20} />
+                       <div className="p-3 bg-brand-blue/10 rounded-lg text-brand-blue">
+                          <Mail size={24} />
                        </div>
                        <div>
-                          <h4 className="font-bold text-brand-dark text-sm uppercase tracking-wide mb-1">Okamžitě e-mailem</h4>
-                          <p className="text-xs text-gray-500">Doručení ihned po zaplacení.</p>
+                          <h4 className="text-white font-bold text-sm uppercase tracking-wide mb-1">Doručení ihned</h4>
+                          <p className="text-gray-500 text-sm">Automaticky e-mailem do pár minut.</p>
                        </div>
                     </div>
                     <div className="flex items-start gap-4">
-                       <div className="w-10 h-10 bg-brand-light flex items-center justify-center rounded-none text-brand-blue">
-                          <Printer size={20} />
+                       <div className="p-3 bg-brand-blue/10 rounded-lg text-brand-blue">
+                          <FileCheck size={24} />
                        </div>
                        <div>
-                          <h4 className="font-bold text-brand-dark text-sm uppercase tracking-wide mb-1">Připraveno k tisku</h4>
-                          <p className="text-xs text-gray-500">Designové PDF pro tisk doma.</p>
+                          <h4 className="text-white font-bold text-sm uppercase tracking-wide mb-1">Formát PDF</h4>
+                          <p className="text-gray-500 text-sm">Design A4 připravený pro domácí tisk.</p>
                        </div>
                     </div>
                  </div>
               </div>
 
-              {/* Right: Visual Mockup (The "Photo" Space) */}
-              <div className="lg:w-1/2 w-full flex justify-center perspective-1000">
-                 <motion.div 
-                    initial={{ rotateY: 10, rotateX: 5 }}
-                    whileHover={{ rotateY: 0, rotateX: 0, scale: 1.02 }}
-                    transition={{ type: "spring", stiffness: 100 }}
-                    className="relative w-full max-w-md aspect-[1.586/1] rounded-xl shadow-2xl overflow-hidden bg-brand-dark text-white p-8 flex flex-col justify-between select-none"
-                    style={{ 
-                      background: 'linear-gradient(135deg, #1a1a1a 0%, #2F2F2F 100%)',
-                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
-                    }}
-                 >
-                    {/* Decorative Shine */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/10 rounded-full blur-[60px] transform translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
-                    <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-brand-blue/50 to-transparent"></div>
+              {/* Right Visual (Real Images Stack) */}
+              <div className="lg:w-1/2 w-full relative h-[600px] flex items-center justify-center">
+                 {/* Decorative background circle */}
+                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-brand-blue/20 rounded-full blur-[80px] -z-10"></div>
 
-                    <div className="flex justify-between items-start relative z-10">
-                       <Logo className="scale-75 origin-top-left" />
-                       <span className="text-brand-blue font-bold tracking-[0.2em] text-xs border border-brand-blue/30 px-3 py-1">
-                          GIFT VOUCHER
-                       </span>
-                    </div>
+                 {/* Stack of 3 overlapping voucher images */}
+                 {[
+                    { 
+                      rotate: -15, x: -80, y: 30, z: 10, scale: 0.9, 
+                      img: '/voucher-deep-complete.png', 
+                      alt: 'Voucher Deep Complete' 
+                    },
+                    { 
+                      rotate: 15, x: 80, y: 30, z: 10, scale: 0.9, 
+                      img: '/voucher-light-refresh.png', 
+                      alt: 'Voucher Light Refresh' 
+                    },
+                    { 
+                      rotate: 0, x: 0, y: 0, z: 20, scale: 1.0, 
+                      img: '/voucher-premium-credit.png', 
+                      alt: 'Voucher Premium Credit' 
+                    }, // Center on top
+                 ].map((card, i) => (
+                    <motion.div
+                       key={i}
+                       initial={{ opacity: 0, y: 100, rotate: 0 }}
+                       whileInView={{ 
+                          opacity: 1, 
+                          y: card.y, 
+                          rotate: card.rotate, 
+                          x: card.x,
+                          scale: card.scale
+                       }}
+                       viewport={{ once: true }}
+                       transition={{ duration: 0.8, delay: i * 0.15, type: "spring", stiffness: 50 }}
+                       className="absolute w-[280px] md:w-[320px] shadow-2xl rounded-sm"
+                       style={{ zIndex: card.z }}
+                    >
+                       {/* REAL IMAGE RENDER */}
+                       <img 
+                          src={card.img} 
+                          alt={card.alt}
+                          className="w-full h-auto rounded-sm shadow-xl object-cover"
+                          onError={(e) => {
+                            // Fallback if image not found during development
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.parentElement!.innerHTML = `
+                              <div class="w-full aspect-[1/1.414] bg-white flex items-center justify-center text-center p-4 border-2 border-dashed border-gray-400">
+                                <span class="text-xs text-gray-500 font-mono">
+                                  Zde se zobrazí obrázek:<br/><strong>${card.img}</strong><br/><br/>
+                                  Nahrajte soubor do složky public.
+                                </span>
+                              </div>
+                            `
+                          }}
+                       />
 
-                    <div className="relative z-10">
-                       <div className="h-px w-20 bg-brand-blue mb-4"></div>
-                       <h4 className="text-2xl font-heading font-bold uppercase text-white/90">
-                          Exclusive Limit
-                       </h4>
-                       <p className="text-white/50 text-xs tracking-widest uppercase mt-1">
-                          Hodnota: 5 000 Kč
-                       </p>
-                    </div>
-
-                    <div className="relative z-10 flex justify-between items-end">
-                       <div className="text-[10px] text-white/30 uppercase tracking-[0.2em]">
-                          No. 2024-001-SW
-                       </div>
-                       <Printer size={16} className="text-white/30" />
-                    </div>
-                 </motion.div>
+                       {/* Shine Overlay for Realism */}
+                       <div className="absolute inset-0 bg-gradient-to-tr from-black/10 via-transparent to-white/20 pointer-events-none rounded-sm"></div>
+                    </motion.div>
+                 ))}
               </div>
 
            </div>
         </div>
 
-        {/* Vouchers Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
-          {VOUCHERS.map((voucher, index) => {
-            // Highlighting the Exclusive (most expensive) or Middle option
-            const isExclusive = index === 2; // 5000 Kc
-
-            return (
-              <motion.div
-                key={voucher.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className={`group relative overflow-hidden transition-all duration-300 flex flex-col h-full
-                  ${isExclusive ? 'bg-brand-dark text-white shadow-2xl scale-[1.02] border border-brand-blue/30' : 'bg-white text-brand-dark border border-gray-100 hover:shadow-xl hover:-translate-y-2'}
-                `}
-              >
-                {/* Badge for Popular/Exclusive */}
-                {voucher.tag && (
-                  <div className={`absolute top-0 right-0 px-4 py-1 text-[10px] font-bold uppercase tracking-widest z-20
-                    ${isExclusive ? 'bg-brand-blue text-brand-dark' : 'bg-brand-dark text-white'}
-                  `}>
-                    {voucher.tag}
-                  </div>
-                )}
-
-                {/* Card Top Accent */}
-                <div className={`absolute top-0 left-0 w-full h-[4px] transition-colors duration-300 z-10
-                   ${isExclusive ? 'bg-brand-blue' : 'bg-gray-100 group-hover:bg-brand-blue'}
-                `}></div>
-
-                <div className="p-8 md:p-10 flex-grow">
-                  <div className="mb-6">
-                    <h3 className={`text-2xl font-bold font-heading mb-2 ${isExclusive ? 'text-white' : 'text-brand-dark'}`}>
-                        {voucher.title}
-                    </h3>
-                    <div className="flex items-baseline gap-1">
-                      <span className={`text-2xl font-bold tracking-tight ${isExclusive ? 'text-brand-blue' : 'text-brand-dark'}`}>
-                          {voucher.price}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <p className={`text-sm mb-8 leading-relaxed ${isExclusive ? 'text-gray-400' : 'text-gray-500'}`}>
-                    {voucher.description}
-                  </p>
-
-                  <ul className="space-y-4 mb-8">
-                    {voucher.features.map((feature, i) => (
-                        <li key={i} className={`flex items-start text-sm ${isExclusive ? 'text-gray-300' : 'text-gray-600'}`}>
-                            <div className={`mt-1 mr-3 rounded-full flex items-center justify-center w-4 h-4 shrink-0
-                                ${isExclusive ? 'bg-brand-blue/20 text-brand-blue' : 'bg-gray-100 text-brand-blue'}
-                            `}>
-                                <Check size={10} strokeWidth={3} />
-                            </div>
-                            {feature}
-                        </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="p-8 md:p-10 pt-0 mt-auto">
-                  <Button 
-                    onClick={() => handleOrderVoucher(voucher.title, voucher.price)}
-                    fullWidth 
-                    variant={isExclusive ? 'primary' : 'secondary'}
-                    className={`${!isExclusive && 'border-gray-200 hover:border-brand-blue group-hover:bg-brand-blue group-hover:text-white'}`}
-                  >
-                    Koupit Online
-                  </Button>
-                </div>
-
-              </motion.div>
-            );
-          })}
+        {/* --- BOOKING CTA BAR --- */}
+        <div className="max-w-4xl mx-auto bg-brand-blue/10 border border-brand-blue p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 mb-16">
+           <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-brand-blue text-brand-dark flex items-center justify-center">
+                 <Calendar size={24} />
+              </div>
+              <div>
+                 <h4 className="font-heading font-bold text-lg text-brand-dark uppercase">Máte již zakoupený voucher?</h4>
+                 <p className="text-sm text-gray-600">Rezervujte si termín online nebo telefonicky.</p>
+              </div>
+           </div>
+           <Button onClick={scrollToContact} variant="dark" className="whitespace-nowrap">
+              Uplatnit voucher
+           </Button>
         </div>
+
+        {/* --- MINI FAQ SECTION --- */}
+        <div className="max-w-4xl mx-auto border-t border-gray-200 pt-16">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+              {VOUCHER_FAQ.map((faq, idx) => (
+                 <div key={idx} className="flex gap-4">
+                    <div className="shrink-0 mt-1">
+                       <HelpCircle className="text-brand-blue opacity-50" size={20} />
+                    </div>
+                    <div>
+                       <h4 className="text-sm font-bold text-brand-dark uppercase tracking-wide mb-2">{faq.q}</h4>
+                       <p className="text-sm text-gray-500 leading-relaxed">{faq.a}</p>
+                    </div>
+                 </div>
+              ))}
+           </div>
+        </div>
+
       </div>
     </section>
   );

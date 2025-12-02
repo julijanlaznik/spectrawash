@@ -8,7 +8,7 @@ import ServiceCalculator from './ServiceCalculator';
 const Services: React.FC = () => {
   const [activeService, setActiveService] = useState(0);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
-  const [calcService, setCalcService] = useState<{id: string, name: string, price: number} | null>(null);
+  const [calcService, setCalcService] = useState<{id: string, name: string, basePrice: number} | null>(null);
   
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -18,9 +18,9 @@ const Services: React.FC = () => {
   
   const y = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
-  const openCalculator = (e: React.MouseEvent, id: string, name: string, price: number) => {
+  const openCalculator = (e: React.MouseEvent, id: string, name: string, basePrice: number) => {
     e.stopPropagation(); 
-    setCalcService({ id, name, price });
+    setCalcService({ id, name, basePrice });
     setIsCalculatorOpen(true);
   };
 

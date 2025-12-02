@@ -1,6 +1,6 @@
 
 import React, { useRef, useState, useEffect } from 'react';
-import { CONTACT_INFO, SERVICES } from '../constants';
+import { CONTACT_INFO, SERVICES, VOUCHERS } from '../constants';
 import Button from './Button';
 import { motion, useScroll, useTransform, Variants, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon, MapPin, Navigation, Phone, Mail, Check, X } from 'lucide-react';
@@ -322,13 +322,13 @@ const Contact: React.FC = () => {
           >
             <motion.div variants={itemVariants} className="mb-10">
               <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs mb-3 block">
-                 Rezervace
+                 Poptávka
               </span>
               <h3 className="text-3xl md:text-4xl font-heading font-bold text-brand-dark mb-4">
-                Napište nám
+                Nezávazná rezervace
               </h3>
               <p className="text-gray-500 font-light max-w-md">
-                 Vyplňte formulář níže pro nezávaznou poptávku našich služeb. Ozveme se vám obratem.
+                 Vyplňte formulář níže pro nezávaznou poptávku našich služeb. Vámi vybraný termín potvrdíme telefonicky nebo e-mailem.
               </p>
             </motion.div>
 
@@ -404,11 +404,32 @@ const Contact: React.FC = () => {
                       onChange={(e) => setSelectedService(e.target.value)}
                     >
                       <option value="" disabled hidden></option>
-                      {/* Filter out 'pickup' id so it doesn't show in dropdown */}
-                      {SERVICES.filter(s => s.id !== 'pickup').map(s => (
-                        <option key={s.id} value={s.title}>{s.title}</option>
-                      ))}
-                      <option value="Jiné">Jiné / Individuální</option>
+                      
+                      <optgroup label="Standardní služby">
+                        {SERVICES.filter(s => s.id !== 'pickup' && s.id !== 'addons').map(s => (
+                          <option key={s.id} value={s.title}>{s.title}</option>
+                        ))}
+                      </optgroup>
+
+                      {/* PURCHASE VOUCHERS - NEW GROUP */}
+                      <optgroup label="Objednávka voucheru">
+                        {VOUCHERS.map(v => (
+                           <option key={`buy-${v.id}`} value={`Objednávka voucheru: ${v.title}`}>Objednat: {v.title}</option>
+                        ))}
+                      </optgroup>
+                      
+                      {/* REDEEM VOUCHERS */}
+                      <optgroup label="Uplatnění voucheru">
+                        {VOUCHERS.map(v => (
+                           <option key={`redeem-${v.id}`} value={`Uplatnění voucheru: ${v.title}`}>Uplatnit: {v.title}</option>
+                        ))}
+                      </optgroup>
+                      
+                      <optgroup label="Ostatní">
+                         <option value={SERVICES.find(s => s.id === 'addons')?.title}>Doplňkové služby</option>
+                         <option value="Jiné">Jiné / Individuální</option>
+                      </optgroup>
+
                     </motion.select>
                     <label 
                       htmlFor="service" 
@@ -513,8 +534,9 @@ const Contact: React.FC = () => {
                        </span>
                        <CalendarIcon size={16} className="text-gray-400" />
                     </div>
+                    {/* CHANGED: Label text to 'Preferovaný termín' and improved styling to prevent overlap */}
                     <label 
-                      className={`absolute left-0 transition-all uppercase tracking-wider pointer-events-none ${selectedDate || isPickerOpen ? '-top-3.5 text-xs font-bold text-brand-blue' : 'top-3 text-base text-gray-400'}`}
+                      className={`absolute left-0 transition-all uppercase tracking-wider pointer-events-none truncate max-w-full ${selectedDate || isPickerOpen ? '-top-3.5 text-xs font-bold text-brand-blue' : 'top-3 text-base text-gray-400'}`}
                     >
                       Preferovaný termín
                     </label>
@@ -570,16 +592,13 @@ const Contact: React.FC = () => {
                                </div>
                                <div className="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-gray-200">
                                  {TIME_SLOTS.map((time, idx) => (
-                                   <motion.button
-                                     key={time}
-                                     initial={{ opacity: 0, y: 10 }}
-                                     animate={{ opacity: 1, y: 0 }}
-                                     transition={{ delay: idx * 0.03 }}
-                                     onClick={(e) => { e.preventDefault(); handleTimeClick(time); }}
-                                     className="py-2 px-1 border border-gray-100 text-xs hover:border-brand-blue hover:text-brand-blue transition-colors text-center bg-gray-50 hover:bg-white"
+                                   <button
+                                      key={idx}
+                                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleTimeClick(time); }}
+                                      className="py-2 text-sm border border-gray-100 text-gray-600 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-colors"
                                    >
-                                     {time}
-                                   </motion.button>
+                                      {time}
+                                   </button>
                                  ))}
                                </div>
                              </>
@@ -591,110 +610,51 @@ const Contact: React.FC = () => {
                 </div>
               </div>
 
-              <motion.div variants={itemVariants} className="relative group/input">
-                <motion.textarea 
-                  whileFocus={{ scale: 1.01, x: 5 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                  id="message" 
-                  rows={4}
-                  className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent resize-none relative z-10"
-                  placeholder="Zpráva"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                ></motion.textarea>
-                <label 
-                  htmlFor="message" 
-                  className={`absolute left-0 transition-all uppercase tracking-wider ${message ? '-top-3.5 text-xs font-bold text-brand-blue' : 'top-3 text-base text-gray-400 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue'}`}
-                >
-                  Zpráva / Specifikace vozu
-                </label>
-              </motion.div>
-
-              <motion.div variants={itemVariants} className="pt-4">
-                <Button 
-                  type="submit" 
-                  variant="dark"
-                  fullWidth 
-                  className="shadow-xl"
-                >
+              {/* SUBMIT BUTTON */}
+              <div className="mt-8 flex justify-end">
+                <Button type="submit" variant="dark" className="px-12">
                   Odeslat poptávku
                 </Button>
-              </motion.div>
+              </div>
+
             </form>
           </motion.div>
         </motion.div>
       </div>
 
-      {/* --- SUCCESS POPUP MODAL --- */}
+      {/* SUCCESS MODAL */}
       <AnimatePresence>
         {showSuccessModal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
-            {/* Backdrop */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
-              onClick={() => setShowSuccessModal(false)}
-            />
-            
-            {/* Modal Content */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 50 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 50 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="relative bg-brand-dark border border-brand-blue p-8 md:p-12 max-w-lg w-full shadow-[0_0_50px_rgba(63,213,211,0.2)]"
-            >
-              {/* Close Icon */}
-              <button 
-                onClick={() => setShowSuccessModal(false)}
-                className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
-              >
-                <X size={24} />
-              </button>
-
-              <div className="flex flex-col items-center text-center">
-                {/* Success Icon */}
-                <motion.div 
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 0.2, type: "spring" }}
-                  className="w-20 h-20 rounded-full border-2 border-brand-blue flex items-center justify-center mb-6 text-brand-blue shadow-[0_0_20px_rgba(63,213,211,0.3)]"
-                >
-                   <Check size={40} strokeWidth={3} />
-                </motion.div>
-
-                <h3 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4 uppercase leading-none">
-                   Rezervace <br/><span className="text-brand-blue">Odeslána</span>
-                </h3>
-                
-                <p className="text-white text-lg mb-6">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+             <motion.div 
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               exit={{ opacity: 0 }}
+               className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+               onClick={() => setShowSuccessModal(false)}
+             />
+             <motion.div
+               initial={{ scale: 0.9, opacity: 0 }}
+               animate={{ scale: 1, opacity: 1 }}
+               exit={{ scale: 0.9, opacity: 0 }}
+               className="bg-white p-8 md:p-12 relative z-10 max-w-lg text-center shadow-2xl"
+             >
+                <div className="w-20 h-20 bg-brand-blue/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                   <Check size={40} className="text-brand-blue" />
+                </div>
+                <h3 className="text-3xl font-heading font-bold text-brand-dark mb-4">
                   Děkujeme, {submittedName}!
+                </h3>
+                <p className="text-gray-500 mb-8 leading-relaxed">
+                  Vaši nezávaznou poptávku jsme přijali. Co nejdříve se vám ozveme pro potvrzení termínu a detailů.
                 </p>
-
-                <div className="text-gray-400 text-sm font-light leading-relaxed mb-8 max-w-xs mx-auto">
-                   Vaše objednávka byla úspěšně přijata ke zpracování. Prosím vyčkejte na potvrzení termínu, které vám zašleme e-mailem nebo telefonicky.
-                </div>
-
-                <div className="w-full h-[1px] bg-white/10 mb-8"></div>
-
-                <div className="flex flex-col gap-2 mb-8">
-                   <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Potřebujete to urgentně?</span>
-                   <a href={`tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`} className="text-xl text-white hover:text-brand-blue transition-colors font-bold">
-                     {CONTACT_INFO.phone}
-                   </a>
-                </div>
-
                 <Button onClick={() => setShowSuccessModal(false)} fullWidth>
-                  Zavřít okno
+                  Zavřít
                 </Button>
-              </div>
-            </motion.div>
+             </motion.div>
           </div>
         )}
       </AnimatePresence>
-
     </section>
   );
 };

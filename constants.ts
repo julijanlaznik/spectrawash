@@ -133,26 +133,43 @@ export const SERVICES = [
 export const VOUCHERS = [
   {
     id: 1,
-    title: 'Smart Care',
+    title: 'Light Refresh',
     price: '2 500 Kč',
-    description: 'Komplexní péče o exteriér i interiér. Ideální volba pro pravidelnou údržbu vozu.',
-    features: ['Šetrné ruční mytí exteriéru', 'Vyčištění interiéru a oken', 'Impregnace pneu a plastů'],
+    description: 'Rychlé a efektivní kompletní osvěžení vozu. Mytí exteriéru, tekutý vosk, suché čištění interiéru, luxování.',
+    features: [
+      'Mytí exteriéru', 
+      'Ošetření tekutým voskem', 
+      'Suché čištění interiéru', 
+      'Luxování, plasty, koberečky'
+    ],
     tag: null
   },
   {
     id: 2,
-    title: 'Deep Detail',
+    title: 'Deep Complete',
     price: '3 800 Kč',
-    description: 'Hloubkový detailing pro náročné. Včetně tepování sedaček a detailního čištění.',
-    features: ['Vše z balíčku Smart Care', 'Hloubkové tepování sedaček', 'Detailing kol a podběhů'],
+    description: 'Prémiová kompletní péče o auto: exteriér + hloubkové čištění interiéru.',
+    features: [
+      'Kompletní mytí exteriéru',
+      'Tekutý vosk',
+      'Mokré čištění interiéru',
+      'Hloubkové tepování sedaček',
+      'Čištění kůže',
+      'Zavazadlový prostor'
+    ],
     tag: 'Nejoblíbenější'
   },
   {
     id: 3,
-    title: 'Exclusive Limit',
+    title: 'Premium Credit 5 000 Kč',
     price: '5 000 Kč',
-    description: 'Otevřený voucher na libovolné služby. Lze využít i na keramiku či leštění laku.',
-    features: ['Volný výběr služeb studia', 'Aplikace vosků a keramik', 'Možnost čerpání po částech'],
+    description: 'Univerzální kredit 5 000 Kč na jakékoliv služby SpectraWash. Obdarovaný si sám vybere.',
+    features: [
+      'Kredit na libovolné služby', 
+      'Platnost 12 měsíců', 
+      'Lze čerpat po částech',
+      'I na keramiku a leštění'
+    ],
     tag: 'Tip na dárek'
   }
 ];
@@ -214,6 +231,20 @@ export const SOCIAL_FEED = [
     thumbnail: 'https://images.unsplash.com/photo-1600705722908-bab1e61c0b6d?q=80&w=800&auto=format&fit=crop',
     title: 'Detaily interiéru',
     views: '5.1k'
+  },
+  {
+    id: 5,
+    type: 'video',
+    thumbnail: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=800&auto=format&fit=crop',
+    title: 'Renovace laku',
+    views: '18.4k'
+  },
+  {
+    id: 6,
+    type: 'video',
+    thumbnail: 'https://images.unsplash.com/photo-1626074961596-e999c2d6156d?q=80&w=800&auto=format&fit=crop',
+    title: 'Hydrofobní ochrana',
+    views: '22.1k'
   }
 ];
 
