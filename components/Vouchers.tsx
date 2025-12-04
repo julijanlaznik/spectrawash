@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, Printer, Mail, HelpCircle, Calendar, FileCheck } from 'lucide-react';
+import { Check, Printer, Mail, HelpCircle, Calendar, FileCheck, Tag, Sparkles } from 'lucide-react';
 import { VOUCHERS } from '../constants';
 import Button from './Button';
 import { motion } from 'framer-motion';
@@ -49,13 +49,24 @@ const Vouchers: React.FC = () => {
   ];
 
   // Helper function to get image path based on voucher ID
+  // UPDATED: Using specific -web versions for the card grid as requested
   const getVoucherImage = (id: number) => {
     switch(id) {
-        case 1: return '/voucher-light-refresh.png';
-        case 2: return '/voucher-deep-complete.png';
+        case 1: return '/voucher-light-refresh-web.png';
+        case 2: return '/voucher-deep-complete-web.png';
         case 3: return '/voucher-premium-credit.png';
-        default: return '/voucher-light-refresh.png';
+        default: return '/voucher-light-refresh-web.png';
     }
+  };
+
+  // Helper to calculate discounted price
+  const getDiscountedPrice = (priceStr: string) => {
+    // Remove non-numeric chars
+    const num = parseInt(priceStr.replace(/\D/g, ''));
+    // Subtract 100 CZK
+    const discounted = num - 100;
+    // Format back to string (e.g. 2 400 Kč)
+    return discounted.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " Kč";
   };
 
   return (
@@ -68,7 +79,7 @@ const Vouchers: React.FC = () => {
       <div className="container mx-auto px-6 relative z-10">
         
         {/* --- HERO HEADER --- */}
-        <div className="text-center max-w-2xl mx-auto mb-20">
+        <div className="text-center max-w-2xl mx-auto mb-12">
           <motion.span 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -98,11 +109,40 @@ const Vouchers: React.FC = () => {
           </motion.p>
         </div>
 
+        {/* --- PROMO BANNER --- */}
+        <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto mb-20 relative group"
+        >
+            <div className="absolute inset-0 bg-brand-blue/20 blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
+            <div className="relative bg-white border border-brand-blue/30 rounded-xl p-6 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-brand-blue/10 rounded-full flex items-center justify-center shrink-0">
+                        <Sparkles className="text-brand-blue" size={24} />
+                    </div>
+                    <div>
+                        <h4 className="font-heading font-bold text-brand-dark text-lg">Vánoční akce pro prvních 50 nákupů!</h4>
+                        <p className="text-sm text-gray-500">Získejte okamžitou slevu 100 Kč na jakýkoliv voucher.</p>
+                    </div>
+                </div>
+                <div className="flex flex-col items-center md:items-end bg-gray-50 p-3 rounded-lg border border-gray-100 min-w-[200px]">
+                    <span className="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Slevový kód</span>
+                    <div className="flex items-center gap-2">
+                        <Tag size={14} className="text-brand-blue" />
+                        <span className="font-mono font-bold text-lg text-brand-dark select-all">SPECTRA100</span>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
+
         {/* --- 3D VOUCHER CARDS GRID --- */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch mb-32">
           {VOUCHERS.map((voucher, index) => {
             // Determine styling based on type
             const isPremium = index === 2; // Credit 5000
+            const discountedPrice = getDiscountedPrice(voucher.price);
             
             return (
               <motion.div
@@ -130,23 +170,24 @@ const Vouchers: React.FC = () => {
                   <div className="p-2">
                     <div 
                       className={`
-                        w-full aspect-[1.6/1] rounded-xl relative overflow-hidden shadow-inner
+                        w-full aspect-[1.5/1] rounded-xl relative overflow-hidden shadow-inner
                         ${isPremium 
                           ? 'bg-gray-900 border border-white/5' 
                           : 'bg-gray-50 border border-gray-200'
                         }
                       `}
                     >
-                       {/* REAL IMAGE RENDER - Cropped/Centered */}
+                       {/* REAL IMAGE RENDER - Perfect 3:2 Ratio (1200x800px suggested) */}
+                       {/* Changed from object-[center_15%] to object-center for custom graphics */}
                        <img 
                           src={getVoucherImage(voucher.id)}
                           alt={voucher.title}
-                          className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
+                          className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-700"
                           onError={(e) => {
                             // Fallback styling if image missing
                             e.currentTarget.style.display = 'none';
                             e.currentTarget.parentElement!.classList.add('flex', 'items-center', 'justify-center', 'p-4');
-                            e.currentTarget.parentElement!.innerHTML = `<span class="text-[10px] text-gray-400 text-center">Náhled voucheru<br/>(Nahrajte /public${getVoucherImage(voucher.id)})</span>`;
+                            e.currentTarget.parentElement!.innerHTML = `<span class="text-[10px] text-gray-400 text-center">Náhled voucheru<br/>(Doporučený rozměr: 1200x800px)</span>`;
                           }}
                        />
                        
@@ -186,13 +227,31 @@ const Vouchers: React.FC = () => {
                         ))}
                      </ul>
 
+                     {/* PRICE CALCULATION BLOCK */}
+                     <div className={`mb-6 p-4 rounded-lg border ${isPremium ? 'bg-white/5 border-white/10' : 'bg-brand-blue/5 border-brand-blue/10'}`}>
+                        <div className="flex items-center justify-between mb-1">
+                            <span className={`text-xs uppercase tracking-widest ${isPremium ? 'text-gray-400' : 'text-gray-500'}`}>Běžná cena:</span>
+                            <span className={`text-sm line-through decoration-red-500 decoration-1 ${isPremium ? 'text-gray-500' : 'text-gray-400'}`}>
+                                {voucher.price}
+                            </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-brand-blue">
+                                <Tag size={12} /> S kódem SPECTRA100:
+                            </span>
+                            <span className={`text-xl font-heading font-bold ${isPremium ? 'text-white' : 'text-brand-dark'}`}>
+                                {discountedPrice}
+                            </span>
+                        </div>
+                     </div>
+
                      <Button 
                        onClick={() => handleBuyVoucher(voucher.id)}
                        fullWidth 
                        variant={isPremium ? 'primary' : 'dark'}
                        className="mt-2"
                      >
-                       Koupit za {voucher.price}
+                       Koupit online
                      </Button>
                      
                      <div className="text-center mt-4">
@@ -277,7 +336,7 @@ const Vouchers: React.FC = () => {
                           opacity: 1, 
                           y: card.y, 
                           rotate: card.rotate, 
-                          x: card.x,
+                          x: card.x, 
                           scale: card.scale
                        }}
                        viewport={{ once: true }}

@@ -3,12 +3,14 @@ import React, { useRef, useState, useEffect } from 'react';
 import { CONTACT_INFO, SERVICES, VOUCHERS } from '../constants';
 import Button from './Button';
 import { motion, useScroll, useTransform, Variants, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon, MapPin, Navigation, Phone, Mail, Check, AlertCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon, MapPin, Navigation, Phone, Mail, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import * as emailjs from '@emailjs/browser';
 
 const Contact: React.FC = () => {
   const containerRef = useRef(null);
   const location = useLocation();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -64,6 +66,7 @@ const Contact: React.FC = () => {
   const [selectedService, setSelectedService] = useState("");
   const [message, setMessage] = useState("");
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  const [isSending, setIsSending] = useState(false);
 
   // AUTO-FILL FROM URL
   useEffect(() => {
@@ -174,9 +177,67 @@ const Contact: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
+
+    // 1. NATIVE HTML VALIDATION CHECK (Name, Phone, Email, Service)
+    // This triggers the browser's bubble UI for missing required fields
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    // 2. CUSTOM VALIDATION FOR DATE & TIME
+    // Since these are custom UI components, we must check them manually
+    if (!selectedDate || !selectedTime) {
+        alert("Prosím vyberte preferovaný termín a čas návštěvy.");
+        setIsPickerOpen(true); // Open the picker to help the user
+        return;
+    }
+
+    setIsSending(true);
+
     const nameInput = form.elements.namedItem('name') as HTMLInputElement;
-    setSubmittedName(nameInput.value || "zákazníku");
-    setShowSuccessModal(true);
+    const nameValue = nameInput.value;
+
+    // -------------------------------------------------------------
+    // ZDE MUSÍTE ZADAT VAŠE KLÍČE Z EMAILJS.COM
+    // -------------------------------------------------------------
+    // 1. Zaregistrujte se na https://www.emailjs.com/
+    // 2. Vytvořte Email Service (např. Gmail) -> získáte SERVICE_ID
+    // 3. Vytvořte Email Template -> získáte TEMPLATE_ID
+    // 4. Z Account -> General získáte PUBLIC_KEY
+    // -------------------------------------------------------------
+
+    // CLIENT KEYS: Přihlašovací údaje budou dodány klientem.
+    // Zatím používáme placeholder hodnoty.
+    const SERVICE_ID = 'YOUR_SERVICE_ID'; // Nahraďte vaším ID
+    const TEMPLATE_ID = 'YOUR_TEMPLATE_ID'; // Nahraďte vaším ID
+    const PUBLIC_KEY = 'YOUR_PUBLIC_KEY'; // Nahraďte vaším klíčem
+
+    // Pokud nemáte nastavené klíče, jen simulujeme odeslání (aby web nepadal)
+    if (SERVICE_ID === 'YOUR_SERVICE_ID') {
+        setTimeout(() => {
+            setSubmittedName(nameValue || "zákazníku");
+            setShowSuccessModal(true);
+            setIsSending(false);
+            console.log("Simulace odeslání: EmailJS klíče nejsou nastaveny v kódu.");
+        }, 1500);
+        return;
+    }
+
+    if (formRef.current) {
+        // Přidáme skrytá pole pro datum/čas, aby se odeslaly v e-mailu
+        // EmailJS bere data z 'name' atributů inputů
+        emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, PUBLIC_KEY)
+            .then((result) => {
+                setSubmittedName(nameValue || "zákazníku");
+                setShowSuccessModal(true);
+                setIsSending(false);
+            }, (error) => {
+                console.log(error.text);
+                alert("Chyba při odesílání. Zkuste to prosím telefonicky.");
+                setIsSending(false);
+            });
+    }
   };
 
   const MAP_URL = "https://www.google.com/maps/place/Spectra+Wash/@50.1604608,14.37045,46m/data=!3m1!1e3!4m6!3m5!1s0x470bc169266c69d7:0xd51032c3e7f78c0f!8m2!3d50.1604871!4d14.3706054!16s%2Fg%2F11t5njqnd9?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D";
@@ -319,7 +380,13 @@ const Contact: React.FC = () => {
               </p>
             </motion.div>
 
-            <form onSubmit={handleSubmit} className="space-y-8 group/form">
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-8 group/form">
+              {/* HIDDEN INPUTS FOR EMAILJS */}
+              <input type="hidden" name="date" value={selectedDate ? selectedDate.toLocaleDateString() : 'Nevybráno'} />
+              <input type="hidden" name="time" value={selectedTime || 'Nevybráno'} />
+              <input type="hidden" name="addons" value={selectedAddons.join(', ')} />
+              <input type="hidden" name="pickup_requested" value={isPickup ? 'Ano' : 'Ne'} />
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <motion.div variants={itemVariants} className="relative group/input">
                   <motion.input 
@@ -345,7 +412,8 @@ const Contact: React.FC = () => {
                     whileFocus={{ scale: 1.02, x: 5 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                     type="tel" 
-                    id="phone" 
+                    id="phone"
+                    name="phone"
                     className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent relative z-10"
                     placeholder="Telefon"
                     required
@@ -364,7 +432,8 @@ const Contact: React.FC = () => {
                   whileFocus={{ scale: 1.01, x: 5 }}
                   transition={{ type: 'spring', stiffness: 300 }}
                   type="email" 
-                  id="email" 
+                  id="email"
+                  name="email"
                   className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent relative z-10"
                   placeholder="Email"
                   required
@@ -385,6 +454,7 @@ const Contact: React.FC = () => {
                       whileFocus={{ scale: 1.02, x: 5 }}
                       transition={{ type: 'spring', stiffness: 300 }}
                       id="service" 
+                      name="service"
                       className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors appearance-none cursor-pointer relative z-10"
                       required
                       value={selectedService}
@@ -449,7 +519,8 @@ const Contact: React.FC = () => {
                           initial={{ x: -20 }}
                           animate={{ x: 0 }}
                           type="text" 
-                          id="pickup_address" 
+                          id="pickup_address"
+                          name="pickup_address"
                           className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent"
                           placeholder="Adresa vyzvednutí"
                           required={isPickup}
@@ -581,8 +652,12 @@ const Contact: React.FC = () => {
               </div>
 
               <div className="mt-8 flex justify-end">
-                <Button type="submit" variant="dark" className="px-12">
-                  Odeslat poptávku
+                <Button type="submit" variant="dark" className="px-12" disabled={isSending}>
+                  {isSending ? (
+                    <span className="flex items-center gap-2">
+                        <Loader2 className="animate-spin" size={18} /> Odesílání...
+                    </span>
+                  ) : "Odeslat poptávku"}
                 </Button>
               </div>
 
