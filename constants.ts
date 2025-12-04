@@ -207,42 +207,42 @@ export const SOCIAL_FEED = [
   {
     id: 1,
     type: 'video',
-    thumbnail: '/reel-01.webp',
+    thumbnail: '/reel-01.jpg',
     title: 'Proces mytí',
     link: 'https://www.instagram.com/reel/DAwG8eBiSLC/'
   },
   {
     id: 2,
     type: 'image',
-    thumbnail: '/reel-02.webp',
+    thumbnail: '/reel-02.jpg',
     title: 'Kontrola kvality',
     link: 'https://www.instagram.com/reel/C_dV5-NioRj/'
   },
   {
     id: 3,
     type: 'video',
-    thumbnail: '/reel-03.webp',
+    thumbnail: '/reel-03.jpg',
     title: 'Aplikace vosku',
     link: 'https://www.instagram.com/reel/C9CNmffioep/'
   },
   {
     id: 4,
     type: 'image',
-    thumbnail: '/reel-04.webp',
+    thumbnail: '/reel-04.jpg',
     title: 'Detaily interiéru',
     link: 'https://www.instagram.com/reel/C2xd-KtMOet/'
   },
   {
     id: 5,
     type: 'video',
-    thumbnail: '/reel-05.webp',
+    thumbnail: '/reel-05.jpg',
     title: 'Renovace laku',
     link: 'https://www.instagram.com/reel/CpJ_L_LAD0v/'
   },
   {
     id: 6,
     type: 'video',
-    thumbnail: '/reel-06.webp',
+    thumbnail: '/reel-06.jpg',
     title: 'Hydrofobní ochrana',
     link: 'https://www.instagram.com/reel/CosZ0MIAW9Z/'
   }
