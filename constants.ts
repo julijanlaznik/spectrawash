@@ -104,7 +104,7 @@ export const SERVICES = [
     price: 'Ceník',
     basePrice: 0,
     duration: '',
-    image: 'https://images.unsplash.com/photo-1632823471565-1ec20104d70b?q=80&w=1000&auto=format&fit=crop', // Stock photo: Detailing brush/Interior
+    image: '/service-addons.webp', // Reverted to local file as requested
     description: 'Rozšiřující služby k programům.',
     details: [
       'Interiér bez tepování (1 350 Kč)',
@@ -124,7 +124,7 @@ export const SERVICES = [
     title: 'Pick-up servis',
     price: 'Individuální',
     basePrice: 500,
-    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1000&auto=format&fit=crop', // Stock photo: Driving/Steering wheel
+    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1000&auto=format&fit=crop', // Stock photo kept as requested
     description: 'Vůz si u vás vyzvedneme a vrátíme čistý.',
     details: ['Vyzvednutí vozu', 'Přistavení zpět']
   }
@@ -250,15 +250,12 @@ export const SOCIAL_FEED = [
 
 export const PORTFOLIO_CATEGORIES = ['Vše', 'Exteriér', 'Interiér', 'Ochrana'];
 
+// Updated to exactly 4 items with local webp paths
 export const PORTFOLIO_ITEMS = [
-  { id: 1, category: 'Exteriér', image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=1470&auto=format&fit=crop', title: 'Porsche 911', desc: 'Ruční mytí' },
-  { id: 2, category: 'Interiér', image: 'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?q=80&w=1582&auto=format&fit=crop', title: 'BMW M5', desc: 'Čištění kůže' },
-  { id: 3, category: 'Ochrana', image: 'https://images.unsplash.com/photo-1619405399517-d7fce0f13302?q=80&w=1374&auto=format&fit=crop', title: 'Mercedes S-Class', desc: 'Keramická ochrana' },
-  { id: 4, category: 'Exteriér', image: 'https://images.unsplash.com/photo-1493238792015-fa093a3070b6?q=80&w=1470&auto=format&fit=crop', title: 'Audi RS6', desc: 'Čištění kol' },
-  { id: 5, category: 'Interiér', image: 'https://images.unsplash.com/photo-1560963689-0933eae8fb4c?q=80&w=1470&auto=format&fit=crop', title: 'Bentley', desc: 'Impregnace' },
-  { id: 6, category: 'Ochrana', image: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80&w=1471&auto=format&fit=crop', title: 'Ferrari', desc: 'Korekce laku' },
-  { id: 7, category: 'Exteriér', image: 'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1469&auto=format&fit=crop', title: 'Lamborghini', desc: 'Detailing' },
-  { id: 8, category: 'Ochrana', image: 'https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=1287&auto=format&fit=crop', title: 'McLaren', desc: 'PPF Fólie' },
+  { id: 1, category: 'Exteriér', image: '/portfolio-01.webp', title: 'Porsche 911', desc: 'Ruční mytí' },
+  { id: 2, category: 'Interiér', image: '/portfolio-02.webp', title: 'BMW M5', desc: 'Čištění kůže' },
+  { id: 3, category: 'Ochrana', image: '/portfolio-03.webp', title: 'Mercedes S-Class', desc: 'Keramická ochrana' },
+  { id: 4, category: 'Exteriér', image: '/portfolio-04.webp', title: 'Audi RS6', desc: 'Čištění kol' },
 ];
 
 export const PARTNERS = [

@@ -13,18 +13,20 @@ const Portfolio: React.FC = () => {
     ? PORTFOLIO_ITEMS 
     : PORTFOLIO_ITEMS.filter(item => item.category === activeCategory);
 
-  // Helper to determine grid span based on index for a dynamic "Bento" look
+  // Helper to determine grid span based on index for exactly 4 items
   const getGridClass = (index: number) => {
-    const patternIndex = index % 8; // Cycle every 8 items
-    switch (patternIndex) {
+    // Layout for exactly 4 items:
+    // Item 0: Big (2x2) - Left Side
+    // Item 1: Tall (1x2) - Middle
+    // Item 2: Small (1x1) - Top Right
+    // Item 3: Small (1x1) - Bottom Right
+    // Result: 4 columns total width
+    
+    switch (index) {
       case 0: return "md:col-span-2 md:row-span-2 h-96 md:h-[600px]"; // Big Feature
       case 1: return "md:col-span-1 md:row-span-2 h-96 md:h-[600px]"; // Tall Vertical
       case 2: return "md:col-span-1 md:row-span-1 h-96 md:h-[296px]"; // Standard box
-      case 3: return "md:col-span-2 md:row-span-1 h-96 md:h-[296px]"; // Wide Horizontal
-      case 4: return "md:col-span-1 md:row-span-1 h-96 md:h-[296px]"; // Standard box
-      case 5: return "md:col-span-1 md:row-span-1 h-96 md:h-[296px]"; // Standard box
-      case 6: return "md:col-span-2 md:row-span-1 h-96 md:h-[296px]"; // Wide
-      case 7: return "md:col-span-1 md:row-span-1 h-96 md:h-[296px]"; // Standard
+      case 3: return "md:col-span-1 md:row-span-1 h-96 md:h-[296px]"; // Standard box
       default: return "md:col-span-1 md:row-span-1 h-96";
     }
   };
