@@ -8,27 +8,24 @@ import { motion } from 'framer-motion';
 const Vouchers: React.FC = () => {
   
   const handleBuyVoucher = (voucherId: number) => {
-    // -------------------------------------------------------------------------
-    // ZDE VLOŽTE ODKAZY NA PLATEBNÍ BRÁNU (STRIPE / PAYMENT LINK)
-    // -------------------------------------------------------------------------
     
     let link = "";
 
     if (voucherId === 1) {
        // 1. Voucher: Light Refresh (2 500 Kč)
-       link = "https://buy.stripe.com/vase-odkaz-1"; 
+       link = "https://buy.stripe.com/test_28E4gzfrJdFA27B7ry9sk02"; 
     } 
     else if (voucherId === 2) {
        // 2. Voucher: Deep Complete (3 800 Kč)
-       link = "https://buy.stripe.com/vase-odkaz-2";
+       link = "https://buy.stripe.com/test_cNieVd3J19pk13x9zG9sk01";
     } 
     else if (voucherId === 3) {
        // 3. Voucher: Premium Credit (5 000 Kč)
-       link = "https://buy.stripe.com/vase-odkaz-3";
+       link = "https://buy.stripe.com/test_eVq7sL93leJEcMfcLS9sk00";
     }
 
     // Pokud je odkaz nastaven, přesměrujeme uživatele
-    if (link && link !== "" && !link.includes("vase-odkaz")) {
+    if (link) {
       window.location.href = link;
     } else {
       console.log("Platební odkaz není nastaven (ID: " + voucherId + ")");
