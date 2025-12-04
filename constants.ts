@@ -11,19 +11,19 @@ export const NAV_LINKS = [
 export const HERO_SLIDES = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070&auto=format&fit=crop',
+    image: '/hero-slide-01.webp',
     title: 'Precizní\nruční mytí',
     subtitle: 'Šetrná péče o váš vůz. Používáme nejšetrnější\nmetody a prémiovou autokosmetiku.',
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1966&auto=format&fit=crop',
+    image: '/hero-slide-02.webp',
     title: 'Detailing interiéru',
     subtitle: 'Hloubkové tepování, čištění kůže a dezinfekce.\nVáš interiér bude opět jako nový.',
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop',
+    image: '/hero-slide-03.webp',
     title: 'Keramická ochrana',
     subtitle: 'Dlouhodobá ochrana laku nanotechnologií.\nExtrémní lesk, hydrofobita a odolnost.',
   },
@@ -37,7 +37,7 @@ export const SERVICES = [
     price: 'od 690 Kč',
     basePrice: 690,
     duration: '60 min',
-    image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1470&auto=format&fit=crop',
+    image: '/service-p1.webp',
     description: 'Základní program pro perfektní čistotu exteriéru.',
     details: [
       'Předmytí a čištění kol',
@@ -55,7 +55,7 @@ export const SERVICES = [
     price: 'od 1 950 Kč',
     basePrice: 1950,
     duration: '150 min',
-    image: 'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?q=80&w=1582&auto=format&fit=crop',
+    image: '/service-p2.webp',
     description: 'Kompletní péče o exteriér a důkladný úklid interiéru (bez mokrého tepování).',
     details: [
       'Vše z programu P1',
@@ -72,7 +72,7 @@ export const SERVICES = [
     price: 'od 3 250 Kč',
     basePrice: 3250,
     duration: '210 min',
-    image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1470&auto=format&fit=crop',
+    image: '/service-p3.webp',
     description: 'Maximální program včetně hloubkového tepování sedaček a čištění kůže.',
     details: [
       'Vše z programu P2',
@@ -88,7 +88,7 @@ export const SERVICES = [
     price: 'od 5 000 Kč',
     basePrice: 5000, 
     duration: 'Individuální',
-    image: 'https://images.unsplash.com/photo-1619405399517-d7fce0f13302?q=80&w=1374&auto=format&fit=crop',
+    image: '/service-polishing.webp',
     description: 'Specializované služby pro náročné klienty. Leštění laku a keramická ochrana.',
     details: [
       'Leštění laku karoserie',
@@ -104,7 +104,7 @@ export const SERVICES = [
     price: 'Ceník',
     basePrice: 0,
     duration: '',
-    image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=1200&auto=format&fit=crop',
+    image: '/service-addons.webp',
     description: 'Rozšiřující služby k programům.',
     details: [
       'Interiér bez tepování (1 350 Kč)',
@@ -124,7 +124,7 @@ export const SERVICES = [
     title: 'Pick-up servis',
     price: 'Individuální',
     basePrice: 500,
-    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1470&auto=format&fit=crop',
+    image: '/service-pickup.webp',
     description: 'Vůz si u vás vyzvedneme a vrátíme čistý.',
     details: ['Vyzvednutí vozu', 'Přistavení zpět']
   }
@@ -207,42 +207,42 @@ export const SOCIAL_FEED = [
   {
     id: 1,
     type: 'video',
-    thumbnail: '/reel-01.jpg',
+    thumbnail: '/reel-01.webp',
     title: 'Proces mytí',
     link: 'https://www.instagram.com/reel/DAwG8eBiSLC/'
   },
   {
     id: 2,
     type: 'image',
-    thumbnail: '/reel-02.jpg',
+    thumbnail: '/reel-02.webp',
     title: 'Kontrola kvality',
     link: 'https://www.instagram.com/reel/C_dV5-NioRj/'
   },
   {
     id: 3,
     type: 'video',
-    thumbnail: '/reel-03.jpg',
+    thumbnail: '/reel-03.webp',
     title: 'Aplikace vosku',
     link: 'https://www.instagram.com/reel/C9CNmffioep/'
   },
   {
     id: 4,
     type: 'image',
-    thumbnail: '/reel-04.jpg',
+    thumbnail: '/reel-04.webp',
     title: 'Detaily interiéru',
     link: 'https://www.instagram.com/reel/C2xd-KtMOet/'
   },
   {
     id: 5,
     type: 'video',
-    thumbnail: '/reel-05.jpg',
+    thumbnail: '/reel-05.webp',
     title: 'Renovace laku',
     link: 'https://www.instagram.com/reel/CpJ_L_LAD0v/'
   },
   {
     id: 6,
     type: 'video',
-    thumbnail: '/reel-06.jpg',
+    thumbnail: '/reel-06.webp',
     title: 'Hydrofobní ochrana',
     link: 'https://www.instagram.com/reel/CosZ0MIAW9Z/'
   }
