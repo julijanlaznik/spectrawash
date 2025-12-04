@@ -104,7 +104,7 @@ export const SERVICES = [
     price: 'Ceník',
     basePrice: 0,
     duration: '',
-    image: '/service-addons.webp',
+    image: 'https://images.unsplash.com/photo-1632823471565-1ec20104d70b?q=80&w=1000&auto=format&fit=crop', // Stock photo: Detailing brush/Interior
     description: 'Rozšiřující služby k programům.',
     details: [
       'Interiér bez tepování (1 350 Kč)',
@@ -124,7 +124,7 @@ export const SERVICES = [
     title: 'Pick-up servis',
     price: 'Individuální',
     basePrice: 500,
-    image: '/service-pickup.webp',
+    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1000&auto=format&fit=crop', // Stock photo: Driving/Steering wheel
     description: 'Vůz si u vás vyzvedneme a vrátíme čistý.',
     details: ['Vyzvednutí vozu', 'Přistavení zpět']
   }
