@@ -1,191 +1,150 @@
 
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { SERVICES } from '../constants';
-import { ArrowRight, Calculator, Clock } from 'lucide-react';
+import { Calculator, Clock, Check } from 'lucide-react';
 import ServiceCalculator from './ServiceCalculator';
 
 const Services: React.FC = () => {
-  const [activeService, setActiveService] = useState(0);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
   const [calcService, setCalcService] = useState<{id: string, name: string, basePrice: number} | null>(null);
-  
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-  
-  const y = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
-  const openCalculator = (e: React.MouseEvent, id: string, name: string, basePrice: number) => {
-    e.stopPropagation(); 
-    setCalcService({ id, name, basePrice });
+  const openCalculator = (serviceId: string, serviceName: string, basePrice: number) => {
+    setCalcService({ id: serviceId, name: serviceName, basePrice });
     setIsCalculatorOpen(true);
   };
 
   return (
-    <section id="services" ref={containerRef} className="py-32 bg-white relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-gray-50 -z-10 hidden lg:block" />
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col lg:flex-row gap-20">
-          
-          <div className="lg:w-1/2">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mb-16"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <span className="h-[1px] w-12 bg-brand-blue"></span>
-                <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs">Dokonalost</span>
-              </div>
-              <h2 className="text-5xl md:text-6xl font-heading font-bold text-brand-dark leading-tight">
-                Nabídka <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-dark">Programů</span>
-              </h2>
-            </motion.div>
-
-            <div className="space-y-0 border-t border-gray-200">
-              {SERVICES.map((service, index) => (
-                <div 
-                  key={service.id}
-                  onMouseEnter={() => setActiveService(index)}
-                  className="group relative cursor-pointer border-b border-gray-200"
-                >
-                  <div className={`flex items-start py-8 transition-all duration-500 ${activeService === index ? 'pl-8 lg:pl-10' : 'pl-0'}`}>
-                    
-                    <span className={`hidden lg:block text-xs font-bold font-heading mr-8 mt-2 transition-colors duration-300 ${activeService === index ? 'text-brand-blue' : 'text-gray-300'}`}>
-                      0{index + 1}
-                    </span>
-
-                    <div className="flex-1">
-                      <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-                        <h3 className={`text-xl md:text-2xl font-heading font-bold transition-colors duration-300 uppercase tracking-wide leading-tight max-w-md ${
-                          activeService === index ? 'text-brand-dark' : 'text-gray-400'
-                        }`}>
-                          {service.title}
-                        </h3>
-                        {/* Mobile Arrow */}
-                        <ArrowRight className={`lg:hidden absolute right-0 top-8 transform transition-all duration-300 ${
-                          activeService === index ? 'text-brand-blue rotate-90' : 'text-gray-300'
-                        }`} />
-                      </div>
-                      
-                      {/* INFO ROW: Price + Duration + Calculator */}
-                      <div className={`mt-3 flex flex-wrap items-center gap-4 transition-opacity duration-300 ${
-                         activeService === index ? 'opacity-100' : 'opacity-60 lg:opacity-40'
-                      }`}>
-                         <span className="text-base font-bold font-heading uppercase tracking-wider text-brand-blue">
-                            {service.price}
-                         </span>
-
-                         {service.duration && (
-                           <span className="flex items-center gap-1 text-xs font-bold text-gray-400 uppercase tracking-wide">
-                             <Clock size={12} /> {service.duration}
-                           </span>
-                         )}
-                         
-                         {/* Only show calculator for P1, P2, P3 or Pickup */}
-                         {service.basePrice > 0 && ['p1', 'p2', 'p3', 'pickup'].includes(service.id) && (
-                           <button 
-                              onClick={(e) => openCalculator(e, service.id, service.title, service.basePrice!)}
-                              className="flex items-center gap-2 px-3 py-1 bg-gray-100 hover:bg-brand-blue hover:text-white transition-colors rounded-full text-[10px] font-bold uppercase tracking-wider text-gray-500"
-                           >
-                             <Calculator size={12} /> Spočítat
-                           </button>
-                         )}
-                      </div>
-                      
-                      <div className={`overflow-hidden transition-all duration-500 ease-[0.16,1,0.3,1] ${
-                        activeService === index ? 'max-h-[800px] opacity-100 mt-6' : 'max-h-0 opacity-0'
-                      }`}>
-                        
-                        {/* MOBILE IMAGE */}
-                        <div className="lg:hidden w-full h-56 mb-6 relative overflow-hidden">
-                           <img 
-                              src={service.image} 
-                              alt={service.title}
-                              className="w-full h-full object-cover grayscale contrast-125"
-                           />
-                           <div className="absolute inset-0 border border-white/10"></div>
-                           <div className="absolute bottom-0 left-0 p-2">
-                             <span className="text-brand-blue/50 font-bold font-heading text-7xl leading-none block mix-blend-multiply">
-                               0{index + 1}
-                             </span>
-                           </div>
-                        </div>
-
-                        <p className="text-gray-500 text-sm leading-relaxed max-w-sm mb-6">
-                          {service.description}
-                        </p>
-                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
-                          {service.details.map((detail, i) => (
-                            <li key={i} className="flex items-center text-xs font-semibold text-brand-dark">
-                              <span className="w-1 h-1 bg-brand-blue mr-2 rounded-full"></span>
-                              {detail}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-
-                    <ArrowRight className={`hidden lg:block transform transition-all duration-500 ${
-                      activeService === index ? 'text-brand-blue -rotate-45 opacity-100 translate-x-0' : 'text-gray-300 opacity-0 -translate-x-4'
-                    }`} />
-                  </div>
-                  
-                  <div className={`absolute left-0 top-0 bottom-0 w-[2px] bg-brand-blue transition-all duration-500 ${
-                    activeService === index ? 'h-full opacity-100' : 'h-0 opacity-0'
-                  }`} />
-                </div>
-              ))}
+    <section id="services" className="relative bg-white overflow-hidden">
+      
+      {/* HEADER SECTION */}
+      <div className="pt-24 pb-12 bg-white">
+        <div className="container mx-auto px-6 text-left">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex items-center gap-4 mb-4 justify-start">
+              <span className="h-[1px] w-12 bg-brand-blue"></span>
+              <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs">Dokonalost</span>
             </div>
-          </div>
-
-          {/* Right Image (Desktop) */}
-          <div className="lg:w-1/2 relative h-[600px] hidden lg:block sticky top-20">
-            <motion.div style={{ y }} className="w-full h-full relative">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeService}
-                    initial={{ opacity: 0, clipPath: "inset(100% 0 0 0)" }}
-                    animate={{ opacity: 1, clipPath: "inset(0 0 0 0)" }}
-                    exit={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} 
-                    className="absolute inset-0 w-full h-full"
-                  >
-                    <img 
-                      src={SERVICES[activeService].image} 
-                      alt={SERVICES[activeService].title} 
-                      className="w-full h-full object-cover filter grayscale contrast-125 brightness-90"
-                    />
-                    
-                    <div className="absolute inset-0 border border-white/10 p-8 flex flex-col justify-between">
-                      <div className="flex justify-between items-start"></div>
-                      <div className="absolute bottom-0 left-0 p-4">
-                         <span className="text-brand-blue/40 font-bold text-[12rem] font-heading leading-none block mix-blend-hard-light">
-                          0{activeService + 1}
-                        </span>
-                      </div>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-                <div className="absolute -bottom-10 -right-10 w-full h-full border-2 border-brand-dark/5 -z-10" />
-            </motion.div>
-          </div>
-
+            <h2 className="text-5xl md:text-6xl font-heading font-bold text-brand-dark leading-tight">
+              Nabídka <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-dark">Programů</span>
+            </h2>
+          </motion.div>
         </div>
+      </div>
 
-        {/* DISCLAIMERS */}
-        <div className="mt-16 pt-8 border-t border-gray-100 text-[10px] text-gray-400 leading-relaxed text-center max-w-4xl mx-auto">
-          <p className="mb-2 font-semibold text-brand-dark/70">*Při nadměrném znečištění vozu může být cena po předchozí dohodě navýšena.</p>
-          <p>
-            Zákazník je povinen po poskytnutí sjednaných služeb provést řádnou prohlídku vyčištěného vozidla s tím, 
-            že po jeho převzetí, úhradě a opuštění prostor provozovny poskytovatele nebude brán na pozdější reklamace zřetel, 
-            což bere zákazník objednáním služeb a přenecháním vozidla k vyčištění bez dalšího na vědomí.
-          </p>
+      {/* SERVICES LIST - FULL WIDTH BANDS (ZEBRA LAYOUT) */}
+      <div className="flex flex-col">
+        {SERVICES.map((service, index) => {
+          // Even index: White background, Text Left (Desktop)
+          // Odd index: Gray background, Image Left (Desktop)
+          const isEven = index % 2 === 0;
+          const bgClass = isEven ? 'bg-white' : 'bg-[#F9FAFB]'; // Very subtle gray for contrast
+
+          return (
+            <div key={service.id} className={`w-full py-16 md:py-20 border-t border-gray-100 ${bgClass}`}>
+              <div className="container mx-auto px-6">
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5 }}
+                  className="flex flex-col lg:flex-row items-end lg:items-center gap-12 lg:gap-20"
+                >
+                  
+                  {/* TEXT COLUMN */}
+                  <div className={`flex-1 w-full text-left ${isEven ? 'lg:order-1' : 'lg:order-2'}`}>
+                    
+                    <div className="mb-3">
+                      <h3 className="text-2xl md:text-3xl font-heading font-bold text-brand-dark uppercase tracking-wide leading-tight">
+                        {service.title.split(':')[0]} <br/>
+                        <span className="text-brand-blue">{service.title.split(':')[1] || ''}</span>
+                      </h3>
+                    </div>
+
+                    {/* Price & Calculator Row */}
+                    <div className="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b border-gray-200/60 justify-start">
+                       <span className="text-lg font-bold font-heading uppercase tracking-wider text-brand-dark">
+                          {service.price}
+                       </span>
+
+                       {service.duration && (
+                         <span className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-wide border-l border-gray-200 pl-4">
+                           <Clock size={12} /> {service.duration}
+                         </span>
+                       )}
+                       
+                       {/* Calculator Button */}
+                       {service.basePrice > 0 && ['p1', 'p2', 'p3', 'pickup'].includes(service.id) && (
+                         <button 
+                            onClick={() => openCalculator(service.id, service.title, service.basePrice)}
+                            className="lg:ml-auto flex items-center gap-2 px-4 py-2 bg-brand-dark text-white hover:bg-brand-blue transition-all duration-300 text-[10px] font-bold uppercase tracking-wider rounded-none"
+                         >
+                           <Calculator size={14} /> Spočítat
+                         </button>
+                       )}
+                    </div>
+
+                    <p className="text-gray-600 text-base leading-relaxed mb-6 max-w-xl mr-auto lg:ml-0">
+                      {service.description}
+                    </p>
+
+                    {/* UPDATED: grid-cols-2 on mobile to save vertical space */}
+                    <ul className="grid grid-cols-2 gap-x-3 gap-y-2">
+                      {service.details.map((detail, i) => (
+                        <li key={i} className="flex items-start text-[11px] md:text-xs font-medium text-brand-dark/80 flex-row gap-2 text-left leading-tight">
+                          <div className="mt-0.5 min-w-[12px]">
+                             <Check size={12} className="text-brand-blue" />
+                          </div>
+                          <span>{detail}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* IMAGE COLUMN */}
+                  <div className={`flex-1 w-full ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
+                     <div className="relative group overflow-hidden shadow-xl w-full aspect-[16/9] md:aspect-[3/2]">
+                        <div className="absolute inset-0 border-[1px] border-white/10 z-10 pointer-events-none"></div>
+                        
+                        {/* Always Grayscale */}
+                        <img 
+                          src={service.image} 
+                          alt={service.title} 
+                          className="w-full h-full object-cover filter grayscale contrast-[1.15] brightness-90 group-hover:scale-105 transition-transform duration-1000 ease-out"
+                        />
+
+                        {/* Number Overlay in Bottom Left */}
+                        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/90 to-transparent z-10 pointer-events-none"></div>
+                        <div className="absolute bottom-0 left-0 p-6 z-20 pointer-events-none">
+                            <span className="text-brand-blue font-heading font-bold text-6xl md:text-8xl leading-none opacity-20 tracking-tighter">
+                              0{index + 1}
+                            </span>
+                        </div>
+                     </div>
+                  </div>
+
+                </motion.div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* DISCLAIMERS - Separate band at the bottom */}
+      <div className="bg-white py-16 border-t border-gray-200">
+        <div className="container mx-auto px-6">
+          <div className="text-[10px] text-gray-400 leading-relaxed text-center max-w-3xl mx-auto">
+            <p className="mb-3 font-bold text-brand-dark/60 uppercase tracking-widest">*Při nadměrném znečištění vozu může být cena po předchozí dohodě navýšena.</p>
+            <p>
+              Zákazník je povinen po poskytnutí sjednaných služeb provést řádnou prohlídku vyčištěného vozidla s tím, 
+              že po jeho převzetí, úhradě a opuštění prostor provozovny poskytovatele nebude brán na pozdější reklamace zřetel, 
+              což bere zákazník objednáním služeb a přenecháním vozidla k vyčištění bez dalšího na vědomí.
+            </p>
+          </div>
         </div>
       </div>
       

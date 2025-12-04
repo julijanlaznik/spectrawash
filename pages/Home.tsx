@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import Hero from '../components/Hero';
 import Services from '../components/Services';
@@ -15,10 +14,16 @@ const Home: React.FC = () => {
     <div className="w-full">
       <Hero />
       <Services />
-      <SocialFeed />
+      
+      {/* SWAPPED: Portfolio moved up immediately after Services for "Price -> Value" logic */}
       <Portfolio />
-      {/* Thin Testimonials Section before Team */}
+      
+      {/* Testimonials validate the portfolio */}
       <Testimonials />
+      
+      {/* Social Feed serves as a dynamic break before the Team section */}
+      <SocialFeed />
+      
       <Team />
       {/* Partners section removed */}
       <Contact />

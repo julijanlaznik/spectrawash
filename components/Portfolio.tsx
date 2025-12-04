@@ -2,9 +2,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PORTFOLIO_ITEMS, PORTFOLIO_CATEGORIES } from '../constants';
+import Button from './Button';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const Portfolio: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('Vše');
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
 
   const filteredItems = activeCategory === 'Vše' 
     ? PORTFOLIO_ITEMS 
@@ -49,7 +52,7 @@ const Portfolio: React.FC = () => {
             {PORTFOLIO_CATEGORIES.map((category) => (
               <button
                 key={category}
-                onClick={() => setActiveCategory(category)}
+                onClick={() => { setActiveCategory(category); setIsMobileExpanded(false); }}
                 className={`text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 relative pb-1 ${
                   activeCategory === category
                     ? 'text-brand-blue'
@@ -79,7 +82,8 @@ const Portfolio: React.FC = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className={`group relative overflow-hidden cursor-pointer bg-brand-dark ${getGridClass(index)}`}
+                // Logic: Show only first 3 items on mobile if not expanded. Always show on desktop (md:block).
+                className={`group relative overflow-hidden cursor-pointer bg-brand-dark ${getGridClass(index)} ${index >= 3 && !isMobileExpanded ? 'hidden md:block' : ''}`}
               >
                 {/* Image layer */}
                 <div className="w-full h-full overflow-hidden relative">
@@ -94,7 +98,7 @@ const Portfolio: React.FC = () => {
                   {/* Clean Gradient Overlay - Only on Hover */}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
                   
-                  {/* Content - Editorial Style (Centered or Bottom Left depending on preference, going for Centered Minimal) */}
+                  {/* Content - Editorial Style */}
                   <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:translate-y-0 translate-y-4">
                      {/* Category Tag */}
                      <span className="text-white text-[10px] font-bold uppercase tracking-[0.2em] border border-white/30 px-3 py-1 mb-4 backdrop-blur-sm">
@@ -118,7 +122,19 @@ const Portfolio: React.FC = () => {
           </AnimatePresence>
         </motion.div>
         
-        {/* Button removed as requested */}
+        {/* Mobile "Show More" Button - SMALL & COMPACT */}
+        <div className="md:hidden flex justify-center mt-8">
+            <button 
+                onClick={() => setIsMobileExpanded(!isMobileExpanded)} 
+                className="flex items-center gap-2 px-6 py-3 border border-brand-dark/20 bg-white text-brand-dark text-[10px] font-bold uppercase tracking-widest hover:bg-brand-dark hover:text-white transition-all duration-300"
+            >
+                {isMobileExpanded ? (
+                    <>Zobrazit méně <ChevronUp size={14}/></>
+                ) : (
+                    <>Zobrazit více <ChevronDown size={14}/></>
+                )}
+            </button>
+        </div>
       </div>
     </section>
   );

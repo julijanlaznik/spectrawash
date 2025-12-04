@@ -1,4 +1,5 @@
 
+
 import React, { useRef, useState, useEffect } from 'react';
 import { CONTACT_INFO, SERVICES, VOUCHERS } from '../constants';
 import Button from './Button';
@@ -178,18 +179,16 @@ const Contact: React.FC = () => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
 
-    // 1. NATIVE HTML VALIDATION CHECK (Name, Phone, Email, Service)
-    // This triggers the browser's bubble UI for missing required fields
+    // 1. NATIVE HTML VALIDATION CHECK
     if (!form.checkValidity()) {
         form.reportValidity();
         return;
     }
 
     // 2. CUSTOM VALIDATION FOR DATE & TIME
-    // Since these are custom UI components, we must check them manually
     if (!selectedDate || !selectedTime) {
         alert("Prosím vyberte preferovaný termín a čas návštěvy.");
-        setIsPickerOpen(true); // Open the picker to help the user
+        setIsPickerOpen(true); 
         return;
     }
 
@@ -198,42 +197,38 @@ const Contact: React.FC = () => {
     const nameInput = form.elements.namedItem('name') as HTMLInputElement;
     const nameValue = nameInput.value;
 
-    // -------------------------------------------------------------
-    // ZDE MUSÍTE ZADAT VAŠE KLÍČE Z EMAILJS.COM
-    // -------------------------------------------------------------
-    // 1. Zaregistrujte se na https://www.emailjs.com/
-    // 2. Vytvořte Email Service (např. Gmail) -> získáte SERVICE_ID
-    // 3. Vytvořte Email Template -> získáte TEMPLATE_ID
-    // 4. Z Account -> General získáte PUBLIC_KEY
-    // -------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // !!! KONFIGURACE PRO SOBOTU - ZDE UPRAVIT ÚDAJE OD KLIENTA !!!
+    // -------------------------------------------------------------------------
+    // 1. Získat údaje z klientova EmailJS účtu.
+    // 2. Přepsat hodnoty 'DOPLNIT_...' za skutečné ID a klíče.
+    // 3. Dokud jsou zde 'DOPLNIT_...', formulář jen simuluje odeslání.
+    // -------------------------------------------------------------------------
 
-    // CLIENT KEYS: Přihlašovací údaje budou dodány klientem.
-    // Zatím používáme placeholder hodnoty.
-    const SERVICE_ID = 'YOUR_SERVICE_ID'; // Nahraďte vaším ID
-    const TEMPLATE_ID = 'YOUR_TEMPLATE_ID'; // Nahraďte vaším ID
-    const PUBLIC_KEY = 'YOUR_PUBLIC_KEY'; // Nahraďte vaším klíčem
+    const SERVICE_ID = 'DOPLNIT_SERVICE_ID';   // Např. 'service_x9s8f7d'
+    const TEMPLATE_ID = 'DOPLNIT_TEMPLATE_ID'; // Např. 'template_k2j4h5g'
+    const PUBLIC_KEY = 'DOPLNIT_PUBLIC_KEY';   // Např. 'user_9s8d7f6g5h4j'
 
-    // Pokud nemáte nastavené klíče, jen simulujeme odeslání (aby web nepadal)
-    if (SERVICE_ID === 'YOUR_SERVICE_ID') {
+    // DETEKCE: Pokud nejsou klíče vyplněny, spustí se SIMULACE (demo)
+    if (SERVICE_ID.includes('DOPLNIT_')) {
+        console.log("⚠️ EmailJS není nastaveno. Spouštím simulaci odeslání.");
         setTimeout(() => {
             setSubmittedName(nameValue || "zákazníku");
             setShowSuccessModal(true);
             setIsSending(false);
-            console.log("Simulace odeslání: EmailJS klíče nejsou nastaveny v kódu.");
         }, 1500);
         return;
     }
 
+    // OSTRÉ ODESLÁNÍ
     if (formRef.current) {
-        // Přidáme skrytá pole pro datum/čas, aby se odeslaly v e-mailu
-        // EmailJS bere data z 'name' atributů inputů
         emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, PUBLIC_KEY)
             .then((result) => {
                 setSubmittedName(nameValue || "zákazníku");
                 setShowSuccessModal(true);
                 setIsSending(false);
             }, (error) => {
-                console.log(error.text);
+                console.error("EmailJS Error:", error.text);
                 alert("Chyba při odesílání. Zkuste to prosím telefonicky.");
                 setIsSending(false);
             });
@@ -651,8 +646,8 @@ const Contact: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-8 flex justify-end">
-                <Button type="submit" variant="dark" className="px-12" disabled={isSending}>
+              <div className="mt-8 flex justify-start md:justify-end">
+                <Button type="submit" variant="dark" className="px-12 md:justify-end" disabled={isSending}>
                   {isSending ? (
                     <span className="flex items-center gap-2">
                         <Loader2 className="animate-spin" size={18} /> Odesílání...

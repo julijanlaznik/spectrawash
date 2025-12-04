@@ -71,12 +71,12 @@ const Hero: React.FC = () => {
 
       {/* Content Layer - Static relative to Parallax bg */}
       <div className="relative z-10 h-full container mx-auto px-6 flex flex-col justify-center">
-        <div className="max-w-4xl pt-20">
+        <div className="max-w-4xl pt-16 md:pt-20">
           <motion.div
             key={`counter-${currentSlide}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-4 mb-6"
+            className="flex items-center gap-4 mb-4 md:mb-6"
           >
             <span className="text-brand-blue font-bold text-lg">0{currentSlide + 1}</span>
             <div className="h-[2px] w-12 bg-white/20">
@@ -90,13 +90,13 @@ const Hero: React.FC = () => {
             <span className="text-white/40 font-bold text-lg">0{HERO_SLIDES.length}</span>
           </motion.div>
 
-          <div className="overflow-hidden mb-4">
+          <div className="overflow-hidden mb-3 md:mb-4">
             <motion.h1
               key={`title-${currentSlide}`}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-4xl md:text-8xl lg:text-9xl font-heading font-bold text-white leading-[1.1] tracking-tighter max-w-4xl whitespace-pre-line"
+              className="text-5xl md:text-8xl lg:text-9xl font-heading font-bold text-white leading-[1.1] tracking-tighter max-w-4xl whitespace-pre-line"
             >
               {HERO_SLIDES[currentSlide].title}
             </motion.h1>
@@ -107,7 +107,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-base md:text-xl text-gray-300 mb-10 max-w-xl font-light leading-relaxed border-l-2 border-brand-blue pl-6 whitespace-pre-line"
+            className="text-base md:text-xl text-gray-300 mb-8 md:mb-10 max-w-xl font-light leading-relaxed border-l-2 border-brand-blue pl-6 whitespace-pre-line"
           >
             {HERO_SLIDES[currentSlide].subtitle}
           </motion.p>
@@ -116,7 +116,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 sm:gap-6"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-6"
           >
             <Button onClick={scrollToContact} fullWidth={false} className="w-full sm:w-auto">
               Rezervovat Online

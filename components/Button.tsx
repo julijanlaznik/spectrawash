@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -14,8 +15,9 @@ const Button: React.FC<ButtonProps> = ({
   ...props 
 }) => {
   // Sharp edges: rounded-none
+  // CHANGED: Reduced padding on mobile (px-6 py-3) vs desktop (md:px-10 md:py-5)
   // CHANGED: 'group' -> 'group/btn' to isolate hover scope
-  const baseStyles = "relative overflow-hidden px-10 py-5 font-heading font-bold text-xs tracking-[0.2em] uppercase transition-all duration-300 group/btn rounded-none";
+  const baseStyles = "relative overflow-hidden px-6 py-3 md:px-10 md:py-5 font-heading font-bold text-[10px] md:text-xs tracking-[0.2em] uppercase transition-all duration-300 group/btn rounded-none";
   
   const variants = {
     // Primary now uses dark text because brand-blue is light turquoise

@@ -207,44 +207,44 @@ export const SOCIAL_FEED = [
   {
     id: 1,
     type: 'video',
-    thumbnail: 'https://images.unsplash.com/photo-1605218457224-b1548df2df31?q=80&w=800&auto=format&fit=crop',
+    thumbnail: '/reel-01.jpg',
     title: 'Proces mytí',
-    views: '12.5k'
+    link: 'https://www.instagram.com/reel/DAwG8eBiSLC/'
   },
   {
     id: 2,
     type: 'image',
-    thumbnail: 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?q=80&w=800&auto=format&fit=crop',
+    thumbnail: '/reel-02.jpg',
     title: 'Kontrola kvality',
-    views: '8.2k'
+    link: 'https://www.instagram.com/reel/C_dV5-NioRj/'
   },
   {
     id: 3,
     type: 'video',
-    thumbnail: 'https://images.unsplash.com/photo-1494905998402-395d579af979?q=80&w=800&auto=format&fit=crop',
+    thumbnail: '/reel-03.jpg',
     title: 'Aplikace vosku',
-    views: '15k'
+    link: 'https://www.instagram.com/reel/C9CNmffioep/'
   },
   {
     id: 4,
     type: 'image',
-    thumbnail: 'https://images.unsplash.com/photo-1600705722908-bab1e61c0b6d?q=80&w=800&auto=format&fit=crop',
+    thumbnail: '/reel-04.jpg',
     title: 'Detaily interiéru',
-    views: '5.1k'
+    link: 'https://www.instagram.com/reel/C2xd-KtMOet/'
   },
   {
     id: 5,
     type: 'video',
-    thumbnail: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=800&auto=format&fit=crop',
+    thumbnail: '/reel-05.jpg',
     title: 'Renovace laku',
-    views: '18.4k'
+    link: 'https://www.instagram.com/reel/CpJ_L_LAD0v/'
   },
   {
     id: 6,
     type: 'video',
-    thumbnail: 'https://images.unsplash.com/photo-1626074961596-e999c2d6156d?q=80&w=800&auto=format&fit=crop',
+    thumbnail: '/reel-06.jpg',
     title: 'Hydrofobní ochrana',
-    views: '22.1k'
+    link: 'https://www.instagram.com/reel/CosZ0MIAW9Z/'
   }
 ];
 
@@ -294,6 +294,7 @@ export const TESTIMONIALS = [
   { name: 'David M.', car: 'Mercedes S-Class', text: 'Naprosto špičková práce. Auto vypadá lépe než když jsem ho kupoval nové.' },
   { name: 'Jana K.', car: 'Porsche Macan', text: 'Skvělý přístup a perfektní čištění interiéru. Určitě se vrátím.' },
   { name: 'Tomáš R.', car: 'Audi RS6', text: 'Keramická ochrana funguje neskutečně. Profesionálové na svém místě.' },
+  { name: 'Viktor P.', car: 'BMW X5', text: 'Nejlepší detailing v Praze. Oceňuji pick-up servis, ušetřilo mi to spoustu času.' },
 ];
 
 export const FAQ_ITEMS = [
