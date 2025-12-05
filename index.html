@@ -38,15 +38,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXX"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config','G-XXXXX', { 'send_page_view': false });
-    // dispatch initial pageview - for SPA you'll also fire on route change
-    gtag('event', 'page_view', { page_path: location.pathname });
-    </script>
+    <!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1YXBT5KJDG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  // NEPOSÍLAT automatický page_view, protože používáte HashRouter
+  gtag('config', 'G-1YXBT5KJDG', { 'send_page_view': false });
+</script>
+
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
