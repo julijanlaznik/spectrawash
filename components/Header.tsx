@@ -45,18 +45,24 @@ const Header: React.FC = () => {
     if (path.includes('#')) {
       const id = path.split('#')[1];
       
+      // Special logic: Center 'Testimonials' vertically, others align to top
+      const scrollOptions: ScrollIntoViewOptions = { 
+        behavior: 'smooth',
+        block: id === 'testimonials' ? 'center' : 'start'
+      };
+
       if (location.pathname !== '/' && path.startsWith('/#')) {
         navigate('/');
         setTimeout(() => {
           const element = document.getElementById(id);
           if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+            element.scrollIntoView(scrollOptions);
           }
         }, 100);
       } else {
         const element = document.getElementById(id);
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          element.scrollIntoView(scrollOptions);
         }
       }
     } else {

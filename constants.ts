@@ -252,7 +252,7 @@ export const PORTFOLIO_CATEGORIES = ['Vše', 'Exteriér', 'Interiér', 'Ochrana'
 
 // Updated to exactly 4 items with local webp paths
 export const PORTFOLIO_ITEMS = [
-  { id: 1, category: 'Exteriér', image: '/portfolio-01.webp', title: 'Mercedes E-Class', desc: 'Ruční mytí' },
+  { id: 1, category: 'Exteriér', image: '/portfolio-01.webp', title: 'Porsche 911', desc: 'Ruční mytí' },
   { id: 2, category: 'Interiér', image: '/portfolio-02.webp', title: 'BMW M5', desc: 'Čištění kůže' },
   { id: 3, category: 'Ochrana', image: '/portfolio-03.webp', title: 'Mercedes S-Class', desc: 'Keramická ochrana' },
   { id: 4, category: 'Exteriér', image: '/portfolio-04.webp', title: 'Audi RS6', desc: 'Čištění kol' },
