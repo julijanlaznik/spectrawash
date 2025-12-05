@@ -13,15 +13,15 @@ const Vouchers: React.FC = () => {
 
     if (voucherId === 1) {
        // 1. Voucher: Light Refresh (2 500 Kč)
-       link = "https://buy.stripe.com/test_28E4gzfrJdFA27B7ry9sk02"; 
+       link = "https://buy.stripe.com/3cI7sLgxJaf13lUeNwaEE00"; 
     } 
     else if (voucherId === 2) {
        // 2. Voucher: Deep Complete (3 800 Kč)
-       link = "https://buy.stripe.com/test_cNieVd3J19pk13x9zG9sk01";
+       link = "https://buy.stripe.com/aFaeVdftF2Mzf4C0WGaEE01";
     } 
     else if (voucherId === 3) {
        // 3. Voucher: Premium Credit (5 000 Kč)
-       link = "https://buy.stripe.com/test_eVq7sL93leJEcMfcLS9sk00";
+       link = "https://buy.stripe.com/28EcN5bdp9aX09IcFoaEE02";
     }
 
     // Pokud je odkaz nastaven, přesměrujeme uživatele
