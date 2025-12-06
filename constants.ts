@@ -124,7 +124,7 @@ export const SERVICES = [
     title: 'Pick-up servis',
     price: 'Individuální',
     basePrice: 500,
-    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1000&auto=format&fit=crop', // Stock photo kept as requested
+    image: '/service-pickup.webp', // Stock photo kept as requested
     description: 'Vůz si u vás vyzvedneme a vrátíme čistý.',
     details: ['Vyzvednutí vozu', 'Přistavení zpět']
   }
