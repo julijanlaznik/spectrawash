@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion, useScroll } from 'framer-motion';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -11,9 +11,30 @@ import Terms from './pages/Terms';
 import FloatingButtons from './components/FloatingButtons';
 import CookieConsent from './components/CookieConsent';
 import ScrollToTop from './components/ScrollToTop';
+import { useEffect } from "react";
 
 const App: React.FC = () => {
   const { scrollYProgress } = useScroll();
+
+  useEffect(() => {
+    const sendPageView = () => {
+      if (typeof gtag === 'function') {
+        gtag('event', 'page_view', {
+          page_path: window.location.pathname + window.location.search,
+        });
+      }
+    };
+
+    // Pageview při načtení
+    sendPageView();
+
+    // Pageview při změně hash routy
+    window.addEventListener('hashchange', sendPageView);
+
+    return () => {
+      window.removeEventListener('hashchange', sendPageView);
+    };
+  }, []);
 
   return (
     <Router>
