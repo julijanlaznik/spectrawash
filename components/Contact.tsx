@@ -1,23 +1,20 @@
-
-
-import React, { useRef, useState, useEffect } from 'react';
-import { CONTACT_INFO, SERVICES, VOUCHERS } from '../constants';
-import Button from './Button';
-import { motion, useScroll, useTransform, Variants, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon, MapPin, Navigation, Phone, Mail, Check, AlertCircle, Loader2 } from 'lucide-react';
+import React, { useRef } from 'react';
+import { CONTACT_INFO } from '../constants';
+import { motion, useScroll, useTransform, Variants } from 'framer-motion';
+import { Clock, MapPin, Navigation, Phone, Mail } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import * as emailjs from '@emailjs/browser';
+import ReservioEmbed from './ReservioEmbed';
 
 const Contact: React.FC = () => {
   const containerRef = useRef(null);
   const location = useLocation();
-  const formRef = useRef<HTMLFormElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
   });
 
+  // Parallax effect for background elements
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   // Staggered animation variants
@@ -55,205 +52,15 @@ const Contact: React.FC = () => {
     }
   };
 
-  // --- CUSTOM DATE/TIME PICKER LOGIC ---
-  const [isPickerOpen, setIsPickerOpen] = useState(false);
-  const [pickerStep, setPickerStep] = useState<'date' | 'time'>('date');
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  
-  // FORM STATE
-  const [isPickup, setIsPickup] = useState(false);
-  const [selectedService, setSelectedService] = useState("");
-  const [message, setMessage] = useState("");
-  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
-  const [isSending, setIsSending] = useState(false);
-
-  // AUTO-FILL FROM URL
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const serviceParam = params.get('service');
-    const pickupParam = params.get('pickup');
-    const detailsParam = params.get('details');
-
-    if (pickupParam === 'true') {
-      setIsPickup(true);
-    }
-
-    if (serviceParam) {
-      setSelectedService(serviceParam);
-    }
-
-    if (detailsParam) {
-      setMessage(detailsParam);
-    }
-  }, [location]);
-
-  // RESET ADDONS IF SERVICE CHANGES
-  useEffect(() => {
-    if (selectedService !== 'Doplňkové služby') {
-      setSelectedAddons([]);
-    }
-  }, [selectedService]);
-
-  const toggleAddon = (addon: string) => {
-    if (selectedAddons.includes(addon)) {
-      setSelectedAddons(prev => prev.filter(a => a !== addon));
-    } else {
-      setSelectedAddons(prev => [...prev, addon]);
-    }
-  };
-
-  const addonsList = SERVICES.find(s => s.id === 'addons')?.details || [];
-  const showAddons = selectedService === 'Doplňkové služby';
-
-  // SUCCESS MODAL STATE
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [submittedName, setSubmittedName] = useState("");
-
-  // Determine if it is a Voucher Redemption to show special message
-  const isVoucherRedemption = selectedService.toLowerCase().includes('uplatnění voucheru');
-
-  // Generate calendar days
-  const getDaysInMonth = (date: Date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const days = new Date(year, month + 1, 0).getDate();
-    const firstDay = new Date(year, month, 1).getDay(); // 0 = Sun, 1 = Mon...
-    const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1; 
-    return { days, firstDay: adjustedFirstDay };
-  };
-
-  const { days: totalDays, firstDay: startDay } = getDaysInMonth(currentMonth);
-  const daysArray = Array.from({ length: totalDays }, (_, i) => i + 1);
-  const emptyDays = Array.from({ length: startDay }, (_, i) => i);
-
-  const today = new Date();
-  const isToday = (day: number) => {
-    return day === today.getDate() && 
-           currentMonth.getMonth() === today.getMonth() && 
-           currentMonth.getFullYear() === today.getFullYear();
-  };
-
-  const handleDateClick = (day: number) => {
-    const newDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-    setSelectedDate(newDate);
-    setPickerStep('time');
-  };
-
-  const handleTimeClick = (time: string) => {
-    setSelectedTime(time);
-    setIsPickerOpen(false);
-    setPickerStep('date');
-  };
-
-  const formatDisplayDate = () => {
-    if (!selectedDate) return '';
-    const dateStr = selectedDate.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' });
-    if (!selectedTime) return dateStr;
-    return `${dateStr} – ${selectedTime}`;
-  };
-
-  const TIME_SLOTS = [
-    "08:00", "08:30", "09:00", "09:30", 
-    "10:00", "10:30", "11:00", "11:30", 
-    "12:00", "12:30", "13:00", "13:30", 
-    "14:00", "14:30", "15:00", "15:30", 
-    "16:00", "16:30", "17:00", "17:30"
-  ];
-
-  const changeMonth = (delta: number) => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + delta, 1));
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if ((e.target as HTMLElement).closest('.custom-picker-container')) return;
-      setIsPickerOpen(false);
-    };
-    if (isPickerOpen) document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [isPickerOpen]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-
-    // 1. NATIVE HTML VALIDATION CHECK
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-    }
-
-    // 2. CUSTOM VALIDATION FOR DATE & TIME
-    if (!selectedDate || !selectedTime) {
-        alert("Prosím vyberte preferovaný termín a čas návštěvy.");
-        setIsPickerOpen(true); 
-        return;
-    }
-
-    setIsSending(true);
-
-    const nameInput = form.elements.namedItem('name') as HTMLInputElement;
-    const nameValue = nameInput.value;
-
-    // -------------------------------------------------------------------------
-    // !!! KONFIGURACE PRO SOBOTU - ZDE UPRAVIT ÚDAJE OD KLIENTA !!!
-    // -------------------------------------------------------------------------
-    // 1. Získat údaje z klientova EmailJS účtu.
-    // 2. Přepsat hodnoty 'DOPLNIT_...' za skutečné ID a klíče.
-    // 3. Dokud jsou zde 'DOPLNIT_...', formulář jen simuluje odeslání.
-    // -------------------------------------------------------------------------
-
-    const SERVICE_ID = 'DOPLNIT_SERVICE_ID';   // Např. 'service_x9s8f7d'
-    const TEMPLATE_ID = 'DOPLNIT_TEMPLATE_ID'; // Např. 'template_k2j4h5g'
-    const PUBLIC_KEY = 'DOPLNIT_PUBLIC_KEY';   // Např. 'user_9s8d7f6g5h4j'
-
-    // DETEKCE: Pokud nejsou klíče vyplněny, spustí se SIMULACE (demo)
-    if (SERVICE_ID.includes('DOPLNIT_')) {
-        console.log("⚠️ EmailJS není nastaveno. Spouštím simulaci odeslání.");
-        setTimeout(() => {
-            setSubmittedName(nameValue || "zákazníku");
-            setShowSuccessModal(true);
-            setIsSending(false);
-        }, 1500);
-        return;
-    }
-
-    // OSTRÉ ODESLÁNÍ
-    if (formRef.current) {
-        emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, PUBLIC_KEY)
-            .then((result) => {
-                setSubmittedName(nameValue || "zákazníku");
-                setShowSuccessModal(true);
-                setIsSending(false);
-            }, (error) => {
-                console.error("EmailJS Error:", error.text);
-                alert("Chyba při odesílání. Zkuste to prosím telefonicky.");
-                setIsSending(false);
-            });
-    }
-  };
-
   const MAP_URL = "https://www.google.com/maps/place/Spectra+Wash/@50.1604608,14.37045,46m/data=!3m1!1e3!4m6!3m5!1s0x470bc169266c69d7:0xd51032c3e7f78c0f!8m2!3d50.1604871!4d14.3706054!16s%2Fg%2F11t5njqnd9?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D";
+  
+  // Client's Reservio URL (Replace this with the real one provided by client)
+  // ZDE PAK VLOŽÍŠ ODKAZ OD KLIENTA
+  const CLIENT_RESERVIO_URL = "https://booking.reservio.com"; 
 
   return (
     <section id="contact" ref={containerRef} className="py-24 md:py-32 relative overflow-hidden bg-gray-100">
-      <style>{`
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
-        input:-webkit-autofill:active,
-        textarea:-webkit-autofill,
-        textarea:-webkit-autofill:hover,
-        textarea:-webkit-autofill:focus,
-        textarea:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 30px white inset !important;
-            -webkit-text-fill-color: #2F2F2F !important;
-            transition: background-color 5000s ease-in-out 0s;
-        }
-      `}</style>
-
+      
       {/* SECTION BACKGROUND */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-blue/10 rounded-full blur-[120px] transform translate-x-1/3 -translate-y-1/3"></div>
@@ -269,10 +76,10 @@ const Contact: React.FC = () => {
           className="flex flex-col lg:flex-row shadow-2xl rounded-none overflow-hidden"
         >
           
-          {/* --- INFO PANEL --- */}
+          {/* --- INFO PANEL (Left Side) --- */}
           <motion.div 
             variants={glassVariants}
-            className="lg:w-5/12 relative min-h-[400px] lg:min-h-[700px] flex flex-col justify-between p-8 lg:p-12 border-r border-white/10"
+            className="lg:w-5/12 relative min-h-[400px] lg:min-h-[600px] flex flex-col justify-between p-8 lg:p-12 border-r border-white/10"
           >
             <div className="absolute inset-0 bg-brand-dark/80 backdrop-blur-xl z-0"></div>
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none z-0"></div>
@@ -357,357 +164,42 @@ const Contact: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* --- CONTACT FORM --- */}
+          {/* --- RESERVIO INTEGRATION (Right Side) --- */}
           <motion.div 
-            className="lg:w-7/12 bg-white p-8 md:p-12 lg:p-16 relative z-10"
+            className="lg:w-7/12 bg-white p-8 md:p-12 lg:p-16 relative z-10 flex flex-col justify-center items-start"
             variants={containerVariants}
           >
-            <motion.div variants={itemVariants} className="mb-10">
+            <motion.div variants={itemVariants} className="mb-10 w-full">
               <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs mb-3 block">
                  Poptávka
               </span>
               <h3 className="text-3xl md:text-4xl font-heading font-bold text-brand-dark mb-4 leading-tight">
-                Nezávazná rezervace <br/>
-                <span className="text-brand-blue/70">& Uplatnění voucheru</span>
+                Rezervace termínu
               </h3>
-              <p className="text-gray-500 font-light max-w-md">
-                 Vyplňte formulář níže pro nezávaznou poptávku našich služeb nebo rezervaci termínu pro dárkový voucher.
+              <p className="text-gray-500 font-light max-w-lg mb-8">
+                 Pro maximální pohodlí využíváme rezervační systém Reservio. Kliknutím níže si vyberete přesný termín, který vám vyhovuje.
               </p>
+
+              {/* RESERVIO COMPONENT - MODAL MODE */}
+              <ReservioEmbed 
+                url={CLIENT_RESERVIO_URL}
+                mode="modal"
+                buttonLabel="Vybrat termín online"
+                className="w-full md:w-auto"
+              />
+
+              <div className="mt-8 pt-8 border-t border-gray-100">
+                <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">
+                  Preferujete osobní domluvu?
+                </p>
+                <a href={`tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`} className="text-brand-dark font-bold hover:text-brand-blue transition-colors text-lg">
+                  Zavolejte nám: {CONTACT_INFO.phone}
+                </a>
+              </div>
             </motion.div>
-
-            <form ref={formRef} onSubmit={handleSubmit} className="space-y-8 group/form">
-              {/* HIDDEN INPUTS FOR EMAILJS */}
-              <input type="hidden" name="date" value={selectedDate ? selectedDate.toLocaleDateString() : 'Nevybráno'} />
-              <input type="hidden" name="time" value={selectedTime || 'Nevybráno'} />
-              <input type="hidden" name="addons" value={selectedAddons.join(', ')} />
-              <input type="hidden" name="pickup_requested" value={isPickup ? 'Ano' : 'Ne'} />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <motion.div variants={itemVariants} className="relative group/input">
-                  <motion.input 
-                    whileFocus={{ scale: 1.02, x: 5 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                    type="text" 
-                    id="name" 
-                    name="name"
-                    className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent relative z-10"
-                    placeholder="Jméno"
-                    required
-                  />
-                  <label 
-                    htmlFor="name" 
-                    className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
-                  >
-                    Jméno
-                  </label>
-                </motion.div>
-
-                <motion.div variants={itemVariants} className="relative group/input">
-                  <motion.input 
-                    whileFocus={{ scale: 1.02, x: 5 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                    type="tel" 
-                    id="phone"
-                    name="phone"
-                    className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent relative z-10"
-                    placeholder="Telefon"
-                    required
-                  />
-                  <label 
-                    htmlFor="phone" 
-                    className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
-                  >
-                    Telefon
-                  </label>
-                </motion.div>
-              </div>
-
-              <motion.div variants={itemVariants} className="relative group/input">
-                <motion.input 
-                  whileFocus={{ scale: 1.01, x: 5 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                  type="email" 
-                  id="email"
-                  name="email"
-                  className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent relative z-10"
-                  placeholder="Email"
-                  required
-                />
-                <label 
-                  htmlFor="email" 
-                  className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
-                >
-                  Email
-                </label>
-              </motion.div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                {/* --- LEFT COLUMN (Service Selection) --- */}
-                <div className="flex flex-col">
-                  <motion.div variants={itemVariants} className="relative group/input">
-                    <motion.select 
-                      whileFocus={{ scale: 1.02, x: 5 }}
-                      transition={{ type: 'spring', stiffness: 300 }}
-                      id="service" 
-                      name="service"
-                      className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors appearance-none cursor-pointer relative z-10"
-                      required
-                      value={selectedService}
-                      onChange={(e) => setSelectedService(e.target.value)}
-                    >
-                      <option value="" disabled hidden></option>
-                      
-                      <optgroup label="Standardní služby">
-                        {SERVICES.filter(s => s.id !== 'pickup' && s.id !== 'addons').map(s => (
-                          <option key={s.id} value={s.title}>{s.title}</option>
-                        ))}
-                      </optgroup>
-                      
-                      <optgroup label="Uplatnění voucheru">
-                        {VOUCHERS.map(v => (
-                           <option key={`redeem-${v.id}`} value={`Uplatnění voucheru: ${v.title}`}>Uplatnit: {v.title}</option>
-                        ))}
-                      </optgroup>
-                      
-                      <optgroup label="Ostatní">
-                         <option value={SERVICES.find(s => s.id === 'addons')?.title}>Doplňkové služby</option>
-                         <option value="Jiné">Jiné / Individuální</option>
-                      </optgroup>
-
-                    </motion.select>
-                    <label 
-                      htmlFor="service" 
-                      className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider pointer-events-none"
-                    >
-                      Služba
-                    </label>
-                    <div className="absolute right-0 top-3 pointer-events-none text-gray-400">
-                      <ChevronRight size={16} className="rotate-90" />
-                    </div>
-                  </motion.div>
-
-                  <motion.div 
-                    variants={itemVariants}
-                    onClick={() => setIsPickup(!isPickup)}
-                    className="mt-6 flex items-center gap-3 cursor-pointer group/check select-none"
-                  >
-                     <motion.div 
-                        whileTap={{ scale: 0.9 }}
-                        className={`w-5 h-5 border transition-all duration-300 flex items-center justify-center ${isPickup ? 'bg-brand-blue border-brand-blue' : 'border-gray-300 group-hover/check:border-brand-blue'}`}
-                     >
-                        {isPickup && <Check size={14} className="text-brand-dark" strokeWidth={3} />}
-                     </motion.div>
-                     <span className={`text-sm transition-colors ${isPickup ? 'text-brand-dark font-medium' : 'text-gray-500 group-hover/check:text-brand-blue'}`}>
-                       Chci využít Pick-up servis (vyzvednutí vozu)
-                     </span>
-                  </motion.div>
-
-                  <AnimatePresence>
-                    {isPickup && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                        animate={{ opacity: 1, height: 'auto', marginTop: 24 }}
-                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                        className="relative group/input overflow-hidden"
-                      >
-                        <motion.input 
-                          initial={{ x: -20 }}
-                          animate={{ x: 0 }}
-                          type="text" 
-                          id="pickup_address"
-                          name="pickup_address"
-                          className="peer w-full border-b border-gray-300 py-3 text-brand-dark focus:border-brand-blue focus:outline-none bg-transparent transition-colors placeholder-transparent"
-                          placeholder="Adresa vyzvednutí"
-                          required={isPickup}
-                        />
-                        <label 
-                          htmlFor="pickup_address" 
-                          className="absolute left-0 -top-3.5 text-xs font-bold text-brand-blue transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-blue uppercase tracking-wider"
-                        >
-                          Adresa vyzvednutí
-                        </label>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-                
-                {/* --- RIGHT COLUMN (Addons + Date) --- */}
-                <div className="flex flex-col gap-6">
-                  <AnimatePresence>
-                    {showAddons && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10, height: 0 }}
-                        animate={{ opacity: 1, y: 0, height: 'auto' }}
-                        exit={{ opacity: 0, y: -10, height: 0 }}
-                        className="bg-white border border-gray-100 shadow-sm p-6 relative overflow-hidden group/menu"
-                      >
-                        <div className="absolute top-0 left-0 w-1 h-full bg-brand-blue"></div>
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-brand-dark mb-4 flex items-center gap-2">
-                           Vyberte doplňkové služby
-                        </h4>
-                        <div className="space-y-2">
-                          {addonsList.map(addon => (
-                             <div 
-                                key={addon} 
-                                onClick={() => toggleAddon(addon)}
-                                className="flex items-start gap-3 cursor-pointer group/addon hover:bg-gray-50 p-2 -mx-2 rounded transition-colors"
-                             >
-                                <div className={`mt-0.5 w-4 h-4 border flex items-center justify-center transition-colors ${selectedAddons.includes(addon) ? 'bg-brand-blue border-brand-blue' : 'border-gray-300 bg-white'}`}>
-                                   {selectedAddons.includes(addon) && <Check size={12} className="text-white" strokeWidth={3} />}
-                                </div>
-                                <span className={`text-sm leading-tight ${selectedAddons.includes(addon) ? 'text-brand-dark font-medium' : 'text-gray-600'}`}>
-                                   {addon}
-                                </span>
-                             </div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <motion.div variants={itemVariants} className="relative group/input custom-picker-container">
-                    <div 
-                      onClick={() => setIsPickerOpen(!isPickerOpen)}
-                      className="peer w-full border-b border-gray-300 py-3 text-brand-dark cursor-pointer flex items-center justify-between hover:bg-gray-50 transition-colors"
-                    >
-                       <span className={selectedDate ? 'text-brand-dark font-medium' : 'text-transparent'}>
-                         {selectedDate ? formatDisplayDate() : 'Vybrat datum'}
-                       </span>
-                       <CalendarIcon size={16} className="text-gray-400" />
-                    </div>
-                    <label 
-                      className={`absolute left-0 transition-all uppercase tracking-wider pointer-events-none truncate max-w-full ${selectedDate || isPickerOpen ? '-top-3.5 text-xs font-bold text-brand-blue' : 'top-3 text-base text-gray-400'}`}
-                    >
-                      Preferovaný termín
-                    </label>
-
-                    <AnimatePresence>
-                      {isPickerOpen && (
-                        <motion.div 
-                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                          className="absolute top-full left-0 z-50 mt-2 w-80 bg-white border border-gray-100 shadow-2xl p-4 rounded-none"
-                        >
-                           {pickerStep === 'date' ? (
-                             <>
-                               <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeMonth(-1); }} className="p-1 hover:bg-gray-50 rounded-full transition-colors"><ChevronLeft size={16}/></button>
-                                  <span className="font-bold text-sm uppercase tracking-wider text-brand-dark">
-                                    {currentMonth.toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' })}
-                                  </span>
-                                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeMonth(1); }} className="p-1 hover:bg-gray-50 rounded-full transition-colors"><ChevronRight size={16}/></button>
-                               </div>
-                               <div className="grid grid-cols-7 gap-1 text-center text-xs mb-2 text-gray-400 font-medium">
-                                 <div>Po</div><div>Út</div><div>St</div><div>Čt</div><div>Pá</div><div>So</div><div>Ne</div>
-                               </div>
-                               <div className="grid grid-cols-7 gap-1">
-                                  {emptyDays.map(d => <div key={`empty-${d}`} />)}
-                                  {daysArray.map(day => {
-                                    const todayHighlight = isToday(day);
-                                    return (
-                                      <button
-                                        key={day}
-                                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDateClick(day); }}
-                                        className={`w-8 h-8 flex items-center justify-center text-sm transition-all rounded-none
-                                          ${todayHighlight ? 'text-brand-blue font-bold ring-1 ring-brand-blue' : 'hover:bg-brand-blue hover:text-white'}
-                                        `}
-                                      >
-                                        {day}
-                                      </button>
-                                    );
-                                  })}
-                               </div>
-                             </>
-                           ) : (
-                             <>
-                               <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100 cursor-pointer group/back" onClick={(e) => { e.stopPropagation(); setPickerStep('date'); }}>
-                                 <ChevronLeft size={14} className="text-gray-400 group-hover/back:text-brand-dark" />
-                                 <span className="font-bold text-sm uppercase tracking-wider text-brand-dark group-hover/back:text-brand-blue transition-colors">Vybrat čas</span>
-                               </div>
-                               <div className="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-gray-200">
-                                 {TIME_SLOTS.map((time, idx) => (
-                                   <button
-                                      key={idx}
-                                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleTimeClick(time); }}
-                                      className="py-2 text-sm border border-gray-100 text-gray-600 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-colors"
-                                   >
-                                      {time}
-                                   </button>
-                                 ))}
-                               </div>
-                             </>
-                           )}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                </div>
-              </div>
-
-              <div className="mt-8 flex justify-start md:justify-end">
-                <Button type="submit" variant="dark" className="px-12 md:justify-end" disabled={isSending}>
-                  {isSending ? (
-                    <span className="flex items-center gap-2">
-                        <Loader2 className="animate-spin" size={18} /> Odesílání...
-                    </span>
-                  ) : "Odeslat poptávku"}
-                </Button>
-              </div>
-
-            </form>
           </motion.div>
         </motion.div>
       </div>
-
-      {/* SUCCESS MODAL */}
-      <AnimatePresence>
-        {showSuccessModal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
-             <motion.div 
-               initial={{ opacity: 0 }}
-               animate={{ opacity: 1 }}
-               exit={{ opacity: 0 }}
-               className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-               onClick={() => setShowSuccessModal(false)}
-             />
-             <motion.div
-               initial={{ scale: 0.9, opacity: 0 }}
-               animate={{ scale: 1, opacity: 1 }}
-               exit={{ scale: 0.9, opacity: 0 }}
-               className="bg-white p-8 md:p-12 relative z-10 max-w-lg text-center shadow-2xl"
-             >
-                <div className="w-20 h-20 bg-brand-blue/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                   <Check size={40} className="text-brand-blue" />
-                </div>
-                <h3 className="text-3xl font-heading font-bold text-brand-dark mb-4">
-                  Děkujeme, {submittedName}!
-                </h3>
-                <p className="text-gray-500 mb-6 leading-relaxed">
-                  Vaši nezávaznou poptávku jsme přijali. Co nejdříve se vám ozveme pro potvrzení termínu a detailů.
-                </p>
-
-                {/* VOUCHER REMINDER NOTICE */}
-                {isVoucherRedemption && (
-                   <div className="mb-8 p-4 bg-gray-50 border border-brand-blue/20 rounded-lg flex items-start gap-3 text-left">
-                      <AlertCircle className="text-brand-blue shrink-0 mt-1" size={20} />
-                      <div>
-                         <p className="text-sm font-bold text-brand-dark uppercase tracking-wide mb-1">Důležité</p>
-                         <p className="text-sm text-gray-600">
-                           Nezapomeňte mít při sobě připravený <strong>unikátní kód voucheru</strong>, který jste obdrželi v e-mailu. Budeme ho potřebovat k ověření platnosti.
-                         </p>
-                      </div>
-                   </div>
-                )}
-
-                <Button onClick={() => setShowSuccessModal(false)} fullWidth>
-                  Zavřít
-                </Button>
-             </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </section>
   );
 };
