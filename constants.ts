@@ -271,7 +271,7 @@ export const TEAM = [
     name: 'Jan Novák', 
     role: 'Vedoucí pobočky', 
     quote: '"Kvalita je pro nás na prvním místě."',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1287&auto=format&fit=crop' 
+    image: '/team-vojtech.webp', 
   },
   { 
     name: 'Petr Svoboda', 
