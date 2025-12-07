@@ -56,7 +56,7 @@ const Contact: React.FC = () => {
   
   // Client's Reservio URL (Replace this with the real one provided by client)
   // ZDE PAK VLOŽÍŠ ODKAZ OD KLIENTA
-  const CLIENT_RESERVIO_URL = "https://booking.reservio.com"; 
+  const CLIENT_RESERVIO_URL = "https://spectra-wash.reservio.com/";
 
   return (
     <section id="contact" ref={containerRef} className="py-24 md:py-32 relative overflow-hidden bg-gray-100">
