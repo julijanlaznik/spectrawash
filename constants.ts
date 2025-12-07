@@ -268,7 +268,7 @@ export const PARTNERS = [
 
 export const TEAM = [
   { 
-    name: 'Jan Novák', 
+    name: 'Vojtěch Ebr', 
     role: 'Vedoucí pobočky', 
     quote: '"Kvalita je pro nás na prvním místě."',
     image: '/team-vojtech.webp', 
