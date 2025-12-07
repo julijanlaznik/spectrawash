@@ -183,7 +183,7 @@ const Contact: React.FC = () => {
               {/* RESERVIO COMPONENT - MODAL MODE */}
               <ReservioEmbed 
                 url={CLIENT_RESERVIO_URL}
-                mode="modal"
+                mode="link"
                 buttonLabel="Vybrat termín online"
                 className="w-full md:w-auto"
               />
