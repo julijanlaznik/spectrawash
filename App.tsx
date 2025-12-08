@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion, useScroll } from 'framer-motion';
@@ -11,6 +10,7 @@ import Terms from './pages/Terms';
 import FloatingButtons from './components/FloatingButtons';
 import CookieConsent from './components/CookieConsent';
 import ScrollToTop from './components/ScrollToTop';
+import PromoBar from './components/PromoBar';
 import { useEffect } from "react";
 
 const App: React.FC = () => {
@@ -18,7 +18,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const sendPageView = () => {
+      // @ts-ignore
       if (typeof gtag === 'function') {
+        // @ts-ignore
         gtag('event', 'page_view', {
           page_path: window.location.pathname + window.location.search,
         });
@@ -47,6 +49,10 @@ const App: React.FC = () => {
         />
         
         <Header />
+        
+        {/* Promo Bar vložen pod Header */}
+        <PromoBar />
+
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
