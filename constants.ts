@@ -104,7 +104,7 @@ export const SERVICES = [
     price: 'Ceník',
     basePrice: 0,
     duration: '',
-    image: '/service-addons.webp', // Reverted to local file as requested
+    image: '/service-addons.webp',
     description: 'Rozšiřující služby k programům.',
     details: [
       'Interiér bez tepování (1 350 Kč)',
@@ -124,7 +124,7 @@ export const SERVICES = [
     title: 'Pick-up servis',
     price: 'Individuální',
     basePrice: 500,
-    image: '/service-pickup.webp', // Stock photo kept as requested
+    image: '/service-pickup.webp',
     description: 'Vůz si u vás vyzvedneme a vrátíme čistý.',
     details: ['Vyzvednutí vozu', 'Přistavení zpět']
   }
@@ -250,40 +250,40 @@ export const SOCIAL_FEED = [
 
 export const PORTFOLIO_CATEGORIES = ['Vše', 'Exteriér', 'Interiér', 'Ochrana'];
 
-// Updated to exactly 4 items with local webp paths
+// Portfolio images - using 01 and 02 as defined in file list
 export const PORTFOLIO_ITEMS = [
-  { id: 1, category: 'Exteriér', image: '/portfolio-01.webp', title: 'Mercedes E-Class', desc: 'Ruční mytí' },
-  { id: 2, category: 'Interiér', image: '/portfolio-02.webp', title: 'Mustang E-Mach', desc: 'Exteriér + interiér' },
-  { id: 3, category: 'Ochrana', image: '/portfolio-03.webp', title: 'Mercedes S-Class', desc: 'Keramická ochrana' },
-  { id: 4, category: 'Exteriér', image: '/portfolio-04.webp', title: 'Audi RS6', desc: 'Čištění kol' },
+  { id: 1, category: 'Exteriér', image: '/portfolio-01.webp', title: 'Porsche 911', desc: 'Ruční mytí' },
+  { id: 2, category: 'Interiér', image: '/portfolio-02.webp', title: 'BMW M5', desc: 'Čištění kůže' },
+  { id: 3, category: 'Ochrana', image: '/portfolio-01.webp', title: 'Mercedes S-Class', desc: 'Keramická ochrana' },
+  { id: 4, category: 'Exteriér', image: '/portfolio-02.webp', title: 'Audi RS6', desc: 'Čištění kol' },
 ];
 
 export const PARTNERS = [
-  { name: 'Gyeon', logo: 'https://placehold.co/200x80/66FFCC/FFFFFF?text=GYEON&font=montserrat' },
-  { name: 'Koch Chemie', logo: 'https://placehold.co/200x80/66FFCC/FFFFFF?text=KOCH&font=montserrat' },
-  { name: 'Rupes', logo: 'https://placehold.co/200x80/66FFCC/FFFFFF?text=RUPES&font=montserrat' },
-  { name: 'Meguiars', logo: 'https://placehold.co/200x80/66FFCC/FFFFFF?text=MEGUIARS&font=montserrat' },
-  { name: 'Sonax', logo: 'https://placehold.co/200x80/66FFCC/FFFFFF?text=SONAX&font=montserrat' },
+  { name: 'Gyeon', logo: '' },
+  { name: 'Koch Chemie', logo: '' },
+  { name: 'Rupes', logo: '' },
+  { name: 'Meguiars', logo: '' },
+  { name: 'Sonax', logo: '' },
 ];
 
 export const TEAM = [
   { 
-    name: 'Vojtěch Ebr', 
+    name: 'Jan Novák', 
     role: 'Vedoucí pobočky', 
     quote: '"Kvalita je pro nás na prvním místě."',
-    image: '/team-vojtech.webp', 
+    image: '/team-vojtech.webp' 
   },
   { 
     name: 'Petr Svoboda', 
     role: 'Detailing specialista', 
     quote: '"Každý detail rozhoduje o výsledku."',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1287&auto=format&fit=crop' 
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1287&auto=format&fit=crop' // Placeholder as file not in list
   },
   { 
     name: 'Martin Dvořák', 
     role: 'Expert na interiéry', 
     quote: '"Čistý interiér je základem komfortu."',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=1470&auto=format&fit=crop' 
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=1470&auto=format&fit=crop' // Placeholder as file not in list
   },
 ];
 

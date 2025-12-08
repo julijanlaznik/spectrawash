@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Check, Printer, Mail, HelpCircle, Calendar, FileCheck, Tag, Sparkles, Phone, ShieldCheck, Zap, CreditCard, Gift, ArrowRight } from 'lucide-react';
 import { VOUCHERS } from '../constants';
@@ -45,9 +46,10 @@ const Vouchers: React.FC = () => {
 
   const getVoucherImage = (id: number) => {
     switch(id) {
+        // Používáme verze s příponou -web.png pro zobrazení na webu
         case 1: return '/voucher-light-refresh-web.png';
         case 2: return '/voucher-deep-complete-web.png';
-        case 3: return '/voucher-premium-credit.png';
+        case 3: return '/voucher-premium-credit-web.png';
         default: return '/voucher-light-refresh-web.png';
     }
   };
@@ -335,6 +337,7 @@ const Vouchers: React.FC = () => {
                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-brand-blue/20 rounded-full blur-[80px] -z-10"></div>
 
                  {/* Stack of 3 overlapping voucher images - Increased size to look like A4 */}
+                 {/* Zde používáme verze bez '-web' pokud v seznamu souborů existují obě, ale pro konzistenci zkusíme ty co jsou v seznamu nejlogičtější pro "print preview" */}
                  {[
                     { rotate: -10, x: -60, y: 20, z: 10, scale: 0.9, img: '/voucher-deep-complete.png' },
                     { rotate: 10, x: 60, y: 20, z: 10, scale: 0.9, img: '/voucher-light-refresh.png' },
