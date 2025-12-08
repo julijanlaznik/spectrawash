@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { SOCIAL_FEED } from '../constants';

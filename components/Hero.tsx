@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { HERO_SLIDES } from '../constants';
@@ -12,13 +11,6 @@ const Hero: React.FC = () => {
   // Parallax Effect Hook
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 1000], [0, 400]);
-
-  // Preload next image to prevent flickering
-  useEffect(() => {
-    const nextIndex = (currentSlide + 1) % HERO_SLIDES.length;
-    const img = new Image();
-    img.src = HERO_SLIDES[nextIndex].image;
-  }, [currentSlide]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -52,19 +44,13 @@ const Hero: React.FC = () => {
               exit={{ opacity: 0 }}
               transition={{ 
                 opacity: { duration: 1.5, ease: "easeInOut" },
-                scale: { duration: 15, ease: "linear" } 
+                scale: { duration: 15, ease: "linear" } // 15s duration ensures smooth slow movement beyond the 7s interval
               }}
               className="absolute inset-0 w-full h-full"
             >
-              {/* CHANGED: Using img tag instead of background-image for better performance/LCP */}
-              <img 
-                src={HERO_SLIDES[currentSlide].image}
-                alt={HERO_SLIDES[currentSlide].title}
-                className="w-full h-full object-cover object-center"
-                // Priority loading for the first slide, lazy for others is handled by structure but here we want speed
-                fetchPriority="high"
-                loading="eager"
-                decoding="sync"
+              <div 
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${HERO_SLIDES[currentSlide].image})` }}
               />
             </motion.div>
           </AnimatePresence>

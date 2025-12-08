@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TEAM } from '../constants';
 import { motion } from 'framer-motion';
