@@ -277,13 +277,13 @@ export const TEAM = [
     name: 'Petr Svoboda', 
     role: 'Detailing specialista', 
     quote: '"Každý detail rozhoduje o výsledku."',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1287&auto=format&fit=crop' // Placeholder as file not in list
+    image: '#' // Placeholder as file not in list
   },
   { 
     name: 'Martin Dvořák', 
     role: 'Expert na interiéry', 
     quote: '"Čistý interiér je základem komfortu."',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=1470&auto=format&fit=crop' // Placeholder as file not in list
+    image: '#' // Placeholder as file not in list
   },
 ];
 
