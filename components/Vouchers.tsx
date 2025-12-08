@@ -60,7 +60,7 @@ const Vouchers: React.FC = () => {
   };
 
   return (
-    <section id="vouchers" className="pt-28 pb-24 md:pt-40 md:pb-32 bg-gray-50 relative overflow-hidden">
+    <section id="vouchers" className="pt-40 pb-24 md:pt-48 md:pb-32 bg-gray-50 relative overflow-hidden">
       
       {/* Background Ambience */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none"></div>
