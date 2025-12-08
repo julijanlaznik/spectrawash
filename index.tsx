@@ -13,7 +13,7 @@ declare global {
 const META_PIXEL_ID = '1192552422202118';
 
 function injectFbEventsScript() {
-  if ((window as any).fbq) return; // už existuje, nespouštět znovu
+  if (window.fbq) return; // už existuje, nespouštět znovu
 
   (function (f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
     if (f.fbq) return;
@@ -29,39 +29,29 @@ function injectFbEventsScript() {
     n.queue = [];
     t = b.createElement(e);
     t.async = true;
+
+    t.onload = () => {
+      try {
+        f.fbq('init', META_PIXEL_ID);
+        f.fbq('track', 'PageView');
+      } catch (e) {
+        console.warn('Meta Pixel init error:', e);
+      }
+    };
+
     t.src = v;
     s = b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t, s);
   })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 }
 
-function safeInitPixel() {
-  try {
-    injectFbEventsScript();
-
-    setTimeout(() => {
-      if ((window as any).fbq) {
-        try {
-          (window as any).fbq('init', META_PIXEL_ID);
-        } catch (e) {}
-
-        try {
-          (window as any).fbq('track', 'PageView');
-        } catch (e) {}
-      }
-    }, 50);
-  } catch (err) {
-    console.warn('Pixel init error:', err);
-  }
-}
-
-// Spustíme před mountem celé appky
-safeInitPixel();
+injectFbEventsScript();
 // --- END Meta Pixel init ---
 
 
 // --- React mount ---
 const rootElement = document.getElementById('root');
+
 if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
