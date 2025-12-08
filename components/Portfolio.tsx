@@ -92,6 +92,8 @@ const Portfolio: React.FC = () => {
                    <motion.img 
                     src={item.image} 
                     alt={item.title} 
+                    loading="lazy"
+                    decoding="async"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
                     className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-700"

@@ -51,6 +51,8 @@ const Team: React.FC = () => {
                <img 
                 src={member.image} 
                 alt={member.name} 
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover filter grayscale contrast-125 transition-all duration-700 group-hover:scale-105"
               />
               

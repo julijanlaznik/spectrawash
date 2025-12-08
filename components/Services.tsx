@@ -110,11 +110,13 @@ const Services: React.FC = () => {
                      <div className="relative group overflow-hidden shadow-xl w-full aspect-[16/9] md:aspect-[3/2]">
                         <div className="absolute inset-0 border-[1px] border-white/10 z-10 pointer-events-none"></div>
                         
-                        {/* Always Grayscale */}
+                        {/* Conditional Grayscale: Pickup is colored, others are grayscale */}
                         <img 
                           src={service.image} 
                           alt={service.title} 
-                          className="w-full h-full object-cover filter grayscale contrast-[1.15] brightness-90 group-hover:scale-105 transition-transform duration-1000 ease-out"
+                          loading="lazy"
+                          decoding="async"
+                          className={`w-full h-full object-cover filter contrast-[1.15] brightness-90 group-hover:scale-105 transition-transform duration-1000 ease-out ${service.id === 'pickup' ? '' : 'grayscale'}`}
                         />
 
                         {/* Number Overlay in Bottom Left */}
