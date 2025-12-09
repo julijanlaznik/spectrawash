@@ -34,8 +34,8 @@ export const SERVICES = [
     id: 'p1',
     icon: Sparkles,
     title: 'P1: Ruční mytí exteriéru',
-    price: 'od 690 Kč',
-    basePrice: 690,
+    price: 'od 650 Kč',
+    basePrice: 650,
     duration: '60 min',
     image: '/service-p1.webp',
     description: 'Základní program pro perfektní čistotu exteriéru.',
@@ -252,7 +252,7 @@ export const PORTFOLIO_CATEGORIES = ['Vše', 'Exteriér', 'Interiér', 'Ochrana'
 
 // Portfolio images - using 01 and 02 as defined in file list
 export const PORTFOLIO_ITEMS = [
-  { id: 1, category: 'Exteriér', image: '/portfolio-01.webp', title: 'Mercedes S-Class', desc: 'Ruční mytí' },
+  { id: 1, category: 'Exteriér', image: '/portfolio-01.webp', title: 'Mercedes E-Class', desc: 'Ruční mytí' },
   { id: 2, category: 'Interiér', image: '/portfolio-02.webp', title: 'Mustang Mach-E', desc: 'Čištění kůže' },
   { id: 3, category: 'Ochrana', image: '/portfolio-03.webp', title: 'Škoda Octavia RS', desc: 'Keramická ochrana' },
   { id: 4, category: 'Exteriér', image: '/portfolio-04.webp', title: 'Porsche 911', desc: 'Ruční mytí' },
