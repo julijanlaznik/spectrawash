@@ -13,7 +13,7 @@ declare global {
 const META_PIXEL_ID = '1192552422202118';
 
 function injectFbEventsScript() {
-  if (window.fbq) return; // už existuje, nespouštět znovu
+  if ((window as any).fbq) return; // už existuje, nespouštět znovu
 
   (function (f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
     if (f.fbq) return;
@@ -34,8 +34,9 @@ function injectFbEventsScript() {
       try {
         f.fbq('init', META_PIXEL_ID);
         f.fbq('track', 'PageView');
-      } catch (e) {
-        console.warn('Meta Pixel init error:', e);
+      } catch (err) {
+        // nechceme crashovat appku pokud se něco s FB pokazí
+        console.warn('Meta Pixel init error:', err);
       }
     };
 
