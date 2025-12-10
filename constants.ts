@@ -288,10 +288,10 @@ export const TEAM = [
 ];
 
 export const TESTIMONIALS = [
-  { name: 'David M.', car: 'Mercedes S-Class', text: 'Naprosto špičková práce. Auto vypadá lépe než když jsem ho kupoval nové.' },
-  { name: 'Jana K.', car: 'Porsche Macan', text: 'Skvělý přístup a perfektní čištění interiéru. Určitě se vrátím.' },
-  { name: 'Tomáš R.', car: 'Audi RS6', text: 'Keramická ochrana funguje neskutečně. Profesionálové na svém místě.' },
-  { name: 'Viktor P.', car: 'BMW X5', text: 'Nejlepší detailing v Praze. Oceňuji pick-up servis, ušetřilo mi to spoustu času.' },
+  { name: 'Pavel K.', car: 'Mercedes', text: 'Po 31 letech vypadá auto jako nové. Hodně ruční práce a šikovné ruce.' },
+  { name: 'Richard H.', car: 'Volkswagen', text: 'Jednoduché a rychlé objednání, precizní práce a příznivá práce.' },
+  { name: 'Pavel B.', car: 'Audi', text: 'Profesionálové v pravém slova smyslu' },
+  { name: 'Jiří P.', car: 'BMW X5', text: 'Výborná práce, snadné objednání, příjemné vystupování.' },
 ];
 
 export const FAQ_ITEMS = [
