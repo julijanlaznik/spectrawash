@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, Printer, Mail, HelpCircle, Calendar, FileCheck, Tag, Sparkles, Phone, ShieldCheck, Zap, CreditCard, Gift, ArrowRight } from 'lucide-react';
+import { Check, Printer, Mail, HelpCircle, Calendar, FileCheck, Tag, Sparkles, Phone, ShieldCheck, Zap, CreditCard, Gift, Smartphone } from 'lucide-react';
 import { VOUCHERS } from '../constants';
 import Button from './Button';
 import { motion } from 'framer-motion';
@@ -9,6 +9,8 @@ const Vouchers: React.FC = () => {
   
   // URL pro rezervaci
   const RESERVIO_URL = "https://spectra-wash.reservio.com/";
+  const PHONE_NUMBER = "+420 606 782 745";
+  const PHONE_LINK = "tel:+420606782745";
 
   const handleBuyVoucher = (voucherId: number) => {
     let link = "";
@@ -61,7 +63,7 @@ const Vouchers: React.FC = () => {
   };
 
   return (
-    <section id="vouchers" className="pt-28 pb-24 md:pt-40 md:pb-32 bg-gray-50 relative overflow-hidden">
+    <section id="vouchers" className="pt-36 pb-24 md:pt-48 md:pb-32 bg-gray-50 relative overflow-hidden">
       
       {/* Background Ambience */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[120px] pointer-events-none"></div>
@@ -69,16 +71,16 @@ const Vouchers: React.FC = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         
-        {/* --- 1. HERO HEADER (Compact & Direct) --- */}
-        <div className="flex flex-col md:items-center md:text-center max-w-4xl mx-auto mb-8 md:mb-12">
+        {/* --- 1. HERO HEADER (Fixed Spacing & Sizing) --- */}
+        <div className="flex flex-col md:items-center md:text-center max-w-4xl mx-auto mb-10 md:mb-16">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center gap-2 mb-2 md:justify-center"
+            className="flex items-center gap-3 mb-4 md:justify-center"
           >
              <span className="w-8 h-[1px] bg-brand-blue md:hidden"></span>
-             <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs">
+             <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs md:text-sm">
                 Originální dárek
              </span>
           </motion.div>
@@ -88,9 +90,9 @@ const Vouchers: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl md:text-6xl font-heading font-bold text-brand-dark leading-tight mb-4"
+            className="text-4xl md:text-7xl font-heading font-bold text-brand-dark leading-[1.1] mb-5"
           >
-            Vouchery <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-dark">SpectraWash</span>
+            Vouchery <br className="md:hidden"/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-dark">SpectraWash</span>
           </motion.h2>
           
           <motion.p 
@@ -98,27 +100,27 @@ const Vouchers: React.FC = () => {
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              transition={{ delay: 0.2 }}
-             className="text-gray-500 text-sm md:text-lg font-light max-w-2xl md:mx-auto mb-6 leading-relaxed"
+             className="text-gray-500 text-sm md:text-xl font-light max-w-2xl md:mx-auto mb-8 leading-relaxed"
           >
             Vyberte prémiovou péči, zaplaťte kartou a <strong>PDF voucher vám dorazí ihned</strong> do e-mailu.
           </motion.p>
 
-          {/* TRUST BAR - Moved here, compact */}
+          {/* TRUST BAR - Better aligned */}
           <motion.div 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="flex flex-wrap gap-x-6 gap-y-2 text-[10px] md:text-sm font-bold text-gray-500 uppercase tracking-wide"
+            className="flex flex-wrap gap-x-6 gap-y-3 text-[10px] md:text-sm font-bold text-gray-500 uppercase tracking-wide border-t border-gray-200 pt-6 md:border-t-0 md:pt-0"
           >
-             <span className="flex items-center gap-1.5"><Zap size={14} className="text-brand-blue" /> Doručení ihned</span>
-             <span className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-brand-blue" /> Platnost 1 rok</span>
-             <span className="flex items-center gap-1.5"><CreditCard size={14} className="text-brand-blue" /> Bezpečná platba</span>
+             <span className="flex items-center gap-2"><Zap size={16} className="text-brand-blue" /> Doručení ihned</span>
+             <span className="flex items-center gap-2"><ShieldCheck size={16} className="text-brand-blue" /> Platnost 1 rok</span>
+             <span className="flex items-center gap-2"><CreditCard size={16} className="text-brand-blue" /> Bezpečná platba</span>
           </motion.div>
         </div>
 
-        {/* --- 2. VOUCHER CARDS GRID (THE MAIN CONTENT) --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 items-start mb-16 md:mb-24">
+        {/* --- 2. VOUCHER CARDS GRID --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 items-start mb-20 md:mb-28">
           {VOUCHERS.map((voucher, index) => {
             const isPremium = index === 2; // Credit 5000
             const discountedPrice = getDiscountedPrice(voucher.price);
@@ -228,46 +230,86 @@ const Vouchers: React.FC = () => {
           })}
         </div>
 
-        {/* --- 3. PROMO BANNER (Sleva 100 Kč) --- */}
+        {/* --- 3. PROMO BANNER --- */}
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="max-w-4xl mx-auto mb-20 md:mb-24"
         >
-            <div className="relative bg-white border border-brand-blue/20 rounded-xl p-5 shadow-sm overflow-hidden group">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-brand-blue/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+            <div className="relative bg-white border border-brand-blue/20 rounded-xl p-6 shadow-sm overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-blue/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
                 
                 <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
-                    <div className="flex items-center gap-4 w-full md:w-auto">
-                        <div className="w-12 h-12 bg-brand-blue text-white rounded-full flex items-center justify-center shrink-0 shadow-md">
-                            <Gift size={24} />
+                    <div className="flex items-center gap-5 w-full md:w-auto">
+                        <div className="w-14 h-14 bg-brand-blue text-white rounded-full flex items-center justify-center shrink-0 shadow-md">
+                            <Gift size={28} />
                         </div>
                         <div className="flex-grow">
-                            <div className="flex items-center gap-2 mb-1">
-                                <h4 className="font-heading font-bold text-brand-dark text-lg">Sleva 100 Kč</h4>
+                            <div className="flex items-center flex-wrap gap-2 mb-1">
+                                <h4 className="font-heading font-bold text-brand-dark text-xl">Sleva 100 Kč</h4>
                                 <span className="bg-red-100 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Prvních 50 ks</span>
                             </div>
                             <p className="text-sm text-gray-500">Uplatněte v košíku na jakýkoliv voucher.</p>
                         </div>
                     </div>
                     
-                    <div className="w-full md:w-auto md:ml-auto flex items-center bg-gray-50 px-4 py-2 rounded border border-gray-200 border-dashed justify-between md:justify-start gap-4">
+                    <div className="w-full md:w-auto md:ml-auto flex items-center bg-gray-50 px-5 py-3 rounded border border-gray-200 border-dashed justify-between md:justify-start gap-4 cursor-pointer hover:border-brand-blue transition-colors group/code">
                         <span className="text-[10px] uppercase tracking-widest text-gray-400">Kód</span>
-                        <span className="font-mono font-bold text-lg text-brand-blue tracking-wider select-all">SPECTRA100</span>
+                        <span className="font-mono font-bold text-xl text-brand-blue tracking-wider select-all">SPECTRA100</span>
                     </div>
                 </div>
             </div>
         </motion.div>
 
-        {/* --- 4. VISUAL PREVIEW SECTION --- */}
+        {/* --- 4. REDEEM BANNER (REDESIGNED) --- */}
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto mb-20"
+        >
+            <div className="bg-white border-2 border-brand-dark/5 shadow-xl rounded-2xl p-6 md:p-10 relative overflow-hidden">
+                {/* Decoration */}
+                <div className="absolute top-0 right-0 w-20 h-20 bg-brand-blue rounded-bl-full opacity-10"></div>
+
+                <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                   <div className="flex-grow text-center md:text-left">
+                      <span className="text-brand-blue font-bold tracking-widest uppercase text-xs mb-2 block">Máte již voucher?</span>
+                      <h4 className="font-heading font-bold text-brand-dark text-2xl md:text-3xl mb-3">Uplatnění & Rezervace</h4>
+                      <p className="text-gray-500 text-sm leading-relaxed max-w-md">
+                         Pro uplatnění voucheru využijte online rezervaci nebo nám zavolejte. Kód voucheru mějte připravený.
+                      </p>
+                   </div>
+                   
+                   <div className="flex flex-col gap-3 w-full md:w-auto shrink-0">
+                      <Button 
+                          onClick={handleRedeemClick} 
+                          variant="dark" 
+                          className="w-full md:w-auto shadow-lg shadow-brand-dark/20"
+                      >
+                          <Calendar size={18} className="mr-2" /> Uplatnit voucher
+                      </Button>
+                      
+                      <div className="flex items-center justify-center gap-3 text-sm text-gray-500 mt-1">
+                          <span className="text-xs uppercase tracking-wide opacity-50">Nebo volejte</span>
+                          <a 
+                            href={PHONE_LINK} 
+                            className="font-bold text-brand-dark hover:text-brand-blue transition-colors flex items-center gap-1"
+                          >
+                             <Smartphone size={16} /> {PHONE_NUMBER}
+                          </a>
+                      </div>
+                   </div>
+                </div>
+            </div>
+        </motion.div>
+
+        {/* --- 5. VISUAL PREVIEW --- */}
         <div className="relative bg-brand-dark rounded-3xl p-8 md:p-16 mb-20 overflow-hidden border border-white/5">
-           {/* Decorative Background */}
            <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-blue/10 via-transparent to-transparent"></div>
            
            <div className="relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-              
-              {/* Left Content */}
               <div className="lg:w-1/2">
                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-brand-blue text-[10px] font-bold uppercase tracking-widest mb-6">
                     <Printer size={14} /> Připraveno k tisku
@@ -302,11 +344,8 @@ const Vouchers: React.FC = () => {
                  </div>
               </div>
 
-              {/* Right Visual (Real Images Stack) */}
               <div className="lg:w-1/2 w-full relative h-[350px] md:h-[600px] flex items-center justify-center">
                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-brand-blue/20 rounded-full blur-[80px] -z-10"></div>
-
-                 {/* Stack of 3 overlapping voucher images */}
                  {[
                     { rotate: -10, x: -40, y: 10, z: 10, scale: 0.9, img: '/voucher-deep-complete.png' },
                     { rotate: 10, x: 40, y: 10, z: 10, scale: 0.9, img: '/voucher-light-refresh.png' },
@@ -318,7 +357,6 @@ const Vouchers: React.FC = () => {
                        whileInView={{ opacity: 1, y: 0, rotate: card.rotate, x: card.x, scale: card.scale }}
                        viewport={{ once: true }}
                        transition={{ duration: 0.8, delay: i * 0.15 }}
-                       // Responsive width for mobile/desktop
                        className="absolute w-[280px] md:w-[450px] shadow-2xl rounded-sm"
                        style={{ zIndex: card.z }}
                     >
@@ -332,32 +370,8 @@ const Vouchers: React.FC = () => {
                     </motion.div>
                  ))}
               </div>
-
            </div>
         </div>
-
-        {/* --- 5. REDEEM BANNER (Máte již voucher?) - MOVED DOWN --- */}
-        <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto mb-16 border-t border-gray-200 pt-12"
-        >
-            <div className="flex flex-col items-center text-center">
-                <span className="text-gray-400 font-bold tracking-widest uppercase text-xs mb-4">Uplatnění voucheru</span>
-                <h4 className="font-heading font-bold text-brand-dark text-2xl mb-4">Máte již zakoupený voucher?</h4>
-                <p className="text-gray-500 mb-6 max-w-lg">
-                   Rezervujte si termín pro své vozidlo jednoduše online. Do poznámky v rezervaci uveďte kód vašeho voucheru.
-                </p>
-                <Button 
-                    onClick={handleRedeemClick} 
-                    variant="outline" 
-                    className="border-gray-300 text-gray-600 hover:border-brand-dark hover:text-brand-dark"
-                >
-                    <Calendar size={18} className="mr-2" /> Rezervovat uplatnění
-                </Button>
-            </div>
-        </motion.div>
 
         {/* --- 6. MINI FAQ SECTION --- */}
         <div className="max-w-4xl mx-auto border-t border-gray-200 pt-16">
