@@ -44,18 +44,25 @@ const CookieConsent: React.FC = () => {
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
-          className="fixed bottom-0 left-0 w-full z-[60] bg-brand-dark border-t border-brand-blue/30 shadow-2xl p-6 md:p-8"
+          className="fixed bottom-0 left-0 w-full z-[60] bg-brand-dark border-t border-brand-blue/30 shadow-2xl p-4 md:p-8"
         >
-          <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-white text-sm leading-relaxed max-w-3xl">
-              <span className="font-bold text-brand-blue block mb-1 uppercase tracking-widest text-xs">Používáme cookies</span>
+          <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+            <div className="text-white text-xs md:text-sm leading-relaxed max-w-3xl text-center md:text-left">
+              <span className="font-bold text-brand-blue block mb-1 uppercase tracking-widest text-[10px] md:text-xs">Používáme cookies</span>
               Tento web používá soubory cookies k zajištění správného fungování a analýze návštěvnosti. Používáním webu s tím souhlasíte.
             </div>
-            <div className="flex gap-4 shrink-0">
-               <Button onClick={handleDecline} variant="outline" className="py-3 px-6 text-xs border-gray-600 text-gray-400 hover:text-white hover:border-white">
+            <div className="flex gap-3 md:gap-4 shrink-0 w-full md:w-auto">
+               <Button 
+                 onClick={handleDecline} 
+                 variant="outline" 
+                 className="flex-1 md:flex-none justify-center !py-2 md:!py-3 px-2 md:px-6 text-[10px] md:text-xs border-gray-600 text-gray-400 hover:text-white hover:border-white"
+               >
                  Odmítnout
                </Button>
-               <Button onClick={handleAccept} className="py-3 px-8 text-xs">
+               <Button 
+                 onClick={handleAccept} 
+                 className="flex-1 md:flex-none justify-center !py-2 md:!py-3 px-2 md:px-8 text-[10px] md:text-xs"
+               >
                  Rozumím
                </Button>
             </div>
