@@ -3,12 +3,13 @@ import { Helmet } from "react-helmet";
 export default function RucniMytiAuto() {
   return (
     <main
-      style={{
-        padding: "80px 20px",
-        maxWidth: "900px",
-        margin: "0 auto",
-      }}
-    >
+  style={{
+    padding: "80px 20px",
+    maxWidth: "900px",
+    margin: "0 auto",
+    marginTop: "120px",
+  }}
+>
       <Helmet>
         <title>Ruční mytí auta Praha | Profesionální péče – SpectraWash</title>
         <meta
