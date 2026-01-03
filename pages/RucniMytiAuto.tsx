@@ -12,10 +12,7 @@ export default function RucniMytiAuto() {
 >
       <Helmet>
         <title>Ruční mytí auta Praha | Profesionální péče – SpectraWash</title>
-        <meta
-          name="description"
-          content="Prémiové ruční mytí aut v Praze a okolí. Šetrná péče o lak, detailní mytí a individuální přístup. Rezervujte online ve SpectraWash."
-        />
+        <meta name="robots" content="noindex, follow" />
       </Helmet>
 
       <h1>Ruční mytí auta v Praze</h1>
