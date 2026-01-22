@@ -14,6 +14,7 @@ import ScrollToTop from './components/ScrollToTop';
 import PromoBar from './components/PromoBar';
 
 import RucniMytiAuto from './pages/services/ServiceCleaning';
+import KeramikaPraha from './pages/services/ServiceCeramic';
 
 /**
  * Komponenta pro správné měření pageview při změně URL (BrowserRouter)
