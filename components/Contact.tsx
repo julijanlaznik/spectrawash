@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { CONTACT_INFO } from '../constants';
 import { motion, useScroll, useTransform, Variants } from 'framer-motion';
@@ -55,8 +54,9 @@ const Contact: React.FC = () => {
 
   const MAP_URL = "https://www.google.com/maps/place/Spectra+Wash/@50.1604608,14.37045,46m/data=!3m1!1e3!4m6!3m5!1s0x470bc169266c69d7:0xd51032c3e7f78c0f!8m2!3d50.1604871!4d14.3706054!16s%2Fg%2F11t5njqnd9?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D";
   
-  // Client's Reservio URL (Updated with real link)
-  const CLIENT_RESERVIO_URL = "https://spectra-wash.reservio.com/"; 
+  // Client's Reservio URL (Replace this with the real one provided by client)
+  // ZDE PAK VLOŽÍŠ ODKAZ OD KLIENTA
+  const CLIENT_RESERVIO_URL = "https://spectra-wash.reservio.com/";
 
   return (
     <section id="contact" ref={containerRef} className="py-24 md:py-32 relative overflow-hidden bg-gray-100">
@@ -174,17 +174,17 @@ const Contact: React.FC = () => {
                  Poptávka
               </span>
               <h3 className="text-3xl md:text-4xl font-heading font-bold text-brand-dark mb-4 leading-tight">
-                Rezervace termínu <br/><span className="text-brand-blue">a uplatnění voucheru</span>
+                Rezervace termínu
               </h3>
               <p className="text-gray-500 font-light max-w-lg mb-8">
-                 Pro maximální pohodlí využíváme rezervační systém Reservio. Kliknutím níže si vyberete přesný termín nebo uplatníte dárkový voucher.
+                 Pro maximální pohodlí využíváme rezervační systém Reservio. Kliknutím níže si vyberete přesný termín, který vám vyhovuje.
               </p>
 
-              {/* RESERVIO COMPONENT - LINK MODE */}
+              {/* RESERVIO COMPONENT - MODAL MODE */}
               <ReservioEmbed 
                 url={CLIENT_RESERVIO_URL}
                 mode="link"
-                buttonLabel="Rezervovat / Uplatnit voucher"
+                buttonLabel="Vybrat termín online"
                 className="w-full md:w-auto"
               />
 

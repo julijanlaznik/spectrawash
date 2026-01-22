@@ -5,8 +5,9 @@ import Contact from '../components/Contact';
 
 const Shop: React.FC = () => {
   return (
-    <div className="w-full pt-[70px] xl:pt-[88px]">
-      {/* Vouchers Section - Starts immediately after header */}
+    <div className="w-full">
+      {/* Vouchers Section - Starts immediately */}
+      {/* Header logic handles text color based on route */}
       <Vouchers />
       <Contact />
     </div>
