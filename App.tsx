@@ -13,7 +13,7 @@ import CookieConsent from './components/CookieConsent';
 import ScrollToTop from './components/ScrollToTop';
 import PromoBar from './components/PromoBar';
 
-import RucniMytiAuto from './pages/RucniMytiAuto';
+import RucniMytiAuto from './pages/ServiceCleaning.tsx';
 
 /**
  * Komponenta pro správné měření pageview při změně URL (BrowserRouter)
