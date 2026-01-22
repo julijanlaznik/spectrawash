@@ -11,19 +11,19 @@ export const NAV_LINKS = [
 export const HERO_SLIDES = [
   {
     id: 1,
-    image: '/hero-slide-01.webp',
+    image: '/rucni-myti-auta-praha-hero.webp',
     title: 'Precizní\nruční mytí',
     subtitle: 'Šetrná péče o váš vůz. Používáme nejšetrnější\nmetody a prémiovou autokosmetiku.',
   },
   {
     id: 2,
-    image: '/hero-slide-02.webp',
+    image: '/detailing-exterieru-praha.webp',
     title: 'Detailing interiéru',
     subtitle: 'Hloubkové tepování, čištění kůže a dezinfekce.\nVáš interiér bude opět jako nový.',
   },
   {
     id: 3,
-    image: '/hero-slide-03.webp',
+    image: '/detailing-interieru-auta-roztoky.webp',
     title: 'Keramická ochrana',
     subtitle: 'Dlouhodobá ochrana laku nanotechnologií.\nExtrémní lesk, hydrofobita a odolnost.',
   },
@@ -34,10 +34,10 @@ export const SERVICES = [
     id: 'p1',
     icon: Sparkles,
     title: 'P1: Ruční mytí exteriéru',
-    price: 'od 650 Kč',
-    basePrice: 650,
+    price: 'od 690 Kč',
+    basePrice: 690,
     duration: '60 min',
-    image: '/service-p1.webp',
+    image: '/rucni-myti-exterieru.webp',
     description: 'Základní program pro perfektní čistotu exteriéru.',
     details: [
       'Předmytí a čištění kol',
@@ -55,7 +55,7 @@ export const SERVICES = [
     price: 'od 1 950 Kč',
     basePrice: 1950,
     duration: '150 min',
-    image: '/service-p2.webp',
+    image: '/rucni-myti-interieru-exterieru.webp',
     description: 'Kompletní péče o exteriér a důkladný úklid interiéru (bez mokrého tepování).',
     details: [
       'Vše z programu P1',
@@ -72,7 +72,7 @@ export const SERVICES = [
     price: 'od 3 250 Kč',
     basePrice: 3250,
     duration: '210 min',
-    image: '/service-p3.webp',
+    image: '/rucni-myti-interieru-exterieru-tepovani.webp',
     description: 'Maximální program včetně hloubkového tepování sedaček a čištění kůže.',
     details: [
       'Vše z programu P2',
@@ -88,7 +88,7 @@ export const SERVICES = [
     price: 'od 5 000 Kč',
     basePrice: 5000, 
     duration: 'Individuální',
-    image: '/service-polishing.webp',
+    image: '/keramicka-ochrana-laku.webp',
     description: 'Specializované služby pro náročné klienty. Leštění laku a keramická ochrana.',
     details: [
       'Leštění laku karoserie',
@@ -104,7 +104,7 @@ export const SERVICES = [
     price: 'Ceník',
     basePrice: 0,
     duration: '',
-    image: '/service-addons.webp',
+    image: '/doplnkove-sluzby-detailing.webp',
     description: 'Rozšiřující služby k programům.',
     details: [
       'Interiér bez tepování (1 350 Kč)',
@@ -124,7 +124,7 @@ export const SERVICES = [
     title: 'Pick-up servis',
     price: 'Individuální',
     basePrice: 500,
-    image: '/service-pickup.webp',
+    image: '/pick-up-servis.webp',
     description: 'Vůz si u vás vyzvedneme a vrátíme čistý.',
     details: ['Vyzvednutí vozu', 'Přistavení zpět']
   }
@@ -252,10 +252,10 @@ export const PORTFOLIO_CATEGORIES = ['Vše', 'Exteriér', 'Interiér', 'Ochrana'
 
 // Portfolio images - using 01 and 02 as defined in file list
 export const PORTFOLIO_ITEMS = [
-  { id: 1, category: 'Exteriér', image: '/portfolio-01.webp', title: 'Mercedes E-Class', desc: 'Ruční mytí' },
-  { id: 2, category: 'Interiér', image: '/portfolio-02.webp', title: 'Mustang Mach-E', desc: 'Čištění kůže' },
-  { id: 3, category: 'Ochrana', image: '/portfolio-03.webp', title: 'Škoda Octavia RS', desc: 'Keramická ochrana' },
-  { id: 4, category: 'Exteriér', image: '/portfolio-04.webp', title: 'Porsche 911', desc: 'Ruční mytí' },
+  { id: 1, category: 'Exteriér', image: '/sverene-vozy-porsche-911.webp', title: 'Porsche 911', desc: 'Ruční mytí' },
+  { id: 2, category: 'Interiér', image: '/sverene-vozy-mustang-mach-e.webp', title: 'Mustang Mach-E', desc: 'Čištění kůže' },
+  { id: 3, category: 'Ochrana', image: '/sverene-vozy-mercedes-s-class.webp', title: 'Mercedes S-Class', desc: 'Keramická ochrana' },
+  { id: 4, category: 'Exteriér', image: '/sverene-vozy-skoda-octavia-rs.webp', title: 'Škoda Octavia RS', desc: 'Čištění kol' },
 ];
 
 export const PARTNERS = [
@@ -277,21 +277,21 @@ export const TEAM = [
     name: 'Petr Svoboda', 
     role: 'Detailing specialista', 
     quote: '"Každý detail rozhoduje o výsledku."',
-    image: '#' // Placeholder as file not in list
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1287&auto=format&fit=crop' // Placeholder as file not in list
   },
   { 
     name: 'Martin Dvořák', 
     role: 'Expert na interiéry', 
     quote: '"Čistý interiér je základem komfortu."',
-    image: '#' // Placeholder as file not in list
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=1470&auto=format&fit=crop' // Placeholder as file not in list
   },
 ];
 
 export const TESTIMONIALS = [
-  { name: 'Pavel K.', car: 'Mercedes', text: 'Po 31 letech vypadá auto jako nové. Hodně ruční práce a šikovné ruce.' },
-  { name: 'Richard H.', car: 'Volkswagen', text: 'Jednoduché a rychlé objednání, precizní práce a příznivá práce.' },
-  { name: 'Pavel B.', car: 'Audi', text: 'Profesionálové v pravém slova smyslu' },
-  { name: 'Jiří P.', car: 'BMW X5', text: 'Výborná práce, snadné objednání, příjemné vystupování.' },
+  { name: 'David M.', car: 'Mercedes S-Class', text: 'Naprosto špičková práce. Auto vypadá lépe než když jsem ho kupoval nové.' },
+  { name: 'Jana K.', car: 'Porsche Macan', text: 'Skvělý přístup a perfektní čištění interiéru. Určitě se vrátím.' },
+  { name: 'Tomáš R.', car: 'Audi RS6', text: 'Keramická ochrana funguje neskutečně. Profesionálové na svém místě.' },
+  { name: 'Viktor P.', car: 'BMW X5', text: 'Nejlepší detailing v Praze. Oceňuji pick-up servis, ušetřilo mi to spoustu času.' },
 ];
 
 export const FAQ_ITEMS = [
