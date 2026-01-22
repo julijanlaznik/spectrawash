@@ -8,17 +8,16 @@ import Home from './pages/Home';
 import Shop from './pages/Shop';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+
 import FloatingButtons from './components/FloatingButtons';
 import CookieConsent from './components/CookieConsent';
 import ScrollToTop from './components/ScrollToTop';
 import PromoBar from './components/PromoBar';
 
-import RucniMytiAuto from './pages/services/ServiceCleaning';
-import KeramikaPraha from './pages/services/ServiceCeramic';
+// SEO pages
+import RucniMytiAutoPraha from './pages/services/ServiceCleaningPraha';
+import ServiceCeramicPraha from './pages/services/ServiceCeramicPraha';
 
-/**
- * Komponenta pro správné měření pageview při změně URL (BrowserRouter)
- */
 const AnalyticsTracker: React.FC = () => {
   const location = useLocation();
 
@@ -43,8 +42,7 @@ const App: React.FC = () => {
       <AnalyticsTracker />
       <ScrollToTop />
 
-      <div className="flex flex-col min-h-screen bg-brand-light font-sans text-brand-dark relative">
-        {/* Scroll Progress Bar */}
+      <div className="flex flex-col min-h-screen bg-brand-light font-sans text-brand-dark">
         <motion.div
           className="fixed top-0 left-0 right-0 h-[3px] bg-brand-blue origin-left z-[100]"
           style={{ scaleX: scrollYProgress }}
@@ -61,7 +59,8 @@ const App: React.FC = () => {
             <Route path="/terms" element={<Terms />} />
 
             {/* SEO služby */}
-            <Route path="/rucni-myti-auta-praha" element={<RucniMytiAuto />} />
+            <Route path="/rucni-myti-auta-praha" element={<RucniMytiAutoPraha />} />
+            <Route path="/keramicka-ochrana-laku-praha" element={<ServiceCeramicPraha />} />
           </Routes>
         </main>
 
