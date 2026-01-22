@@ -16,7 +16,7 @@ import PromoBar from './components/PromoBar';
 
 // SEO pages
 import RucniMytiAutoPraha from './pages/services/ServiceCleaningPraha';
-import ServiceCeramicPraha from './pages/services/ServiceCeramic';
+import ServiceCeramicPraha from './pages/services/ServiceCeramicPraha';
 
 const AnalyticsTracker: React.FC = () => {
   const location = useLocation();
