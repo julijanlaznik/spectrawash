@@ -16,7 +16,11 @@ import PromoBar from './components/PromoBar';
 
 // SEO pages
 import RucniMytiAutoPraha from './pages/services/ServiceCleaningPraha';
-import ServiceCeramicPraha from './pages/services/ServiceCeramic';
+
+<Route
+  path="/ServiceCleanPraha"
+  element={<ServiceCleanPraha />}
+/>
 
 const AnalyticsTracker: React.FC = () => {
   const location = useLocation();
