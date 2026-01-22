@@ -43,57 +43,51 @@ const Hero: React.FC = () => {
          className="absolute inset-0 w-full h-full"
       >
           {/* Slider Images - Crossfade with Ken Burns Effect */}
-          <AnimatePresence initial={false}>
+          <AnimatePresence initial={false} mode="wait">
             <motion.div
               key={currentSlide}
-              // Ken Burns: Start at 1.0, slowly scale to 1.15 over a long duration
+              // Improved: No initial scale-up for the very first frame to avoid rendering delay
               initial={{ opacity: 0, scale: 1.0 }}
               animate={{ opacity: 1, scale: 1.15 }}
               exit={{ opacity: 0 }}
               transition={{ 
-                opacity: { duration: 1.5, ease: "easeInOut" },
+                opacity: { duration: 1.2, ease: "easeInOut" },
                 scale: { duration: 15, ease: "linear" } 
               }}
               className="absolute inset-0 w-full h-full"
             >
-              {/* CHANGED: Using img tag instead of background-image for better performance/LCP */}
               <img 
                 src={HERO_SLIDES[currentSlide].image}
                 alt={HERO_SLIDES[currentSlide].title}
                 className="w-full h-full object-cover object-center"
-                // Priority loading for the first slide, lazy for others is handled by structure but here we want speed
-                fetchPriority="high"
-                loading="eager"
+                // Priority loading for LCP
+                fetchPriority={currentSlide === 0 ? "high" : "auto"}
+                loading={currentSlide === 0 ? "eager" : "lazy"}
                 decoding="sync"
               />
             </motion.div>
           </AnimatePresence>
 
-          {/* STATIC OVERLAYS - Moved OUTSIDE the loop so they are permanent and stable */}
-          
-          {/* 1. Main Left-to-Right Dark Gradient (For Text Content) */}
+          {/* STATIC OVERLAYS */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent pointer-events-none" />
-          
-          {/* 2. Brand Tint Overlay */}
           <div className="absolute inset-0 bg-brand-blue/20 mix-blend-overlay pointer-events-none" />
-
-          {/* 3. Top Legibility Gradient - Enhanced for Menu readability */}
           <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-black/90 to-transparent opacity-90 pointer-events-none" />
           
       </motion.div>
 
-      {/* Content Layer - Static relative to Parallax bg */}
+      {/* Content Layer */}
       <div className="relative z-10 h-full container mx-auto px-6 flex flex-col justify-center">
         <div className="max-w-4xl pt-16 md:pt-20">
           <motion.div
             key={`counter-${currentSlide}`}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-4 mb-4 md:mb-6"
           >
             <span className="text-brand-blue font-bold text-lg">0{currentSlide + 1}</span>
             <div className="h-[2px] w-12 bg-white/20">
               <motion.div 
+                key={`progress-${currentSlide}`}
                 initial={{ width: 0 }}
                 animate={{ width: "100%" }}
                 transition={{ duration: 7, ease: "linear" }}
@@ -141,7 +135,6 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
