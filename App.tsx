@@ -15,10 +15,7 @@ import ScrollToTop from './components/ScrollToTop';
 import PromoBar from './components/PromoBar';
 
 // SEO pages
-import ServiceCleaningPraha from './pages/services/ServiceCleaningPraha';
-import ServiceCeramicPraha from './pages/services/ServiceCeramicPraha';
-import ServiceFullCare from './pages/services/ServiceFullCare';
-import ServicePPFPraha from './pages/services/ServicePPFPraha';
+import RucniMytiAutoPraha from './pages/services/ServiceCleaningPraha';
 
 const AnalyticsTracker: React.FC = () => {
   const location = useLocation();
