@@ -33,7 +33,7 @@ const Portfolio: React.FC = () => {
             className="mb-8 md:mb-0"
           >
             <span className="text-brand-blue font-bold tracking-[0.2em] uppercase text-xs mb-2 block border-l-2 border-brand-blue pl-4">
-              Portfolio
+              Kdo k nám jezdí
             </span>
             <h2 className="text-4xl md:text-6xl font-heading font-bold text-brand-dark leading-none">
               Svěřené <br/> Vozy
