@@ -38,10 +38,8 @@ const Services: React.FC = () => {
       {/* SERVICES LIST - FULL WIDTH BANDS (ZEBRA LAYOUT) */}
       <div className="flex flex-col">
         {SERVICES.map((service, index) => {
-          // Even index: White background, Text Left (Desktop)
-          // Odd index: Gray background, Image Left (Desktop)
           const isEven = index % 2 === 0;
-          const bgClass = isEven ? 'bg-white' : 'bg-[#F9FAFB]'; // Very subtle gray for contrast
+          const bgClass = isEven ? 'bg-white' : 'bg-[#F9FAFB]';
 
           return (
             <div key={service.id} className={`w-full py-16 md:py-20 border-t border-gray-100 ${bgClass}`}>
@@ -91,7 +89,6 @@ const Services: React.FC = () => {
                       {service.description}
                     </p>
 
-                    {/* UPDATED: grid-cols-2 on mobile to save vertical space */}
                     <ul className="grid grid-cols-2 gap-x-3 gap-y-2">
                       {service.details.map((detail, i) => (
                         <li key={i} className="flex items-start text-[11px] md:text-xs font-medium text-brand-dark/80 flex-row gap-2 text-left leading-tight">
@@ -106,10 +103,9 @@ const Services: React.FC = () => {
 
                   {/* IMAGE COLUMN */}
                   <div className={`flex-1 w-full ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
-                     <div className="relative group overflow-hidden shadow-xl w-full aspect-[16/9] md:aspect-[3/2]">
+                     <div className="relative group overflow-hidden shadow-xl w-full aspect-[16/9] md:aspect-[3/2] bg-gray-100">
                         <div className="absolute inset-0 border-[1px] border-white/10 z-10 pointer-events-none"></div>
                         
-                        {/* Conditional Grayscale: Pickup is colored, others are grayscale */}
                         <img 
                           src={service.image} 
                           alt={service.title} 
@@ -118,7 +114,7 @@ const Services: React.FC = () => {
                           className={`w-full h-full object-cover filter contrast-[1.15] brightness-90 group-hover:scale-105 transition-transform duration-1000 ease-out ${service.id === 'pickup' ? '' : 'grayscale'}`}
                         />
 
-                        {/* Number Overlay in Bottom Left */}
+                        {/* Number Overlay */}
                         <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/90 to-transparent z-10 pointer-events-none"></div>
                         <div className="absolute bottom-0 left-0 p-6 z-20 pointer-events-none">
                             <span className="text-brand-blue font-heading font-bold text-6xl md:text-8xl leading-none opacity-20 tracking-tighter">
@@ -135,7 +131,7 @@ const Services: React.FC = () => {
         })}
       </div>
 
-      {/* DISCLAIMERS - Separate band at the bottom */}
+      {/* DISCLAIMERS */}
       <div className="bg-white py-16 border-t border-gray-200">
         <div className="container mx-auto px-6">
           <div className="text-[10px] text-gray-400 leading-relaxed text-center max-w-3xl mx-auto">
