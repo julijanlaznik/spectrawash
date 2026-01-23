@@ -9,12 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "3",
+    "framer-motion": "^12.23.24",
+    "lucide-react": "^0.554.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "lucide-react": "^0.554.0",
-    "react-router-dom": "^7.9.6",
-    "framer-motion": "^12.23.24",
-    "@emailjs/browser": "3"
+    "react-helmet-async": "^2.0.5",
+    "react-router-dom": "^7.9.6"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
